@@ -72,48 +72,116 @@
   50% { filter: brightness(1.2) hue-rotate(15deg); }
 }
 
-/* Active Swimming Keyframes (Fluid 60 FPS, No Freezing) */
-@keyframes fish-swim-right {
+/* ========================================================
+   AUTHENTIC LIVING AQUARIUM ANIMATIONS (60 FPS GPU)
+   ======================================================== */
+
+/* 1. Shallow Patrol (Swims Right, Waves, Turns, Swims Left) */
+@keyframes fish-patrol-shallow {
   0% {
     transform: translate3d(0, 0, 0) scaleX(1);
   }
+  25% {
+    transform: translate3d(220px, -18px, 0) scaleX(1);
+  }
   48% {
-    transform: translate3d(380px, -24px, 0) scaleX(1);
+    transform: translate3d(460px, 6px, 0) scaleX(1);
   }
   50% {
-    transform: translate3d(380px, -24px, 0) scaleX(-1);
+    transform: translate3d(460px, 6px, 0) scaleX(-1);
+  }
+  75% {
+    transform: translate3d(220px, 16px, 0) scaleX(-1);
   }
   98% {
-    transform: translate3d(-180px, 18px, 0) scaleX(-1);
+    transform: translate3d(0, 0, 0) scaleX(-1);
   }
   100% {
     transform: translate3d(0, 0, 0) scaleX(1);
   }
 }
 
-@keyframes fish-swim-left {
+/* 2. Deep Dive Patrol (Swims Left, Dives, Turns, Swims Right) */
+@keyframes fish-patrol-deep {
   0% {
     transform: translate3d(0, 0, 0) scaleX(-1);
   }
+  25% {
+    transform: translate3d(-240px, 24px, 0) scaleX(-1);
+  }
   48% {
-    transform: translate3d(-380px, 20px, 0) scaleX(-1);
+    transform: translate3d(-500px, -12px, 0) scaleX(-1);
   }
   50% {
-    transform: translate3d(-380px, 20px, 0) scaleX(1);
+    transform: translate3d(-500px, -12px, 0) scaleX(1);
+  }
+  75% {
+    transform: translate3d(-240px, -20px, 0) scaleX(1);
   }
   98% {
-    transform: translate3d(180px, -16px, 0) scaleX(1);
+    transform: translate3d(0, 0, 0) scaleX(1);
   }
   100% {
     transform: translate3d(0, 0, 0) scaleX(-1);
   }
 }
 
-@keyframes fish-float-gentle {
+/* 3. Wide Majestic Cruiser (Slow, Long Journey) */
+@keyframes fish-patrol-wide {
+  0% {
+    transform: translate3d(0, 0, 0) scaleX(1);
+  }
+  25% {
+    transform: translate3d(300px, -28px, 0) scaleX(1);
+  }
+  48% {
+    transform: translate3d(620px, 12px, 0) scaleX(1);
+  }
+  50% {
+    transform: translate3d(620px, 12px, 0) scaleX(-1);
+  }
+  75% {
+    transform: translate3d(300px, 22px, 0) scaleX(-1);
+  }
+  98% {
+    transform: translate3d(0, 0, 0) scaleX(-1);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scaleX(1);
+  }
+}
+
+/* 4. Agile Dart Patrol (Quick Bursts) */
+@keyframes fish-patrol-dart {
+  0% {
+    transform: translate3d(0, 0, 0) scaleX(-1);
+  }
+  20% {
+    transform: translate3d(-180px, -14px, 0) scaleX(-1);
+  }
+  48% {
+    transform: translate3d(-360px, 18px, 0) scaleX(-1);
+  }
+  50% {
+    transform: translate3d(-360px, 18px, 0) scaleX(1);
+  }
+  70% {
+    transform: translate3d(-180px, 24px, 0) scaleX(1);
+  }
+  98% {
+    transform: translate3d(0, 0, 0) scaleX(1);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scaleX(-1);
+  }
+}
+
+/* Gentle Organic Water Float */
+@keyframes fish-gentle-bob {
   0%, 100% {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-8px);
+    transform: translateY(-9px);
   }
 }

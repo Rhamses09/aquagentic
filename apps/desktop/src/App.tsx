@@ -9,7 +9,8 @@ import {
   Weather,
   GachaRollResult,
   FISH_MAP,
-  AquagenticSyncState
+  AquagenticSyncState,
+  InventoryItem
 } from '@aquagentic/core-game';
 import { Sidebar } from './components/Sidebar';
 import { ChatView, Message } from './components/ChatView';
@@ -31,18 +32,57 @@ function loadInitialState(): AquagenticSyncState {
   return createInitialState('desktop');
 }
 
+function buildSwimmingFishes(ids: string[], inv: Record<string, InventoryItem>): SwimmingFishState[] {
+  const patterns: Array<'fish-patrol-shallow' | 'fish-patrol-deep' | 'fish-patrol-wide' | 'fish-patrol-dart'> = [
+    'fish-patrol-shallow',
+    'fish-patrol-deep',
+    'fish-patrol-wide',
+    'fish-patrol-dart'
+  ];
+
+  return ids.map((id, index) => {
+    const def = FISH_MAP.get(id);
+    const item = inv[id];
+    const isShiny = item ? item.shinyCount > 0 : false;
+    return {
+      id: `ocean_fish_${id}_${index}`,
+      def: def!,
+      inv: item,
+      // Distribute evenly across vertical depths: 18%, 38%, 56%, 74%
+      topPercent: 18 + ((index * 20) % 58),
+      // Distribute across horizontal positions: 15%, 38%, 62%, 82%
+      leftPercent: 15 + ((index * 24) % 68),
+      swimDuration: 12 + ((index * 3) % 7), // 12s to 18s per loop
+      animPattern: patterns[index % patterns.length],
+      isShiny,
+      scale: 1.05 + ((index % 3) * 0.15)
+    };
+  }).filter(f => f.def !== undefined);
+}
+
 export const App: Component = () => {
   const initial = loadInitialState();
-  const [gameState, setGameState] = createSignal(initial);
+
+  // Decoupled Fine-Grained Reactive Signals (100% immune to tick re-rendering bugs)
+  const [pearls, setPearls] = createSignal<number>(initial.aquarium.pearls);
+  const [pps, setPps] = createSignal<number>(initial.aquarium.pearlsPerSecond);
+  const [totalTokens, setTotalTokens] = createSignal<number>(initial.aquarium.totalTokensBurned);
+  const [currentBait, setCurrentBait] = createSignal<number>(initial.aquarium.currentBaitProgress);
+  const [rodCost, setRodCost] = createSignal<number>(initial.aquarium.rodTokenCost);
+  const [pityEpic, setPityEpic] = createSignal<number>(initial.aquarium.pityCounterEpic);
+  const [pityLegendary, setPityLegendary] = createSignal<number>(initial.aquarium.pityCounterLegendary);
+  const [inventory, setInventory] = createSignal<Record<string, InventoryItem>>(initial.aquarium.inventory || {});
+  const [activeTankFishIds, setActiveTankFishIds] = createSignal<string[]>(initial.aquarium.activeTankFishIds || []);
+
+  // STABLE SWIMMING FISH SIGNAL (Updated ONLY on catch / toggle, NEVER on 500ms economy ticks!)
+  const [swimmingFishes, setSwimmingFishes] = createSignal<SwimmingFishState[]>(
+    buildSwimmingFishes(initial.aquarium.activeTankFishIds || [], initial.aquarium.inventory || {})
+  );
+
   const [currentBiome, setCurrentBiome] = createSignal<Biome>('default_ocean');
   const [currentWeather, setCurrentWeather] = createSignal<Weather>('clear');
   const [latestCatch, setLatestCatch] = createSignal<GachaRollResult | null>(null);
   const [isBestiaryOpen, setIsBestiaryOpen] = createSignal(false);
-
-  // Active tank occupants isolated signal
-  const [activeTankFishIds, setActiveTankFishIds] = createSignal<string[]>(
-    initial.aquarium.activeTankFishIds || []
-  );
 
   // Chat Sessions & Active State
   const [currentSessionId, setCurrentSessionId] = createSignal('session_1');
@@ -65,61 +105,49 @@ export const App: Component = () => {
   ]);
 
   // Persist state changes to localStorage
-  const saveState = (state: AquagenticSyncState) => {
+  const persistState = () => {
     try {
-      localStorage.setItem('aquagentic_state_v1', JSON.stringify(state));
+      const stateToSave: AquagenticSyncState = {
+        version: 1,
+        lastUpdated: Date.now(),
+        deviceOrigin: 'desktop',
+        aquarium: {
+          totalTokensBurned: totalTokens(),
+          currentBaitProgress: currentBait(),
+          rodTokenCost: rodCost(),
+          pearls: pearls(),
+          abyssalPearls: 0,
+          coralFragments: 0,
+          pearlsPerSecond: pps(),
+          rodLevel: 1,
+          pityCounterEpic: pityEpic(),
+          pityCounterLegendary: pityLegendary(),
+          activeTankFishIds: activeTankFishIds(),
+          unlockedBiomes: ['default_ocean'],
+          unlockedThemes: ['classic_dark'],
+          inventory: inventory()
+        },
+        recentSessions: []
+      };
+      localStorage.setItem('aquagentic_state_v1', JSON.stringify(stateToSave));
     } catch {}
   };
 
-  // Passive PPS Economy Ticker (Mutates pearls only, never triggers fish animation resets)
+  // Passive PPS Economy Ticker (Mutates pearls ONLY, zero effect on fish animations)
   onMount(() => {
     const timer = setInterval(() => {
-      setGameState((prev) => {
-        const pps = prev.aquarium.pearlsPerSecond;
-        if (pps <= 0) return prev;
-        const next = {
-          ...prev,
-          lastUpdated: Date.now(),
-          aquarium: {
-            ...prev.aquarium,
-            pearls: prev.aquarium.pearls + pps / 2
-          }
-        };
-        return next;
-      });
+      const rate = pps();
+      if (rate > 0) {
+        setPearls((p) => p + rate / 2);
+      }
     }, 500);
 
     onCleanup(() => clearInterval(timer));
   });
 
-  // Calculate stable swimming fishes: ONLY updates when fish are added/removed, NEVER on pearl ticks
-  const swimmingFishes = createMemo<SwimmingFishState[]>(() => {
-    const ids = activeTankFishIds();
-    const inv = gameState().aquarium.inventory;
-
-    return ids.map((id, index) => {
-      const def = FISH_MAP.get(id);
-      const item = inv[id];
-      const isShiny = item ? item.shinyCount > 0 : false;
-      return {
-        id: `ocean_fish_${id}_${index}`,
-        def: def!,
-        inv: item,
-        // Spread evenly across heights: 20%, 38%, 56%, 74%
-        topPercent: 18 + ((index * 20) % 58),
-        // Positioned clearly across visible widths: 15%, 38%, 62%, 82%
-        leftPercent: 15 + ((index * 24) % 68),
-        swimDuration: 10 + ((index * 2) % 6),
-        direction: (index % 2 === 0 ? 'right' : 'left') as 'right' | 'left',
-        isShiny,
-        scale: 1.05 + ((index % 3) * 0.15)
-      };
-    }).filter(f => f.def !== undefined);
-  });
-
   const discoveredCount = createMemo(() => {
-    const inv = gameState().aquarium.inventory;
-    return Object.keys(inv).filter(id => inv[id].count > 0).length;
+    const inv = inventory();
+    return Object.keys(inv).filter((id) => inv[id].count > 0).length;
   });
 
   // Burn tokens engine
@@ -132,84 +160,135 @@ export const App: Component = () => {
       setCurrentBiome(detected);
     }
 
-    setGameState((prev) => {
-      const aq = { ...prev.aquarium };
-      aq.totalTokensBurned += amount;
-      aq.currentBaitProgress += amount;
+    setTotalTokens((t) => t + amount);
+    let newBait = currentBait() + amount;
+    const currentCost = rodCost();
 
-      let catchResult: GachaRollResult | null = null;
-      while (aq.currentBaitProgress >= aq.rodTokenCost) {
-        aq.currentBaitProgress -= aq.rodTokenCost;
+    let curPityEpic = pityEpic();
+    let curPityLegendary = pityLegendary();
+    let updatedInv = { ...inventory() };
+    let updatedTank = [...activeTankFishIds()];
+    let caughtFish: GachaRollResult | null = null;
 
-        catchResult = rollGacha(aq, {
-          prompt: promptText,
-          weather: currentWeather()
-        });
+    // Check for catches
+    while (newBait >= currentCost) {
+      newBait -= currentCost;
 
-        applyCatchToInventory(aq, catchResult.instance);
-
-        if (catchResult.fish.rarity === 'legendary' || catchResult.fish.rarity === 'mythic') {
-          aq.pityCounterLegendary = 0;
-          aq.pityCounterEpic = 0;
-        } else if (catchResult.fish.rarity === 'epic') {
-          aq.pityCounterEpic = 0;
-          aq.pityCounterLegendary += 1;
-        } else {
-          aq.pityCounterEpic += 1;
-          aq.pityCounterLegendary += 1;
-        }
-      }
-
-      const nextState: AquagenticSyncState = {
-        ...prev,
-        lastUpdated: Date.now(),
-        aquarium: aq
+      const dummyAquarium = {
+        totalTokensBurned: totalTokens(),
+        currentBaitProgress: newBait,
+        rodTokenCost: currentCost,
+        pearls: pearls(),
+        abyssalPearls: 0,
+        coralFragments: 0,
+        pearlsPerSecond: pps(),
+        rodLevel: 1,
+        pityCounterEpic: curPityEpic,
+        pityCounterLegendary: curPityLegendary,
+        activeTankFishIds: updatedTank,
+        unlockedBiomes: ['default_ocean' as Biome],
+        unlockedThemes: ['classic_dark'],
+        inventory: updatedInv
       };
 
-      if (catchResult) {
-        setLatestCatch(catchResult);
-        setActiveTankFishIds([...aq.activeTankFishIds]);
+      caughtFish = rollGacha(dummyAquarium, {
+        prompt: promptText,
+        weather: currentWeather()
+      });
 
-        setTimeout(() => {
-          setLatestCatch(curr => (curr === catchResult ? null : curr));
-        }, 6000);
+      applyCatchToInventory(dummyAquarium, caughtFish.instance);
+      updatedInv = dummyAquarium.inventory;
+      updatedTank = dummyAquarium.activeTankFishIds;
+
+      if (caughtFish.fish.rarity === 'legendary' || caughtFish.fish.rarity === 'mythic') {
+        curPityLegendary = 0;
+        curPityEpic = 0;
+      } else if (caughtFish.fish.rarity === 'epic') {
+        curPityEpic = 0;
+        curPityLegendary += 1;
+      } else {
+        curPityEpic += 1;
+        curPityLegendary += 1;
       }
+    }
 
-      saveState(nextState);
-      return nextState;
-    });
+    setCurrentBait(newBait);
+    setPityEpic(curPityEpic);
+    setPityLegendary(curPityLegendary);
+
+    if (caughtFish) {
+      setInventory(updatedInv);
+      setActiveTankFishIds(updatedTank);
+
+      // Recalculate PPS
+      const newPPS = calculatePassivePPS({
+        totalTokensBurned: totalTokens(),
+        currentBaitProgress: newBait,
+        rodTokenCost: currentCost,
+        pearls: pearls(),
+        abyssalPearls: 0,
+        coralFragments: 0,
+        pearlsPerSecond: 0,
+        rodLevel: 1,
+        pityCounterEpic: curPityEpic,
+        pityCounterLegendary: curPityLegendary,
+        activeTankFishIds: updatedTank,
+        unlockedBiomes: ['default_ocean'],
+        unlockedThemes: ['classic_dark'],
+        inventory: updatedInv
+      });
+      setPps(newPPS);
+
+      // UPDATE STABLE FISHES SIGNAL ONLY WHEN FISH ARE CAUGHT
+      setSwimmingFishes(buildSwimmingFishes(updatedTank, updatedInv));
+
+      setLatestCatch(caughtFish);
+      persistState();
+
+      setTimeout(() => {
+        setLatestCatch((curr) => (curr === caughtFish ? null : curr));
+      }, 6000);
+    }
   };
 
   // Toggle fish in/out of the active tank
   const handleToggleActiveTank = (fishId: string) => {
-    setGameState((prev) => {
-      const aq = { ...prev.aquarium };
-      const currentTank = [...aq.activeTankFishIds];
-      const index = currentTank.indexOf(fishId);
+    let currentTank = [...activeTankFishIds()];
+    const index = currentTank.indexOf(fishId);
 
-      if (index >= 0) {
-        if (currentTank.length > 1) {
-          currentTank.splice(index, 1);
-        }
-      } else {
-        if (currentTank.length < 8) {
-          currentTank.push(fishId);
-        }
+    if (index >= 0) {
+      if (currentTank.length > 1) {
+        currentTank.splice(index, 1);
       }
+    } else {
+      if (currentTank.length < 8) {
+        currentTank.push(fishId);
+      }
+    }
 
-      aq.activeTankFishIds = currentTank;
-      aq.pearlsPerSecond = calculatePassivePPS(aq);
-
-      const nextState: AquagenticSyncState = {
-        ...prev,
-        lastUpdated: Date.now(),
-        aquarium: aq
-      };
-
-      setActiveTankFishIds([...currentTank]);
-      saveState(nextState);
-      return nextState;
+    const curInv = inventory();
+    const newPPS = calculatePassivePPS({
+      totalTokensBurned: totalTokens(),
+      currentBaitProgress: currentBait(),
+      rodTokenCost: rodCost(),
+      pearls: pearls(),
+      abyssalPearls: 0,
+      coralFragments: 0,
+      pearlsPerSecond: 0,
+      rodLevel: 1,
+      pityCounterEpic: pityEpic(),
+      pityCounterLegendary: pityLegendary(),
+      activeTankFishIds: currentTank,
+      unlockedBiomes: ['default_ocean'],
+      unlockedThemes: ['classic_dark'],
+      inventory: curInv
     });
+
+    setActiveTankFishIds(currentTank);
+    setPps(newPPS);
+    // UPDATE STABLE FISHES SIGNAL ONLY ON USER TOGGLE
+    setSwimmingFishes(buildSwimmingFishes(currentTank, curInv));
+    persistState();
   };
 
   // Handle user sending a prompt in the chat view
@@ -221,7 +300,7 @@ export const App: Component = () => {
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
 
-    setMessages(prev => [...prev, userMsg]);
+    setMessages((prev) => [...prev, userMsg]);
     setIsStreaming(true);
 
     const promptTokens = Math.max(25, Math.round(text.length / 3));
@@ -247,14 +326,14 @@ export const App: Component = () => {
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         };
 
-        setMessages(prev => [...prev, assistantMsg]);
+        setMessages((prev) => [...prev, assistantMsg]);
       }
     }, 200);
   };
 
   const handleNewChat = () => {
     const newId = `session_${Date.now()}`;
-    setSessions(prev => [
+    setSessions((prev) => [
       { id: newId, title: 'Nueva conversación', updatedAt: 'Ahora', model: selectedModel() },
       ...prev
     ]);
@@ -303,10 +382,10 @@ export const App: Component = () => {
         <AquariumDock
           biome={currentBiome()}
           weather={currentWeather()}
-          pearls={gameState().aquarium.pearls}
-          pps={gameState().aquarium.pearlsPerSecond}
-          currentBait={gameState().aquarium.currentBaitProgress}
-          rodCost={gameState().aquarium.rodTokenCost}
+          pearls={pearls()}
+          pps={pps()}
+          currentBait={currentBait()}
+          rodCost={rodCost()}
           activeFishCount={swimmingFishes().length}
           onBurnTokens={handleBurnTokens}
           onSimulateStream={handleSendMessage}
@@ -323,7 +402,7 @@ export const App: Component = () => {
         {/* Bestiario / Fishdex Modal */}
         <Show when={isBestiaryOpen()}>
           <BestiaryModal
-            inventory={gameState().aquarium.inventory}
+            inventory={inventory()}
             activeTankIds={activeTankFishIds()}
             onToggleActiveTank={handleToggleActiveTank}
             onClose={() => setIsBestiaryOpen(false)}
