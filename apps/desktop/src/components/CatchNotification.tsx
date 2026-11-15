@@ -2,6 +2,7 @@ import { Component, Show } from 'solid-js';
 import { GachaRollResult } from '@aquagentic/core-game';
 import { t } from '../i18n';
 import { FishGlyph } from './FishGlyph';
+import { PixelFish } from './PixelFish';
 import { IconSparkles } from './icons';
 
 interface CatchNotificationProps {
@@ -51,10 +52,11 @@ export const CatchNotification: Component<CatchNotificationProps> = (props) => {
             {/* Fish Info Row */}
             <div class="flex items-center gap-3 pt-0.5">
               <div class="w-12 h-12 rounded-lg bg-[#141722] border border-white/[0.08] flex items-center justify-center shrink-0 shadow-inner">
-                <FishGlyph
+                <PixelFish
+                  fishId={result().fish.id}
                   rarity={result().fish.rarity}
                   isShiny={result().instance.isShiny}
-                  size={32}
+                  size={34}
                 />
               </div>
 

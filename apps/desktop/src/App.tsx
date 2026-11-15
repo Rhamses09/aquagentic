@@ -15,13 +15,18 @@ import { ChatView, Message } from './components/ChatView';
 import { AquariumDock } from './components/AquariumDock';
 import { CatchNotification } from './components/CatchNotification';
 import { BestiaryModal } from './components/BestiaryModal';
+import { AmbientAquariumBackground, SwimmingFishState } from './components/AmbientAquariumBackground';
 
 export const App: Component = () => {
-  const [gameState, setGameState] = createSignal(createInitialState('desktop'));
+  const initial = createInitialState('desktop');
+  const [gameState, setGameState] = createSignal(initial);
   const [currentBiome, setCurrentBiome] = createSignal<Biome>('default_ocean');
   const [currentWeather, setCurrentWeather] = createSignal<Weather>('clear');
   const [latestCatch, setLatestCatch] = createSignal<GachaRollResult | null>(null);
   const [isBestiaryOpen, setIsBestiaryOpen] = createSignal(false);
+
+  // Active tank occupants isolated signal (to NEVER trigger animation resets during 500ms pearl ticks)
+  const [activeTankFishIds, setActiveTankFishIds] = createSignal<string[]>(initial.aquarium.activeTankFishIds);
 
   // Chat Sessions & Active State
   const [currentSessionId, setCurrentSessionId] = createSignal('session_1');
@@ -37,13 +42,13 @@ export const App: Component = () => {
     {
       id: 'msg_1',
       role: 'assistant',
-      content: '¡Hola! Soy tu asistente agéntico en Aquagentic. Cada prompt, código y llamada MCP alimentará tu caña de pesca en el acuario inferior.',
+      content: '¡Hola! Soy tu asistente agéntico en Aquagentic. Cada prompt, código y llamada MCP alimentará tu caña de pesca en el acuario de fondo.',
       tokens: 42,
       timestamp: '12:00'
     }
   ]);
 
-  // Passive PPS Economy Ticker
+  // Passive PPS Economy Ticker (Isolated to ONLY mutate pearls, zero DOM or animation restarts)
   onMount(() => {
     const timer = setInterval(() => {
       setGameState((prev) => {
@@ -63,22 +68,26 @@ export const App: Component = () => {
     onCleanup(() => clearInterval(timer));
   });
 
-  // Calculate swimming fishes positioned visibly inside the tank bounds
-  const swimmingFishes = createMemo(() => {
-    const aq = gameState().aquarium;
-    return aq.activeTankFishIds.map((id, index) => {
+  // Calculate stable swimming fishes: ONLY updates when fish are added/removed, NEVER on pearl ticks
+  const swimmingFishes = createMemo<SwimmingFishState[]>(() => {
+    const ids = activeTankFishIds();
+    const inv = gameState().aquarium.inventory;
+
+    return ids.map((id, index) => {
       const def = FISH_MAP.get(id);
-      const inv = aq.inventory[id];
-      const isShiny = inv ? inv.shinyCount > 0 : false;
+      const item = inv[id];
+      const isShiny = item ? item.shinyCount > 0 : false;
       return {
-        id: `swim_${id}_${index}`,
+        id: `ocean_fish_${id}_${index}`,
         def: def!,
-        inv,
-        topPercent: 14 + ((index * 24) % 50),
-        leftPercent: 8 + ((index * 26) % 76),
-        swimDuration: 7 + ((index * 2) % 6),
+        inv: item,
+        // Spread evenly across heights: 16%, 34%, 52%, 70%, 84%
+        topPercent: 16 + ((index * 22) % 65),
+        // Peaceful, natural drifting speed
+        swimDuration: 22 + ((index * 4) % 14),
+        swimDelay: (index * 2.5) % 8,
         isShiny,
-        scale: 0.9 + ((index % 3) * 0.1)
+        scale: 0.95 + ((index % 3) * 0.12)
       };
     }).filter(f => f.def !== undefined);
   });
@@ -128,6 +137,9 @@ export const App: Component = () => {
 
       if (catchResult) {
         setLatestCatch(catchResult);
+        // Sync active tank occupants
+        setActiveTankFishIds([...aq.activeTankFishIds]);
+
         setTimeout(() => {
           setLatestCatch(curr => (curr === catchResult ? null : curr));
         }, 6000);
@@ -149,12 +161,10 @@ export const App: Component = () => {
       const index = currentTank.indexOf(fishId);
 
       if (index >= 0) {
-        // Remove if not the last fish
         if (currentTank.length > 1) {
           currentTank.splice(index, 1);
         }
       } else {
-        // Add if under capacity (max 8)
         if (currentTank.length < 8) {
           currentTank.push(fishId);
         }
@@ -162,6 +172,9 @@ export const App: Component = () => {
 
       aq.activeTankFishIds = currentTank;
       aq.pearlsPerSecond = calculatePassivePPS(aq);
+
+      // Sync active tank occupants
+      setActiveTankFishIds([...currentTank]);
 
       return {
         ...prev,
@@ -228,8 +241,15 @@ export const App: Component = () => {
   };
 
   return (
-    <div class="flex h-screen w-screen overflow-hidden bg-[#090b10] text-zinc-100 select-none">
-      {/* Left Sidebar (Claude Desktop / Antigravity Style) */}
+    <div class="relative flex h-screen w-screen overflow-hidden bg-[#07090e] text-zinc-100 select-none">
+      {/* 1. Fullscreen Ambient Living Aquarium Background */}
+      <AmbientAquariumBackground
+        biome={currentBiome()}
+        weather={currentWeather()}
+        activeFishes={swimmingFishes()}
+      />
+
+      {/* 2. Left Sidebar (Translucent Obsidian Glass) */}
       <Sidebar
         currentSessionId={currentSessionId()}
         sessions={sessions()}
@@ -241,9 +261,9 @@ export const App: Component = () => {
         onOpenBestiary={() => setIsBestiaryOpen(true)}
       />
 
-      {/* Main Column */}
-      <main class="flex-1 flex flex-col h-screen overflow-hidden relative">
-        {/* Chat Conversation View */}
+      {/* 3. Main Workspace */}
+      <main class="flex-1 flex flex-col h-screen overflow-hidden relative z-10">
+        {/* Chat Conversation View with Translucent Glass Panels */}
         <ChatView
           messages={messages()}
           selectedModel={selectedModel()}
@@ -251,7 +271,7 @@ export const App: Component = () => {
           onSendMessage={handleSendMessage}
         />
 
-        {/* Ambient Aquarium Dock (Dock Inferior Colapsable) */}
+        {/* Minimal Bottom Telemetry Strip */}
         <AquariumDock
           biome={currentBiome()}
           weather={currentWeather()}
@@ -259,7 +279,7 @@ export const App: Component = () => {
           pps={gameState().aquarium.pearlsPerSecond}
           currentBait={gameState().aquarium.currentBaitProgress}
           rodCost={gameState().aquarium.rodTokenCost}
-          activeFishes={swimmingFishes()}
+          activeFishCount={swimmingFishes().length}
           onBurnTokens={handleBurnTokens}
           onSimulateStream={handleSendMessage}
           onSimulateGlitch={handleSimulateGlitch}
@@ -276,7 +296,7 @@ export const App: Component = () => {
         <Show when={isBestiaryOpen()}>
           <BestiaryModal
             inventory={gameState().aquarium.inventory}
-            activeTankIds={gameState().aquarium.activeTankFishIds}
+            activeTankIds={activeTankFishIds()}
             onToggleActiveTank={handleToggleActiveTank}
             onClose={() => setIsBestiaryOpen(false)}
           />

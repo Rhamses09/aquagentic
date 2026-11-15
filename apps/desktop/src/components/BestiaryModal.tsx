@@ -7,6 +7,7 @@ import {
 } from '@aquagentic/core-game';
 import { t } from '../i18n';
 import { FishGlyph } from './FishGlyph';
+import { PixelFish } from './PixelFish';
 import { IconSparkles, IconCheck, IconPlus } from './icons';
 
 interface BestiaryModalProps {
@@ -99,7 +100,7 @@ export const BestiaryModal: Component<BestiaryModalProps> = (props) => {
                     <div class="flex items-start justify-between gap-2 mb-2">
                       <div class="w-12 h-12 rounded-lg bg-black/40 border border-white/[0.06] flex items-center justify-center shrink-0">
                         {isDiscovered ? (
-                          <FishGlyph rarity={fish.rarity} isShiny={inv.shinyCount > 0} size={28} />
+                          <PixelFish fishId={fish.id} rarity={fish.rarity} isShiny={inv.shinyCount > 0} size={32} />
                         ) : (
                           <span class="text-zinc-600 font-mono text-base font-bold">?</span>
                         )}
