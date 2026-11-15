@@ -3,211 +3,292 @@ import { FishDefinition } from './types';
 export const INITIAL_FISH_CATALOG: FishDefinition[] = [
   // --- COMÚN (basePPS: 1 - 2) ---
   {
-    id: 'syntax_sardine',
-    nameKey: 'fish.syntax_sardine.name',
-    descriptionKey: 'fish.syntax_sardine.desc',
+    id: 'clownfish',
+    nameKey: 'fish.clownfish.name',
+    descriptionKey: 'fish.clownfish.desc',
     rarity: 'common',
-    basePPS: 1,
+    basePPS: 1.0,
     biome: 'frontend_reef',
-    minWeightKB: 4,
-    maxWeightKB: 32,
-    sprite: 'sprites/syntax_sardine.png'
+    minWeightKB: 10,
+    maxWeightKB: 60,
+    sprite: 'sprites/clownfish.png'
   },
   {
-    id: 'console_log_carp',
-    nameKey: 'fish.console_log_carp.name',
-    descriptionKey: 'fish.console_log_carp.desc',
+    id: 'blue_tang',
+    nameKey: 'fish.blue_tang.name',
+    descriptionKey: 'fish.blue_tang.desc',
     rarity: 'common',
     basePPS: 1.5,
+    biome: 'frontend_reef',
+    minWeightKB: 50,
+    maxWeightKB: 250,
+    sprite: 'sprites/blue_tang.png'
+  },
+  {
+    id: 'seahorse',
+    nameKey: 'fish.seahorse.name',
+    descriptionKey: 'fish.seahorse.desc',
+    rarity: 'common',
+    basePPS: 1.2,
     biome: 'default_ocean',
-    minWeightKB: 8,
-    maxWeightKB: 64,
-    sprite: 'sprites/console_log_carp.png'
+    minWeightKB: 5,
+    maxWeightKB: 40,
+    sprite: 'sprites/seahorse.png'
   },
   {
-    id: 'bit_shrimp',
-    nameKey: 'fish.bit_shrimp.name',
-    descriptionKey: 'fish.bit_shrimp.desc',
+    id: 'french_angelfish',
+    nameKey: 'fish.french_angelfish.name',
+    descriptionKey: 'fish.french_angelfish.desc',
     rarity: 'common',
-    basePPS: 1,
-    biome: 'low_level',
-    minWeightKB: 1,
-    maxWeightKB: 8,
-    sprite: 'sprites/bit_shrimp.png'
-  },
-  {
-    id: 'json_jellyfish',
-    nameKey: 'fish.json_jellyfish.name',
-    descriptionKey: 'fish.json_jellyfish.desc',
-    rarity: 'common',
-    basePPS: 2,
-    biome: 'data_swamp',
-    minWeightKB: 12,
-    maxWeightKB: 96,
-    sprite: 'sprites/json_jellyfish.png'
+    basePPS: 2.0,
+    biome: 'frontend_reef',
+    minWeightKB: 80,
+    maxWeightKB: 450,
+    sprite: 'sprites/french_angelfish.png'
   },
 
   // --- POCO COMÚN (basePPS: 5 - 10) ---
   {
-    id: 'compiler_carp',
-    nameKey: 'fish.compiler_carp.name',
-    descriptionKey: 'fish.compiler_carp.desc',
+    id: 'lionfish',
+    nameKey: 'fish.lionfish.name',
+    descriptionKey: 'fish.lionfish.desc',
     rarity: 'uncommon',
-    basePPS: 6,
-    biome: 'low_level',
-    minWeightKB: 64,
-    maxWeightKB: 512,
-    sprite: 'sprites/compiler_carp.png'
+    basePPS: 6.0,
+    biome: 'frontend_reef',
+    minWeightKB: 120,
+    maxWeightKB: 800,
+    sprite: 'sprites/lionfish.png'
   },
   {
-    id: 'recursive_salmon',
-    nameKey: 'fish.recursive_salmon.name',
-    descriptionKey: 'fish.recursive_salmon.desc',
+    id: 'mandarin_dragonet',
+    nameKey: 'fish.mandarin_dragonet.name',
+    descriptionKey: 'fish.mandarin_dragonet.desc',
     rarity: 'uncommon',
-    basePPS: 8,
+    basePPS: 7.5,
+    biome: 'frontend_reef',
+    minWeightKB: 15,
+    maxWeightKB: 90,
+    sprite: 'sprites/mandarin_dragonet.png'
+  },
+  {
+    id: 'copperband_butterfly',
+    nameKey: 'fish.copperband_butterfly.name',
+    descriptionKey: 'fish.copperband_butterfly.desc',
+    rarity: 'uncommon',
+    basePPS: 8.0,
     biome: 'default_ocean',
-    minWeightKB: 128,
-    maxWeightKB: 1024,
-    sprite: 'sprites/recursive_salmon.png'
+    minWeightKB: 60,
+    maxWeightKB: 320,
+    sprite: 'sprites/copperband_butterfly.png'
   },
   {
-    id: 'regex_ray',
-    nameKey: 'fish.regex_ray.name',
-    descriptionKey: 'fish.regex_ray.desc',
+    id: 'pufferfish',
+    nameKey: 'fish.pufferfish.name',
+    descriptionKey: 'fish.pufferfish.desc',
     rarity: 'uncommon',
-    basePPS: 7,
+    basePPS: 9.0,
     biome: 'data_swamp',
-    minWeightKB: 80,
-    maxWeightKB: 720,
-    sprite: 'sprites/regex_ray.png'
+    minWeightKB: 100,
+    maxWeightKB: 650,
+    sprite: 'sprites/pufferfish.png'
   },
 
-  // --- RARO (basePPS: 25 - 45) ---
+  // --- RARO (basePPS: 25 - 50) ---
   {
-    id: 'git_squid',
-    nameKey: 'fish.git_squid.name',
-    descriptionKey: 'fish.git_squid.desc',
+    id: 'blue_ringed_octopus',
+    nameKey: 'fish.blue_ringed_octopus.name',
+    descriptionKey: 'fish.blue_ringed_octopus.desc',
     rarity: 'rare',
-    basePPS: 30,
-    biome: 'default_ocean',
-    minWeightKB: 512,
-    maxWeightKB: 4096,
-    sprite: 'sprites/git_squid.png',
+    basePPS: 32.0,
+    biome: 'low_level',
+    minWeightKB: 30,
+    maxWeightKB: 120,
+    sprite: 'sprites/blue_ringed_octopus.png',
     passive: {
-      id: 'git_commit_surge',
-      nameKey: 'passive.git_commit_surge.name',
-      descriptionKey: 'passive.git_commit_surge.desc',
+      id: 'neuro_surge',
+      nameKey: 'passive.neuro_surge.name',
+      descriptionKey: 'passive.neuro_surge.desc',
       type: 'bait_charge',
-      value: 0.25 // llena 25% de la barra con acciones Git
+      value: 0.25
     }
   },
   {
-    id: 'context_remora',
-    nameKey: 'fish.context_remora.name',
-    descriptionKey: 'fish.context_remora.desc',
+    id: 'anglerfish',
+    nameKey: 'fish.anglerfish.name',
+    descriptionKey: 'fish.anglerfish.desc',
     rarity: 'rare',
-    basePPS: 35,
+    basePPS: 38.0,
     biome: 'abyssal_zone',
-    minWeightKB: 256,
-    maxWeightKB: 2048,
-    sprite: 'sprites/context_remora.png',
+    minWeightKB: 300,
+    maxWeightKB: 2500,
+    sprite: 'sprites/anglerfish.png',
     passive: {
-      id: 'deep_context_boost',
-      nameKey: 'passive.deep_context_boost.name',
-      descriptionKey: 'passive.deep_context_boost.desc',
+      id: 'abyssal_lure',
+      nameKey: 'passive.abyssal_lure.name',
+      descriptionKey: 'passive.abyssal_lure.desc',
       type: 'pps_multiplier',
-      value: 2.0 // x2 si el contexto supera 20k tokens
+      value: 2.0
     }
   },
   {
-    id: 'local_lantern_fish',
-    nameKey: 'fish.local_lantern_fish.name',
-    descriptionKey: 'fish.local_lantern_fish.desc',
+    id: 'moray_eel',
+    nameKey: 'fish.moray_eel.name',
+    descriptionKey: 'fish.moray_eel.desc',
     rarity: 'rare',
-    basePPS: 40,
-    biome: 'abyssal_zone',
-    minWeightKB: 500,
-    maxWeightKB: 3500,
-    sprite: 'sprites/local_lantern_fish.png',
-    passive: {
-      id: 'ollama_saver',
-      nameKey: 'passive.ollama_saver.name',
-      descriptionKey: 'passive.ollama_saver.desc',
-      type: 'local_model_boost',
-      value: 3.0 // x3 mientras se usa modelo local
-    }
+    basePPS: 42.0,
+    biome: 'low_level',
+    minWeightKB: 1500,
+    maxWeightKB: 12000,
+    sprite: 'sprites/moray_eel.png'
   },
-
-  // --- GLITCH / TORMENTA (Raros especiales) ---
   {
-    id: 'null_pointer_eel',
-    nameKey: 'fish.null_pointer_eel.name',
-    descriptionKey: 'fish.null_pointer_eel.desc',
+    id: 'barracuda',
+    nameKey: 'fish.barracuda.name',
+    descriptionKey: 'fish.barracuda.desc',
     rarity: 'rare',
-    basePPS: 50,
+    basePPS: 45.0,
     biome: 'default_ocean',
-    minWeightKB: 404,
-    maxWeightKB: 4040,
-    sprite: 'sprites/null_pointer_eel.png',
+    minWeightKB: 2000,
+    maxWeightKB: 18000,
+    sprite: 'sprites/barracuda.png'
+  },
+
+  // --- GLITCH / TORMENTA (Especies de aguas profundas) ---
+  {
+    id: 'goblin_shark',
+    nameKey: 'fish.goblin_shark.name',
+    descriptionKey: 'fish.goblin_shark.desc',
+    rarity: 'rare',
+    basePPS: 55.0,
+    biome: 'abyssal_zone',
+    minWeightKB: 4000,
+    maxWeightKB: 35000,
+    sprite: 'sprites/goblin_shark.png',
     stormOnly: true
   },
   {
-    id: 'segfault_puffer',
-    nameKey: 'fish.segfault_puffer.name',
-    descriptionKey: 'fish.segfault_puffer.desc',
+    id: 'black_dragonfish',
+    nameKey: 'fish.black_dragonfish.name',
+    descriptionKey: 'fish.black_dragonfish.desc',
     rarity: 'epic',
-    basePPS: 120,
-    biome: 'low_level',
-    minWeightKB: 1390,
-    maxWeightKB: 13900,
-    sprite: 'sprites/segfault_puffer.png',
+    basePPS: 140.0,
+    biome: 'abyssal_zone',
+    minWeightKB: 80,
+    maxWeightKB: 450,
+    sprite: 'sprites/black_dragonfish.png',
     stormOnly: true
   },
 
-  // --- ÉPICO (basePPS: 100 - 250) ---
+  // --- ÉPICO (basePPS: 120 - 250) ---
   {
-    id: 'kernel_shark',
-    nameKey: 'fish.kernel_shark.name',
-    descriptionKey: 'fish.kernel_shark.desc',
+    id: 'hammerhead_shark',
+    nameKey: 'fish.hammerhead_shark.name',
+    descriptionKey: 'fish.hammerhead_shark.desc',
     rarity: 'epic',
-    basePPS: 150,
+    basePPS: 160.0,
     biome: 'low_level',
-    minWeightKB: 4096,
-    maxWeightKB: 32768,
-    sprite: 'sprites/kernel_shark.png',
+    minWeightKB: 15000,
+    maxWeightKB: 120000,
+    sprite: 'sprites/hammerhead_shark.png',
     passive: {
-      id: 'common_refiner',
-      nameKey: 'passive.common_refiner.name',
-      descriptionKey: 'passive.common_refiner.desc',
+      id: 'electro_detection',
+      nameKey: 'passive.electro_detection.name',
+      descriptionKey: 'passive.electro_detection.desc',
       type: 'common_devourer',
-      value: 1 // Convierte comunes repetidos en fragmentos de coral
+      value: 1
     }
   },
-
-  // --- LEGENDARIO (basePPS: 500 - 1200) ---
   {
-    id: 'docker_whale',
-    nameKey: 'fish.docker_whale.name',
-    descriptionKey: 'fish.docker_whale.desc',
-    rarity: 'legendary',
-    basePPS: 800,
+    id: 'manta_ray',
+    nameKey: 'fish.manta_ray.name',
+    descriptionKey: 'fish.manta_ray.desc',
+    rarity: 'epic',
+    basePPS: 190.0,
     biome: 'default_ocean',
-    minWeightKB: 32768,
-    maxWeightKB: 524288,
-    sprite: 'sprites/docker_whale.png'
+    minWeightKB: 25000,
+    maxWeightKB: 250000,
+    sprite: 'sprites/manta_ray.png'
+  },
+  {
+    id: 'ocean_sunfish',
+    nameKey: 'fish.ocean_sunfish.name',
+    descriptionKey: 'fish.ocean_sunfish.desc',
+    rarity: 'epic',
+    basePPS: 220.0,
+    biome: 'default_ocean',
+    minWeightKB: 50000,
+    maxWeightKB: 500000,
+    sprite: 'sprites/ocean_sunfish.png'
+  },
+  {
+    id: 'great_white_shark',
+    nameKey: 'fish.great_white_shark.name',
+    descriptionKey: 'fish.great_white_shark.desc',
+    rarity: 'epic',
+    basePPS: 260.0,
+    biome: 'low_level',
+    minWeightKB: 80000,
+    maxWeightKB: 800000,
+    sprite: 'sprites/great_white_shark.png'
   },
 
-  // --- MÍTICO / ANOMALÍA (basePPS: 3000+) ---
+  // --- LEGENDARIO (basePPS: 600 - 1500) ---
   {
-    id: 'async_leviathan',
-    nameKey: 'fish.async_leviathan.name',
-    descriptionKey: 'fish.async_leviathan.desc',
-    rarity: 'mythic',
-    basePPS: 5000,
+    id: 'whale_shark',
+    nameKey: 'fish.whale_shark.name',
+    descriptionKey: 'fish.whale_shark.desc',
+    rarity: 'legendary',
+    basePPS: 850.0,
+    biome: 'default_ocean',
+    minWeightKB: 500000,
+    maxWeightKB: 4000000,
+    sprite: 'sprites/whale_shark.png'
+  },
+  {
+    id: 'giant_oarfish',
+    nameKey: 'fish.giant_oarfish.name',
+    descriptionKey: 'fish.giant_oarfish.desc',
+    rarity: 'legendary',
+    basePPS: 1100.0,
     biome: 'abyssal_zone',
-    minWeightKB: 1048576, // 1 GB+
-    maxWeightKB: 16777216, // 16 GB+
-    sprite: 'sprites/async_leviathan.png'
+    minWeightKB: 100000,
+    maxWeightKB: 900000,
+    sprite: 'sprites/giant_oarfish.png'
+  },
+  {
+    id: 'coelacanth',
+    nameKey: 'fish.coelacanth.name',
+    descriptionKey: 'fish.coelacanth.desc',
+    rarity: 'legendary',
+    basePPS: 1350.0,
+    biome: 'abyssal_zone',
+    minWeightKB: 45000,
+    maxWeightKB: 350000,
+    sprite: 'sprites/coelacanth.png'
+  },
+
+  // --- MÍTICO / ANOMALÍA (basePPS: 4000+) ---
+  {
+    id: 'colossal_squid',
+    nameKey: 'fish.colossal_squid.name',
+    descriptionKey: 'fish.colossal_squid.desc',
+    rarity: 'mythic',
+    basePPS: 5500.0,
+    biome: 'abyssal_zone',
+    minWeightKB: 350000,
+    maxWeightKB: 2500000,
+    sprite: 'sprites/colossal_squid.png'
+  },
+  {
+    id: 'greenland_shark',
+    nameKey: 'fish.greenland_shark.name',
+    descriptionKey: 'fish.greenland_shark.desc',
+    rarity: 'mythic',
+    basePPS: 6200.0,
+    biome: 'abyssal_zone',
+    minWeightKB: 800000,
+    maxWeightKB: 5000000,
+    sprite: 'sprites/greenland_shark.png'
   }
 ];
 

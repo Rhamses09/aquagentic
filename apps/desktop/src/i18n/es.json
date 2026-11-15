@@ -64,5 +64,29 @@
     "maxWeight": "Récord de peso:",
     "caughtCount": "Capturados:",
     "close": "Cerrar"
+  },
+  "chest": {
+    "title": "Cofre Marino de Pesca",
+    "subtitle": "Forjado mediante el consumo de tokens en prompts y código",
+    "available": "Cofres listos",
+    "openChest": "Abrir Cofre",
+    "openAnother": "Abrir otro cofre",
+    "remaining": "disponibles",
+    "tapToOpen": "Haz clic en el cofre para desbloquearlo",
+    "opening": "Abriendo cofre marino...",
+    "newDiscovery": "¡NUEVA ESPECIE DESCUBIERTA!",
+    "sendToTank": "Enviar al Acuario",
+    "skip": "Saltar animación",
+    "readyToast": "¡Cofre de pesca desbloqueado!",
+    "readyToastDesc": "Has acumulado suficientes tokens para abrir un nuevo cofre.",
+    "scientificName": "Especie biológica",
+    "rarityCommon": "Común",
+    "rarityUncommon": "Poco Común",
+    "rarityRare": "Raro",
+    "rarityEpic": "Épico",
+    "rarityLegendary": "Legendario",
+    "rarityMythic": "Mítico",
+    "shinyVariant": "✨ VARIANTE SHINY (x3 PPS) ✨",
+    "passiveTitle": "Habilidad Pasiva:"
   }
 }

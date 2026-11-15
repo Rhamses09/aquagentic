@@ -67,8 +67,8 @@ test('Monotonic Merge preserves highest counts, weights, and star ranks without 
   const local = createInitialState('desktop');
   const remote = createInitialState('mobile');
 
-  // Local caught 2 sardines
-  local.aquarium.inventory['syntax_sardine'] = {
+  // Local caught 2 clownfish
+  local.aquarium.inventory['clownfish'] = {
     count: 2,
     shinyCount: 0,
     starRank: 1,
@@ -79,8 +79,8 @@ test('Monotonic Merge preserves highest counts, weights, and star ranks without 
   local.aquarium.pearls = 100;
   local.lastUpdated = 5000;
 
-  // Remote (mobile while PC was off) caught 5 sardines, 1 shiny, and a bigger one
-  remote.aquarium.inventory['syntax_sardine'] = {
+  // Remote (mobile while PC was off) caught 5 clownfish, 1 shiny, and a bigger one
+  remote.aquarium.inventory['clownfish'] = {
     count: 5,
     shinyCount: 1,
     starRank: 2,
@@ -93,10 +93,10 @@ test('Monotonic Merge preserves highest counts, weights, and star ranks without 
 
   const merged = mergeStates(local, remote);
 
-  assert.strictEqual(merged.aquarium.inventory['syntax_sardine'].count, 5);
-  assert.strictEqual(merged.aquarium.inventory['syntax_sardine'].shinyCount, 1);
-  assert.strictEqual(merged.aquarium.inventory['syntax_sardine'].starRank, 2);
-  assert.strictEqual(merged.aquarium.inventory['syntax_sardine'].maxWeightBytes, 25000);
+  assert.strictEqual(merged.aquarium.inventory['clownfish'].count, 5);
+  assert.strictEqual(merged.aquarium.inventory['clownfish'].shinyCount, 1);
+  assert.strictEqual(merged.aquarium.inventory['clownfish'].starRank, 2);
+  assert.strictEqual(merged.aquarium.inventory['clownfish'].maxWeightBytes, 25000);
   assert.strictEqual(merged.aquarium.totalTokensBurned, 3500);
   assert.ok(merged.aquarium.pearls >= 400);
 });
@@ -105,8 +105,8 @@ test('i18n translates seamlessly in English and Spanish', () => {
   assert.strictEqual(getTranslation('es', 'game.title'), 'Aquagentic');
   assert.strictEqual(getTranslation('es', 'rarity.legendary'), 'Legendario');
   assert.strictEqual(getTranslation('en', 'rarity.legendary'), 'Legendary');
-  assert.strictEqual(getTranslation('es', 'fish.syntax_sardine.name'), 'Sardina de Sintaxis');
-  assert.strictEqual(getTranslation('en', 'fish.syntax_sardine.name'), 'Syntax Sardine');
-  assert.strictEqual(getTranslation('es', 'biome.abyssal_zone'), 'Zona Abisal de Pensamiento');
-  assert.strictEqual(getTranslation('en', 'biome.abyssal_zone'), 'Abyssal Reasoning Trench');
+  assert.strictEqual(getTranslation('es', 'fish.clownfish.name'), 'Pez Payaso');
+  assert.strictEqual(getTranslation('en', 'fish.clownfish.name'), 'Clownfish');
+  assert.strictEqual(getTranslation('es', 'biome.abyssal_zone'), 'Zona Abisal Profunda');
+  assert.strictEqual(getTranslation('en', 'biome.abyssal_zone'), 'Abyssal Midnight Trench');
 });

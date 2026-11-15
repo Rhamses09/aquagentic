@@ -17,6 +17,7 @@ import { ChatView, Message } from './components/ChatView';
 import { AquariumDock } from './components/AquariumDock';
 import { CatchNotification } from './components/CatchNotification';
 import { BestiaryModal } from './components/BestiaryModal';
+import { ChestOpeningModal } from './components/ChestOpeningModal';
 import { AmbientAquariumBackground, SwimmingFishState } from './components/AmbientAquariumBackground';
 
 function loadInitialState(): AquagenticSyncState {
@@ -73,6 +74,12 @@ export const App: Component = () => {
   const [pityLegendary, setPityLegendary] = createSignal<number>(initial.aquarium.pityCounterLegendary);
   const [inventory, setInventory] = createSignal<Record<string, InventoryItem>>(initial.aquarium.inventory || {});
   const [activeTankFishIds, setActiveTankFishIds] = createSignal<string[]>(initial.aquarium.activeTankFishIds || []);
+  const [availableChests, setAvailableChests] = createSignal<number>(
+    typeof (initial.aquarium as any).availableChests === 'number'
+      ? (initial.aquarium as any).availableChests
+      : 1
+  );
+  const [isChestModalOpen, setIsChestModalOpen] = createSignal<boolean>(false);
 
   // STABLE SWIMMING FISH SIGNAL (Updated ONLY on catch / toggle, NEVER on 500ms economy ticks!)
   const [swimmingFishes, setSwimmingFishes] = createSignal<SwimmingFishState[]>(
@@ -125,8 +132,9 @@ export const App: Component = () => {
           activeTankFishIds: activeTankFishIds(),
           unlockedBiomes: ['default_ocean'],
           unlockedThemes: ['classic_dark'],
-          inventory: inventory()
-        },
+          inventory: inventory(),
+          availableChests: availableChests()
+        } as any,
         recentSessions: []
       };
       localStorage.setItem('aquagentic_state_v1', JSON.stringify(stateToSave));
@@ -150,7 +158,7 @@ export const App: Component = () => {
     return Object.keys(inv).filter((id) => inv[id].count > 0).length;
   });
 
-  // Burn tokens engine
+  // Burn tokens engine - Accumulates bait progress and awards Fishing Chests
   const handleBurnTokens = (amount: number, promptText: string) => {
     const detected = detectBiome({
       codeSnippet: promptText,
@@ -164,91 +172,96 @@ export const App: Component = () => {
     let newBait = currentBait() + amount;
     const currentCost = rodCost();
 
+    let earnedChests = 0;
+    while (newBait >= currentCost) {
+      newBait -= currentCost;
+      earnedChests += 1;
+    }
+
+    setCurrentBait(newBait);
+
+    if (earnedChests > 0) {
+      setAvailableChests((c) => c + earnedChests);
+    }
+    persistState();
+  };
+
+  // Open 1 Fishing Chest (Interactive Gacha Sequence)
+  const handleOpenOneChest = (): GachaRollResult | null => {
+    if (availableChests() <= 0) return null;
+
+    setAvailableChests((c) => Math.max(0, c - 1));
+
     let curPityEpic = pityEpic();
     let curPityLegendary = pityLegendary();
     let updatedInv = { ...inventory() };
     let updatedTank = [...activeTankFishIds()];
-    let caughtFish: GachaRollResult | null = null;
 
-    // Check for catches
-    while (newBait >= currentCost) {
-      newBait -= currentCost;
+    const dummyAquarium = {
+      totalTokensBurned: totalTokens(),
+      currentBaitProgress: currentBait(),
+      rodTokenCost: rodCost(),
+      pearls: pearls(),
+      abyssalPearls: 0,
+      coralFragments: 0,
+      pearlsPerSecond: pps(),
+      rodLevel: 1,
+      pityCounterEpic: curPityEpic,
+      pityCounterLegendary: curPityLegendary,
+      activeTankFishIds: updatedTank,
+      unlockedBiomes: ['default_ocean' as Biome],
+      unlockedThemes: ['classic_dark'],
+      inventory: updatedInv
+    };
 
-      const dummyAquarium = {
-        totalTokensBurned: totalTokens(),
-        currentBaitProgress: newBait,
-        rodTokenCost: currentCost,
-        pearls: pearls(),
-        abyssalPearls: 0,
-        coralFragments: 0,
-        pearlsPerSecond: pps(),
-        rodLevel: 1,
-        pityCounterEpic: curPityEpic,
-        pityCounterLegendary: curPityLegendary,
-        activeTankFishIds: updatedTank,
-        unlockedBiomes: ['default_ocean' as Biome],
-        unlockedThemes: ['classic_dark'],
-        inventory: updatedInv
-      };
+    const caughtFish = rollGacha(dummyAquarium, {
+      weather: currentWeather()
+    });
 
-      caughtFish = rollGacha(dummyAquarium, {
-        prompt: promptText,
-        weather: currentWeather()
-      });
+    applyCatchToInventory(dummyAquarium, caughtFish.instance);
+    updatedInv = dummyAquarium.inventory;
+    updatedTank = dummyAquarium.activeTankFishIds;
 
-      applyCatchToInventory(dummyAquarium, caughtFish.instance);
-      updatedInv = dummyAquarium.inventory;
-      updatedTank = dummyAquarium.activeTankFishIds;
-
-      if (caughtFish.fish.rarity === 'legendary' || caughtFish.fish.rarity === 'mythic') {
-        curPityLegendary = 0;
-        curPityEpic = 0;
-      } else if (caughtFish.fish.rarity === 'epic') {
-        curPityEpic = 0;
-        curPityLegendary += 1;
-      } else {
-        curPityEpic += 1;
-        curPityLegendary += 1;
-      }
+    if (caughtFish.fish.rarity === 'legendary' || caughtFish.fish.rarity === 'mythic') {
+      curPityLegendary = 0;
+      curPityEpic = 0;
+    } else if (caughtFish.fish.rarity === 'epic') {
+      curPityEpic = 0;
+      curPityLegendary += 1;
+    } else {
+      curPityEpic += 1;
+      curPityLegendary += 1;
     }
 
-    setCurrentBait(newBait);
     setPityEpic(curPityEpic);
     setPityLegendary(curPityLegendary);
+    setInventory(updatedInv);
+    setActiveTankFishIds(updatedTank);
 
-    if (caughtFish) {
-      setInventory(updatedInv);
-      setActiveTankFishIds(updatedTank);
+    // Recalculate passive PPS
+    const newPPS = calculatePassivePPS({
+      totalTokensBurned: totalTokens(),
+      currentBaitProgress: currentBait(),
+      rodTokenCost: rodCost(),
+      pearls: pearls(),
+      abyssalPearls: 0,
+      coralFragments: 0,
+      pearlsPerSecond: 0,
+      rodLevel: 1,
+      pityCounterEpic: curPityEpic,
+      pityCounterLegendary: curPityLegendary,
+      activeTankFishIds: updatedTank,
+      unlockedBiomes: ['default_ocean'],
+      unlockedThemes: ['classic_dark'],
+      inventory: updatedInv
+    });
+    setPps(newPPS);
 
-      // Recalculate PPS
-      const newPPS = calculatePassivePPS({
-        totalTokensBurned: totalTokens(),
-        currentBaitProgress: newBait,
-        rodTokenCost: currentCost,
-        pearls: pearls(),
-        abyssalPearls: 0,
-        coralFragments: 0,
-        pearlsPerSecond: 0,
-        rodLevel: 1,
-        pityCounterEpic: curPityEpic,
-        pityCounterLegendary: curPityLegendary,
-        activeTankFishIds: updatedTank,
-        unlockedBiomes: ['default_ocean'],
-        unlockedThemes: ['classic_dark'],
-        inventory: updatedInv
-      });
-      setPps(newPPS);
+    // Update stable swimming fishes in background with new species
+    setSwimmingFishes(buildSwimmingFishes(updatedTank, updatedInv));
+    persistState();
 
-      // UPDATE STABLE FISHES SIGNAL ONLY WHEN FISH ARE CAUGHT
-      setSwimmingFishes(buildSwimmingFishes(updatedTank, updatedInv));
-
-      setLatestCatch(caughtFish);
-      persistState();
-
-      setTimeout(() => {
-        setLatestCatch((curr) => (curr === caughtFish ? null : curr));
-      }, 6000);
-    }
+    return caughtFish;
   };
 
   // Toggle fish in/out of the active tank
@@ -387,11 +400,22 @@ export const App: Component = () => {
           currentBait={currentBait()}
           rodCost={rodCost()}
           activeFishCount={swimmingFishes().length}
+          availableChests={availableChests()}
+          onOpenChestModal={() => setIsChestModalOpen(true)}
           onBurnTokens={handleBurnTokens}
           onSimulateStream={handleSendMessage}
           onSimulateGlitch={handleSimulateGlitch}
           onOpenBestiary={() => setIsBestiaryOpen(true)}
         />
+
+        {/* Gacha Fishing Chest Opening Modal */}
+        <Show when={isChestModalOpen()}>
+          <ChestOpeningModal
+            availableChests={availableChests()}
+            onOpenOneChest={handleOpenOneChest}
+            onClose={() => setIsChestModalOpen(false)}
+          />
+        </Show>
 
         {/* Sleek Catch Notification Card */}
         <CatchNotification

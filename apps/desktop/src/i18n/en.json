@@ -64,5 +64,29 @@
     "maxWeight": "Weight record:",
     "caughtCount": "Caught:",
     "close": "Close"
+  },
+  "chest": {
+    "title": "Marine Fishing Chest",
+    "subtitle": "Forged through token consumption in prompts and code",
+    "available": "Chests ready",
+    "openChest": "Open Chest",
+    "openAnother": "Open another chest",
+    "remaining": "available",
+    "tapToOpen": "Click on the chest to unlock it",
+    "opening": "Unlocking ocean chest...",
+    "newDiscovery": "NEW SPECIES DISCOVERED!",
+    "sendToTank": "Send to Aquarium",
+    "skip": "Skip animation",
+    "readyToast": "Fishing chest unlocked!",
+    "readyToastDesc": "You accumulated enough tokens to open a new chest.",
+    "scientificName": "Biological species",
+    "rarityCommon": "Common",
+    "rarityUncommon": "Uncommon",
+    "rarityRare": "Rare",
+    "rarityEpic": "Epic",
+    "rarityLegendary": "Legendary",
+    "rarityMythic": "Mythic",
+    "shinyVariant": "✨ SHINY VARIANT (x3 PPS) ✨",
+    "passiveTitle": "Passive Ability:"
   }
 }

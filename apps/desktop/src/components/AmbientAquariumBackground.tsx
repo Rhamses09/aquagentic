@@ -58,15 +58,22 @@ export const AmbientAquariumBackground: Component<AmbientAquariumBackgroundProps
                 class="flex flex-col items-center group pointer-events-auto cursor-pointer"
                 style={{ animation: `fish-gentle-bob 3.5s ease-in-out infinite` }}
               >
-                <PixelFish
-                  fishId={fish.def.id}
-                  rarity={fish.def.rarity}
-                  isShiny={fish.isShiny}
-                  size={48 * fish.scale}
-                  class="transform hover:scale-125 transition-transform"
-                />
+                {/* Fish Sprite Wrapper with Turn Keyframe (Sprite flips, but text stays crisp & unmirrored) */}
+                <div
+                  style={{
+                    animation: `${fish.animPattern}-turn ${fish.swimDuration}s ease-in-out infinite`
+                  }}
+                >
+                  <PixelFish
+                    fishId={fish.def.id}
+                    rarity={fish.def.rarity}
+                    isShiny={fish.isShiny}
+                    size={48 * fish.scale}
+                    class="transform hover:scale-125 transition-transform"
+                  />
+                </div>
 
-                {/* Identification Pill */}
+                {/* Identification Pill (Never flipped or distorted) */}
                 <span class="mt-1 px-1.5 py-0.5 rounded text-[8.5px] font-mono text-cyan-300/90 bg-black/70 border border-cyan-800/40 backdrop-blur-sm opacity-60 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-lg">
                   {t(fish.def.nameKey)} (+{fish.def.basePPS} PPS)
                 </span>

@@ -1,7 +1,7 @@
 {
   "game": {
     "title": "Aquagentic",
-    "tagline": "Ultralight AI Agent Client & Gamified Aquarium Gacha",
+    "tagline": "Ultralight AI Agent Client & Gamified Aquarium Fishing",
     "pearls": "Pearls",
     "abyssalPearls": "Abyssal Pearls",
     "coralFragments": "Coral Fragments",
@@ -9,7 +9,7 @@
     "tokensBurned": "Tokens Burned",
     "baitProgress": "Bait Progress",
     "rodLevel": "Rod Level",
-    "activeTank": "Active Tank",
+    "activeTank": "Active Aquarium",
     "inventory": "Fishdex",
     "shop": "Shop",
     "fusion": "Fusion Lab",
@@ -25,93 +25,121 @@
   },
   "biome": {
     "default_ocean": "Classic Ocean",
-    "low_level": "Low-Level Trench",
-    "data_swamp": "Data Swamp",
-    "frontend_reef": "Frontend Reef",
-    "abyssal_zone": "Abyssal Reasoning Trench"
+    "low_level": "Deep Trench",
+    "data_swamp": "Mangrove Shallows",
+    "frontend_reef": "Coral Reef",
+    "abyssal_zone": "Abyssal Midnight Trench"
   },
   "weather": {
     "clear": "Crystal Waters",
-    "storm": "Glitch Storm"
+    "storm": "Oceanic Storm"
   },
   "fish": {
-    "syntax_sardine": {
-      "name": "Syntax Sardine",
-      "desc": "An agile fish swimming between braces and semicolons."
+    "clownfish": {
+      "name": "Clownfish",
+      "desc": "A vibrant reef fish (Amphiprion ocellaris) living in protective symbiosis with sea anemones."
     },
-    "console_log_carp": {
-      "name": "Console.log Carp",
-      "desc": "Spawns whenever you are desperately trying to figure out what's happening."
+    "blue_tang": {
+      "name": "Blue Tang",
+      "desc": "A brilliant sapphire blue fish with a vibrant yellow tail fin (Paracanthurus hepatus) grazing across coral heads."
     },
-    "bit_shrimp": {
-      "name": "Bit Micro-Shrimp",
-      "desc": "Tiny but foundational across system memory."
+    "seahorse": {
+      "name": "Crowned Seahorse",
+      "desc": "An elegant upright fish (Hippocampus coronatus) anchoring itself to sea grasses with its prehensile tail."
     },
-    "json_jellyfish": {
-      "name": "JSON Jellyfish",
-      "desc": "Drifts translucently organizing key-value pairs."
+    "french_angelfish": {
+      "name": "French Angelfish",
+      "desc": "A majestic Caribbean reef grazer adorned with velvety black scales bordered in shimmering gold (Pomacanthus paru)."
     },
-    "compiler_carp": {
-      "name": "Compiler Carp",
-      "desc": "Inspects code for warnings before taking a swim."
+    "lionfish": {
+      "name": "Red Lionfish",
+      "desc": "A striking predatory marvel boasting venomous rayed spines and tiger-striped bands (Pterois volitans)."
     },
-    "recursive_salmon": {
-      "name": "Recursive Salmon",
-      "desc": "Swims upstream calling itself repeatedly until base condition."
+    "mandarin_dragonet": {
+      "name": "Mandarin Dragonet",
+      "desc": "One of the most visually stunning marine creatures, patterned in psychedelic turquoise and orange mazes (Synchiropus splendidus)."
     },
-    "regex_ray": {
-      "name": "Regex Ray",
-      "desc": "Glides cryptic pattern lines along the swamp floor."
+    "copperband_butterfly": {
+      "name": "Copperband Butterflyfish",
+      "desc": "An ornate butterflyfish with gleaming copper bands and an elongated snout built for crevice foraging (Chelmon rostratus)."
     },
-    "git_squid": {
-      "name": "Git Squid",
-      "desc": "Equipped with 8 tentacles to juggle branches and merges simultaneously."
+    "pufferfish": {
+      "name": "Dwarf Pufferfish",
+      "desc": "A curious fish that inflates itself with water into a spiny sphere when threatened by predators."
     },
-    "context_remora": {
-      "name": "Context Remora",
-      "desc": "Latches onto massive context windows to double passive resources."
+    "blue_ringed_octopus": {
+      "name": "Blue-Ringed Octopus",
+      "desc": "A small cephalopod displaying glowing iridescent blue rings when agitated (Hapalochlaena lunulata)."
     },
-    "local_lantern_fish": {
-      "name": "Local Lantern Fish",
-      "desc": "Glows intensely when sustained by local models at 0 API cost."
+    "anglerfish": {
+      "name": "Deep Sea Anglerfish",
+      "desc": "A creature of the midnight zone armed with a bioluminescent dorsal photophore lure (Melanocetus johnsonii)."
     },
-    "null_pointer_eel": {
-      "name": "NullPointer Eel",
-      "desc": "An electric creature that only emerges during bug storms."
+    "moray_eel": {
+      "name": "Giant Moray Eel",
+      "desc": "A muscular serpentine predator with a pharyngeal second jaw lurking inside rocky crevices (Gymnothorax javanicus)."
     },
-    "segfault_puffer": {
-      "name": "Segfault Puffer",
-      "desc": "Violently inflates when a process touches forbidden memory."
+    "barracuda": {
+      "name": "Great Barracuda",
+      "desc": "A lightning-fast torpedo predator equipped with razor-sharp dagger teeth (Sphyraena barracuda)."
     },
-    "kernel_shark": {
-      "name": "Kernel Shark",
-      "desc": "Top OS predator; devours common duplicates and refines coral."
+    "goblin_shark": {
+      "name": "Goblin Shark",
+      "desc": "A living prehistoric relic of the abyss with jaws that slingshot forward to ambush prey (Mitsukurina owstoni)."
     },
-    "docker_whale": {
-      "name": "Docker Whale",
-      "desc": "Carries entire containerized cargo pods across the deep seas."
+    "black_dragonfish": {
+      "name": "Black Dragonfish",
+      "desc": "An abyssal deep-sea terror possessing light-trapping black skin and transparent needle fangs."
     },
-    "async_leviathan": {
-      "name": "Async Leviathan",
-      "desc": "A mythical beast of unresolved promises and non-blocking event loops."
+    "hammerhead_shark": {
+      "name": "Great Hammerhead Shark",
+      "desc": "A formidable ocean predator with a wide cephalofoil head packed with electromagnetic ampullae (Sphyrna mokarran)."
+    },
+    "manta_ray": {
+      "name": "Giant Oceanic Manta Ray",
+      "desc": "A gentle pelagic wanderer with wings stretching over seven meters flying gracefully through open sea currents (Mobula birostris)."
+    },
+    "ocean_sunfish": {
+      "name": "Giant Ocean Sunfish",
+      "desc": "The world's heaviest bony fish, characterized by a rounded body and a calm, majestic presence (Mola mola)."
+    },
+    "great_white_shark": {
+      "name": "Great White Shark",
+      "desc": "The apex predator of coastal waters, representing millions of years of predatory perfection (Carcharodon carcharias)."
+    },
+    "whale_shark": {
+      "name": "Whale Shark",
+      "desc": "The largest fish on Earth (Rhincodon typus), a colossal gentle giant dotted with star-like constellations."
+    },
+    "giant_oarfish": {
+      "name": "Giant Oarfish",
+      "desc": "A mythical, ribbon-like silver sea serpent reaching up to 11 meters with an ethereal crimson crest (Regalecus glesne)."
+    },
+    "coelacanth": {
+      "name": "Prehistoric Coelacanth",
+      "desc": "A 400-million-year-old living fossil with lobed fins, long believed extinct with the dinosaurs (Latimeria chalumnae)."
+    },
+    "colossal_squid": {
+      "name": "Colossal Squid",
+      "desc": "The most massive invertebrate on Earth, prowling the freezing Antarctic deep armed with rotating tentacle hooks."
+    },
+    "greenland_shark": {
+      "name": "Greenland Shark",
+      "desc": "The longest-living vertebrate known, silently roaming Arctic ocean depths for more than four centuries (Somniosus microcephalus)."
     }
   },
   "passive": {
-    "git_commit_surge": {
-      "name": "Commit Surge",
-      "desc": "Fills 25% of the bait bar with each Git action."
+    "neuro_surge": {
+      "name": "Ring Pulse",
+      "desc": "Fills 25% of the bait bar with each successful tool action."
     },
-    "deep_context_boost": {
-      "name": "Deep Synergy",
-      "desc": "Doubles pearl production when context window exceeds 20,000 tokens."
+    "abyssal_lure": {
+      "name": "Bioluminescent Lure",
+      "desc": "Doubles pearl generation during deep thinking sessions."
     },
-    "ollama_saver": {
-      "name": "Sovereign Light",
-      "desc": "Multiplies pearls x3 while chatting with local models."
-    },
-    "common_refiner": {
-      "name": "Kernel Refiner",
-      "desc": "Consumes duplicate common catches to forge Coral Fragments."
+    "electro_detection": {
+      "name": "Electro-Sense",
+      "desc": "Detects and consumes common duplicates to forge Coral Fragments."
     }
   }
 }

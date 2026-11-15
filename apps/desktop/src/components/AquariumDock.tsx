@@ -1,4 +1,4 @@
-import { Component } from 'solid-js';
+import { Component, Show } from 'solid-js';
 import { Biome, Weather } from '@aquagentic/core-game';
 import { t } from '../i18n';
 import {
@@ -6,7 +6,8 @@ import {
   IconCompass,
   IconTerminal,
   IconPlus,
-  IconFish
+  IconFish,
+  IconChest
 } from './icons';
 
 interface AquariumDockProps {
@@ -17,6 +18,8 @@ interface AquariumDockProps {
   currentBait: number;
   rodCost: number;
   activeFishCount: number;
+  availableChests: number;
+  onOpenChestModal: () => void;
   onBurnTokens: (amount: number, prompt: string) => void;
   onSimulateStream: (prompt: string) => void;
   onSimulateGlitch: () => void;
@@ -83,6 +86,22 @@ export const AquariumDock: Component<AquariumDockProps> = (props) => {
 
       {/* Right: Quick actions & Bestiary shortcut */}
       <div class="flex items-center gap-2">
+        {/* Fishing Chest Gacha Button */}
+        <button
+          onClick={props.onOpenChestModal}
+          class={`px-2.5 py-1 rounded-md text-[10.5px] font-mono font-medium transition-all flex items-center gap-1.5 border ${
+            props.availableChests > 0
+              ? 'bg-cyan-950/80 hover:bg-cyan-900/80 text-cyan-300 border-cyan-500/60 shadow-[0_0_12px_rgba(6,182,212,0.35)] animate-pulse'
+              : 'bg-white/[0.04] hover:bg-white/[0.08] text-zinc-300 hover:text-white border-white/[0.06]'
+          }`}
+          title={t('chest.title')}
+        >
+          <IconChest size={12} class={props.availableChests > 0 ? "text-cyan-300" : "text-zinc-400"} />
+          <span>
+            {props.availableChests > 0 ? `${props.availableChests} ${t('chest.openChest')}` : t('chest.openChest')}
+          </span>
+        </button>
+
         {/* Open Bestiary */}
         <button
           onClick={props.onOpenBestiary}
