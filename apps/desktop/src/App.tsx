@@ -8,7 +8,8 @@ import {
   Biome,
   Weather,
   GachaRollResult,
-  FISH_MAP
+  FISH_MAP,
+  AquagenticSyncState
 } from '@aquagentic/core-game';
 import { Sidebar } from './components/Sidebar';
 import { ChatView, Message } from './components/ChatView';
@@ -17,16 +18,31 @@ import { CatchNotification } from './components/CatchNotification';
 import { BestiaryModal } from './components/BestiaryModal';
 import { AmbientAquariumBackground, SwimmingFishState } from './components/AmbientAquariumBackground';
 
+function loadInitialState(): AquagenticSyncState {
+  try {
+    const saved = localStorage.getItem('aquagentic_state_v1');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed && parsed.aquarium) {
+        return parsed;
+      }
+    }
+  } catch {}
+  return createInitialState('desktop');
+}
+
 export const App: Component = () => {
-  const initial = createInitialState('desktop');
+  const initial = loadInitialState();
   const [gameState, setGameState] = createSignal(initial);
   const [currentBiome, setCurrentBiome] = createSignal<Biome>('default_ocean');
   const [currentWeather, setCurrentWeather] = createSignal<Weather>('clear');
   const [latestCatch, setLatestCatch] = createSignal<GachaRollResult | null>(null);
   const [isBestiaryOpen, setIsBestiaryOpen] = createSignal(false);
 
-  // Active tank occupants isolated signal (to NEVER trigger animation resets during 500ms pearl ticks)
-  const [activeTankFishIds, setActiveTankFishIds] = createSignal<string[]>(initial.aquarium.activeTankFishIds);
+  // Active tank occupants isolated signal
+  const [activeTankFishIds, setActiveTankFishIds] = createSignal<string[]>(
+    initial.aquarium.activeTankFishIds || []
+  );
 
   // Chat Sessions & Active State
   const [currentSessionId, setCurrentSessionId] = createSignal('session_1');
@@ -48,13 +64,20 @@ export const App: Component = () => {
     }
   ]);
 
-  // Passive PPS Economy Ticker (Isolated to ONLY mutate pearls, zero DOM or animation restarts)
+  // Persist state changes to localStorage
+  const saveState = (state: AquagenticSyncState) => {
+    try {
+      localStorage.setItem('aquagentic_state_v1', JSON.stringify(state));
+    } catch {}
+  };
+
+  // Passive PPS Economy Ticker (Mutates pearls only, never triggers fish animation resets)
   onMount(() => {
     const timer = setInterval(() => {
       setGameState((prev) => {
         const pps = prev.aquarium.pearlsPerSecond;
         if (pps <= 0) return prev;
-        return {
+        const next = {
           ...prev,
           lastUpdated: Date.now(),
           aquarium: {
@@ -62,6 +85,7 @@ export const App: Component = () => {
             pearls: prev.aquarium.pearls + pps / 2
           }
         };
+        return next;
       });
     }, 500);
 
@@ -81,13 +105,14 @@ export const App: Component = () => {
         id: `ocean_fish_${id}_${index}`,
         def: def!,
         inv: item,
-        // Spread evenly across heights: 16%, 34%, 52%, 70%, 84%
-        topPercent: 16 + ((index * 22) % 65),
-        // Peaceful, natural drifting speed
-        swimDuration: 22 + ((index * 4) % 14),
-        swimDelay: (index * 2.5) % 8,
+        // Spread evenly across heights: 20%, 38%, 56%, 74%
+        topPercent: 20 + ((index * 20) % 58),
+        // Positioned clearly across visible widths: 15%, 38%, 62%, 82%
+        leftPercent: 15 + ((index * 24) % 68),
+        swimDuration: 12 + ((index * 2) % 6),
+        swimDelay: 0,
         isShiny,
-        scale: 0.95 + ((index % 3) * 0.12)
+        scale: 1.05 + ((index % 3) * 0.15)
       };
     }).filter(f => f.def !== undefined);
   });
@@ -135,9 +160,14 @@ export const App: Component = () => {
         }
       }
 
+      const nextState: AquagenticSyncState = {
+        ...prev,
+        lastUpdated: Date.now(),
+        aquarium: aq
+      };
+
       if (catchResult) {
         setLatestCatch(catchResult);
-        // Sync active tank occupants
         setActiveTankFishIds([...aq.activeTankFishIds]);
 
         setTimeout(() => {
@@ -145,11 +175,8 @@ export const App: Component = () => {
         }, 6000);
       }
 
-      return {
-        ...prev,
-        lastUpdated: Date.now(),
-        aquarium: aq
-      };
+      saveState(nextState);
+      return nextState;
     });
   };
 
@@ -173,14 +200,15 @@ export const App: Component = () => {
       aq.activeTankFishIds = currentTank;
       aq.pearlsPerSecond = calculatePassivePPS(aq);
 
-      // Sync active tank occupants
-      setActiveTankFishIds([...currentTank]);
-
-      return {
+      const nextState: AquagenticSyncState = {
         ...prev,
         lastUpdated: Date.now(),
         aquarium: aq
       };
+
+      setActiveTankFishIds([...currentTank]);
+      saveState(nextState);
+      return nextState;
     });
   };
 
@@ -242,14 +270,14 @@ export const App: Component = () => {
 
   return (
     <div class="relative flex h-screen w-screen overflow-hidden bg-[#07090e] text-zinc-100 select-none">
-      {/* 1. Fullscreen Ambient Living Aquarium Background */}
+      {/* 1. Fullscreen Ambient Living Aquarium Background (Z-0) */}
       <AmbientAquariumBackground
         biome={currentBiome()}
         weather={currentWeather()}
         activeFishes={swimmingFishes()}
       />
 
-      {/* 2. Left Sidebar (Translucent Obsidian Glass) */}
+      {/* 2. Left Sidebar (Translucent Obsidian Glass, Z-20) */}
       <Sidebar
         currentSessionId={currentSessionId()}
         sessions={sessions()}
@@ -261,8 +289,8 @@ export const App: Component = () => {
         onOpenBestiary={() => setIsBestiaryOpen(true)}
       />
 
-      {/* 3. Main Workspace */}
-      <main class="flex-1 flex flex-col h-screen overflow-hidden relative z-10">
+      {/* 3. Main Workspace (Transparent container so background shows through, Z-10) */}
+      <main class="flex-1 flex flex-col h-screen overflow-hidden relative z-10 bg-transparent">
         {/* Chat Conversation View with Translucent Glass Panels */}
         <ChatView
           messages={messages()}

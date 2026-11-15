@@ -52,7 +52,7 @@ export const ChatView: Component<ChatViewProps> = (props) => {
   };
 
   return (
-    <div class="flex-1 flex flex-col h-full bg-[#090b10] relative overflow-hidden select-text">
+    <div class="flex-1 flex flex-col h-full bg-transparent relative overflow-hidden select-text">
       {/* Top Session Bar (Client Titlebar Style) */}
       <div class="h-13 border-b border-white/[0.06] px-5 flex items-center justify-between bg-[#0d0f17]/80 backdrop-blur-md z-10 select-none">
         <div class="flex items-center gap-2 text-xs">
