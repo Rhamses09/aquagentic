@@ -1,0 +1,44 @@
+{
+  "nav": {
+    "chat": "Chat Agéntico",
+    "tank": "Acuario",
+    "fishdex": "Bestiario",
+    "shop": "Tienda",
+    "remote": "Vincular Móvil"
+  },
+  "stats": {
+    "pearls": "Perlas",
+    "pps": "PPS",
+    "tokensBurned": "Tokens Quemados",
+    "currentBait": "Cebo / Barra de Lanzamiento",
+    "rodLevel": "Caña Nivel",
+    "biome": "Bioma",
+    "weather": "Clima",
+    "tankCapacity": "Capacidad del Tanque"
+  },
+  "dock": {
+    "title": "Simulador de Consumo de Tokens en Tiempo Real",
+    "subtitle": "Escribe un prompt o genera tokens para cargar tu caña y pescar en vivo.",
+    "inputPlaceholder": "Escribe un prompt de prueba (ej: Implementa un parser en Rust...)",
+    "burn100Tokens": "+100 Tokens",
+    "burn500Tokens": "+500 Tokens (Lanzamiento Rápido)",
+    "simulateStream": "Simular Respuesta Streaming",
+    "triggerGlitch": "Simular Error (Tormenta Glitch)",
+    "goldenBait": "Cebo Dorado Activo",
+    "nextCatchAt": "Próxima captura a los"
+  },
+  "tank": {
+    "empty": "El acuario está vacío. Quema tokens para capturar tu primer pez.",
+    "shinyBadge": "SHINY x3",
+    "paused": "Pausado para ahorrar 100% de CPU en segundo plano"
+  },
+  "catchModal": {
+    "title": "¡Pez Capturado!",
+    "newBadge": "¡NUEVA ESPECIE!",
+    "pityBadge": "¡GARANTÍA PITY!",
+    "weight": "Peso",
+    "passive": "Efecto Pasivo",
+    "promptHash": "Semilla SHA-256",
+    "continue": "Añadir al Acuario"
+  }
+}

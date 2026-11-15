@@ -1,0 +1,44 @@
+{
+  "nav": {
+    "chat": "Agent Chat",
+    "tank": "Aquarium",
+    "fishdex": "Fishdex",
+    "shop": "Shop",
+    "remote": "Pair Mobile"
+  },
+  "stats": {
+    "pearls": "Pearls",
+    "pps": "PPS",
+    "tokensBurned": "Tokens Burned",
+    "currentBait": "Bait / Cast Bar",
+    "rodLevel": "Rod Level",
+    "biome": "Biome",
+    "weather": "Weather",
+    "tankCapacity": "Tank Capacity"
+  },
+  "dock": {
+    "title": "Real-Time Token Burning Simulator",
+    "subtitle": "Type a prompt or burn tokens to charge your rod and catch fish live.",
+    "inputPlaceholder": "Enter a test prompt (e.g. Implement a fast parser in Rust...)",
+    "burn100Tokens": "+100 Tokens",
+    "burn500Tokens": "+500 Tokens (Instant Cast)",
+    "simulateStream": "Simulate Streaming Response",
+    "triggerGlitch": "Simulate Error (Glitch Storm)",
+    "goldenBait": "Golden Bait Active",
+    "nextCatchAt": "Next catch at"
+  },
+  "tank": {
+    "empty": "The aquarium is empty. Burn tokens to catch your first fish.",
+    "shinyBadge": "SHINY x3",
+    "paused": "Paused for 100% CPU saving while backgrounded"
+  },
+  "catchModal": {
+    "title": "Fish Caught!",
+    "newBadge": "NEW DISCOVERY!",
+    "pityBadge": "PITY TRIGGERED!",
+    "weight": "Weight",
+    "passive": "Passive Effect",
+    "promptHash": "SHA-256 Seed",
+    "continue": "Add to Aquarium"
+  }
+}

@@ -2,15 +2,23 @@
   "name": "@aquagentic/core-game",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
   "scripts": {
     "build": "tsc",
-    "test": "node --test"
+    "test": "node --import tsx --test src/test/core.test.ts"
   },
-  "dependencies": {},
   "devDependencies": {
+    "@types/node": "^22.13.4",
     "typescript": "^5.7.3"
   }
 }

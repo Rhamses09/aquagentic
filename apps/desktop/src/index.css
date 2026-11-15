@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    margin: 0;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background-color: #040911;
+    color: #e2e8f0;
+  }
+  
+  code, pre {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+/* 0% CPU Composited GPU Animations */
+.gpu-layer {
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Biome Backdrops */
+.biome-default_ocean {
+  background: radial-gradient(circle at 50% 20%, #0d2b45 0%, #051322 70%, #02070d 100%);
+}
+
+.biome-low_level {
+  background: radial-gradient(circle at 50% 20%, #1a2634 0%, #0a111a 70%, #03060a 100%);
+}
+
+.biome-data_swamp {
+  background: radial-gradient(circle at 50% 20%, #0f2d26 0%, #071714 70%, #020807 100%);
+}
+
+.biome-frontend_reef {
+  background: radial-gradient(circle at 50% 20%, #0f3443 0%, #102027 70%, #03080b 100%);
+}
+
+.biome-abyssal_zone {
+  background: radial-gradient(circle at 50% 20%, #160d2b 0%, #090514 70%, #020108 100%);
+}
+
+/* Glitch Storm Effect */
+.weather-storm {
+  box-shadow: inset 0 0 100px rgba(168, 85, 247, 0.25);
+  animation: storm-pulse 2s ease-in-out infinite;
+}
+
+@keyframes storm-pulse {
+  0%, 100% { filter: brightness(1) contrast(1); }
+  50% { filter: brightness(1.2) contrast(1.15) hue-rotate(15deg); }
+}
