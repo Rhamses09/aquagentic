@@ -1,9 +1,10 @@
-import { Component, createSignal, onMount, onCleanup, createMemo } from 'solid-js';
+import { Component, createSignal, onMount, onCleanup, createMemo, Show } from 'solid-js';
 import {
   createInitialState,
   rollGacha,
   applyCatchToInventory,
   detectBiome,
+  calculatePassivePPS,
   Biome,
   Weather,
   GachaRollResult,
@@ -13,12 +14,14 @@ import { Sidebar } from './components/Sidebar';
 import { ChatView, Message } from './components/ChatView';
 import { AquariumDock } from './components/AquariumDock';
 import { CatchNotification } from './components/CatchNotification';
+import { BestiaryModal } from './components/BestiaryModal';
 
 export const App: Component = () => {
   const [gameState, setGameState] = createSignal(createInitialState('desktop'));
   const [currentBiome, setCurrentBiome] = createSignal<Biome>('default_ocean');
   const [currentWeather, setCurrentWeather] = createSignal<Weather>('clear');
   const [latestCatch, setLatestCatch] = createSignal<GachaRollResult | null>(null);
+  const [isBestiaryOpen, setIsBestiaryOpen] = createSignal(false);
 
   // Chat Sessions & Active State
   const [currentSessionId, setCurrentSessionId] = createSignal('session_1');
@@ -34,7 +37,7 @@ export const App: Component = () => {
     {
       id: 'msg_1',
       role: 'assistant',
-      content: '¡Hola! Soy tu asistente agéntico en Aquagentic. Cada prompt, código y token generado alimentará tu caña de pesca en el acuario inferior.',
+      content: '¡Hola! Soy tu asistente agéntico en Aquagentic. Cada prompt, código y llamada MCP alimentará tu caña de pesca en el acuario inferior.',
       tokens: 42,
       timestamp: '12:00'
     }
@@ -60,7 +63,7 @@ export const App: Component = () => {
     onCleanup(() => clearInterval(timer));
   });
 
-  // Calculate swimming fishes for the ambient dock
+  // Calculate swimming fishes positioned visibly inside the tank bounds
   const swimmingFishes = createMemo(() => {
     const aq = gameState().aquarium;
     return aq.activeTankFishIds.map((id, index) => {
@@ -71,18 +74,22 @@ export const App: Component = () => {
         id: `swim_${id}_${index}`,
         def: def!,
         inv,
-        topPercent: 12 + ((index * 24) % 55),
-        swimDuration: 8 + ((index * 2) % 6),
-        swimDelay: (index * 1.5) % 4,
+        topPercent: 14 + ((index * 24) % 50),
+        leftPercent: 8 + ((index * 26) % 76),
+        swimDuration: 7 + ((index * 2) % 6),
         isShiny,
-        scale: 0.85 + ((index % 3) * 0.1)
+        scale: 0.9 + ((index % 3) * 0.1)
       };
     }).filter(f => f.def !== undefined);
   });
 
+  const discoveredCount = createMemo(() => {
+    const inv = gameState().aquarium.inventory;
+    return Object.keys(inv).filter(id => inv[id].count > 0).length;
+  });
+
   // Burn tokens engine
   const handleBurnTokens = (amount: number, promptText: string) => {
-    // Detect biome from code or keywords
     const detected = detectBiome({
       codeSnippet: promptText,
       modelName: selectedModel()
@@ -121,11 +128,40 @@ export const App: Component = () => {
 
       if (catchResult) {
         setLatestCatch(catchResult);
-        // Auto-dismiss catch toast after 6 seconds
         setTimeout(() => {
           setLatestCatch(curr => (curr === catchResult ? null : curr));
         }, 6000);
       }
+
+      return {
+        ...prev,
+        lastUpdated: Date.now(),
+        aquarium: aq
+      };
+    });
+  };
+
+  // Toggle fish in/out of the active tank
+  const handleToggleActiveTank = (fishId: string) => {
+    setGameState((prev) => {
+      const aq = { ...prev.aquarium };
+      const currentTank = [...aq.activeTankFishIds];
+      const index = currentTank.indexOf(fishId);
+
+      if (index >= 0) {
+        // Remove if not the last fish
+        if (currentTank.length > 1) {
+          currentTank.splice(index, 1);
+        }
+      } else {
+        // Add if under capacity (max 8)
+        if (currentTank.length < 8) {
+          currentTank.push(fishId);
+        }
+      }
+
+      aq.activeTankFishIds = currentTank;
+      aq.pearlsPerSecond = calculatePassivePPS(aq);
 
       return {
         ...prev,
@@ -147,10 +183,8 @@ export const App: Component = () => {
     setMessages(prev => [...prev, userMsg]);
     setIsStreaming(true);
 
-    // Prompt tokens estimate (approx 1 token per 4 chars)
     const promptTokens = Math.max(25, Math.round(text.length / 3));
 
-    // Simulate Agent Streaming chunks
     let accumulatedTokens = 0;
     const interval = setInterval(() => {
       accumulatedTokens += 60;
@@ -160,12 +194,11 @@ export const App: Component = () => {
         clearInterval(interval);
         setIsStreaming(false);
 
-        // Assistant reply with reasoning demo if model is DeepSeek/Thinking
         const isThinking = selectedModel().includes('Thinking') || selectedModel().includes('DeepSeek');
         const assistantMsg: Message = {
           id: `asst_${Date.now()}`,
           role: 'assistant',
-          content: `Entendido. He analizado tu solicitud sobre:\n\`\`\`\n${text.substring(0, 120)}\n\`\`\`\nHe preparado la solución asegurando máxima eficiencia, bajo consumo de memoria y compatibilidad completa con el sistema.`,
+          content: `Entendido. He procesado tu solicitud sobre:\n\`\`\`\n${text.substring(0, 120)}\n\`\`\`\nHe preparado la solución asegurando máxima eficiencia, bajo consumo de memoria y compatibilidad completa con el sistema.`,
           reasoning: isThinking
             ? '1. Analizando requerimientos de tokens y complejidad algorítmica.\n2. Verificando que no haya bloqueos en el event loop.\n3. Despachando llamada a herramienta MCP.'
             : undefined,
@@ -195,15 +228,17 @@ export const App: Component = () => {
   };
 
   return (
-    <div class="flex h-screen w-screen overflow-hidden bg-[#0c0d12] text-zinc-100 select-none">
+    <div class="flex h-screen w-screen overflow-hidden bg-[#090b10] text-zinc-100 select-none">
       {/* Left Sidebar (Claude Desktop / Antigravity Style) */}
       <Sidebar
         currentSessionId={currentSessionId()}
         sessions={sessions()}
         selectedModel={selectedModel()}
+        discoveredCount={discoveredCount()}
         onSelectModel={setSelectedModel}
         onNewChat={handleNewChat}
         onSelectSession={setCurrentSessionId}
+        onOpenBestiary={() => setIsBestiaryOpen(true)}
       />
 
       {/* Main Column */}
@@ -228,6 +263,7 @@ export const App: Component = () => {
           onBurnTokens={handleBurnTokens}
           onSimulateStream={handleSendMessage}
           onSimulateGlitch={handleSimulateGlitch}
+          onOpenBestiary={() => setIsBestiaryOpen(true)}
         />
 
         {/* Sleek Catch Notification Card */}
@@ -235,6 +271,16 @@ export const App: Component = () => {
           catchResult={latestCatch()}
           onDismiss={() => setLatestCatch(null)}
         />
+
+        {/* Bestiario / Fishdex Modal */}
+        <Show when={isBestiaryOpen()}>
+          <BestiaryModal
+            inventory={gameState().aquarium.inventory}
+            activeTankIds={gameState().aquarium.activeTankFishIds}
+            onToggleActiveTank={handleToggleActiveTank}
+            onClose={() => setIsBestiaryOpen(false)}
+          />
+        </Show>
       </main>
     </div>
   );

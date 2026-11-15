@@ -48,6 +48,21 @@
     "caughtToast": "¡Nueva Captura!",
     "shinyToast": "★ VARIANTE SHINY (x3 PPS)",
     "weight": "Peso",
-    "viewBestiary": "Ver en Bestiario"
+    "viewBestiary": "Ver Bestiario"
+  },
+  "bestiary": {
+    "title": "Bestiario de Peces (Fishdex)",
+    "subtitle": "Colección de especies capturadas mediante el consumo de tokens y llamadas a agentes.",
+    "discovered": "Descubiertos",
+    "all": "Todos",
+    "inTank": "En Tanque",
+    "addToTank": "Añadir al Tanque",
+    "removeFromTank": "Quitar del Tanque",
+    "tankFull": "Tanque lleno (máx 8)",
+    "undiscovered": "Especie no descubierta",
+    "biomeHint": "Se avista en:",
+    "maxWeight": "Récord de peso:",
+    "caughtCount": "Capturados:",
+    "close": "Cerrar"
   }
 }

@@ -48,6 +48,21 @@
     "caughtToast": "New Catch!",
     "shinyToast": "★ SHINY VARIANT (x3 PPS)",
     "weight": "Weight",
-    "viewBestiary": "View in Fishdex"
+    "viewBestiary": "View Fishdex"
+  },
+  "bestiary": {
+    "title": "Fishdex & Collection",
+    "subtitle": "Catalog of aquatic species discovered through token consumption and agent calls.",
+    "discovered": "Discovered",
+    "all": "All",
+    "inTank": "In Tank",
+    "addToTank": "Add to Tank",
+    "removeFromTank": "Remove from Tank",
+    "tankFull": "Tank full (max 8)",
+    "undiscovered": "Undiscovered Species",
+    "biomeHint": "Spawns in:",
+    "maxWeight": "Weight record:",
+    "caughtCount": "Caught:",
+    "close": "Close"
   }
 }

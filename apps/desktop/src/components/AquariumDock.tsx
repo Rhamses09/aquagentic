@@ -8,7 +8,8 @@ import {
   IconChevronDown,
   IconChevronUp,
   IconTerminal,
-  IconPlus
+  IconPlus,
+  IconFish
 } from './icons';
 
 interface SwimmingFish {
@@ -16,8 +17,8 @@ interface SwimmingFish {
   def: FishDefinition;
   inv?: InventoryItem;
   topPercent: number;
+  leftPercent: number;
   swimDuration: number;
-  swimDelay: number;
   isShiny: boolean;
   scale: number;
 }
@@ -33,6 +34,7 @@ interface AquariumDockProps {
   onBurnTokens: (amount: number, prompt: string) => void;
   onSimulateStream: (prompt: string) => void;
   onSimulateGlitch: () => void;
+  onOpenBestiary: () => void;
   onFishClick?: (fish: SwimmingFish) => void;
 }
 
@@ -44,14 +46,14 @@ export const AquariumDock: Component<AquariumDockProps> = (props) => {
   return (
     <div
       class={`border-t border-white/[0.08] transition-all duration-300 relative flex flex-col z-20 select-none ${
-        isExpanded() ? 'h-64' : 'h-20'
+        isExpanded() ? 'h-64' : 'h-28'
       } biome-ambient-${props.biome} ${
         props.weather === 'storm' ? 'weather-storm-active' : ''
       }`}
     >
       {/* Top Dock Bar (Telemetry Strip & Controls) */}
       <div class="h-9 px-4 flex items-center justify-between border-b border-white/[0.05] bg-black/40 backdrop-blur-md shrink-0 font-mono text-xs">
-        {/* Left: Telemetry Ticker */}
+        {/* Left: Telemetry Ticker & Bestiary Shortcut */}
         <div class="flex items-center gap-4">
           <div class="flex items-center gap-1.5 text-cyan-300 font-semibold">
             <span class="text-[10px] text-zinc-500 uppercase">Pearls</span>
@@ -67,6 +69,16 @@ export const AquariumDock: Component<AquariumDockProps> = (props) => {
             <IconCompass size={11} class="text-zinc-500" />
             <span class="uppercase tracking-wider text-[9.5px] font-semibold">{t(`biome.${props.biome}`)}</span>
           </div>
+
+          {/* Active Tank Fish Count Badge (Clickable to open Bestiary) */}
+          <button
+            onClick={props.onOpenBestiary}
+            class="flex items-center gap-1 px-2 py-0.5 rounded bg-cyan-950/60 border border-cyan-800/40 text-cyan-300 hover:bg-cyan-900/60 transition-colors text-[10.5px]"
+            title={t('aquarium.viewBestiary')}
+          >
+            <IconFish size={12} />
+            <span>{props.activeFishes.length} {t('aquarium.activeTank')}</span>
+          </button>
         </div>
 
         {/* Center: Token Cast / Bait Progress Gauge */}
@@ -77,7 +89,7 @@ export const AquariumDock: Component<AquariumDockProps> = (props) => {
               {props.currentBait} / {props.rodCost} tk
             </span>
           </div>
-          <div class="w-full h-1 bg-white/[0.06] rounded-full overflow-hidden border border-white/[0.04] relative">
+          <div class="w-full h-1.5 bg-white/[0.06] rounded-full overflow-hidden border border-white/[0.04] relative">
             <div
               class="h-full bg-gradient-to-r from-cyan-500 via-indigo-500 to-emerald-400 rounded-full transition-all duration-300"
               style={{ width: `${progressPercent()}%` }}
@@ -87,6 +99,15 @@ export const AquariumDock: Component<AquariumDockProps> = (props) => {
 
         {/* Right: Actions & Drawer Toggle */}
         <div class="flex items-center gap-2">
+          {/* Open Bestiary Button */}
+          <button
+            onClick={props.onOpenBestiary}
+            class="px-2 py-0.5 rounded bg-white/[0.04] hover:bg-white/[0.08] text-zinc-300 hover:text-white text-[10px] border border-white/[0.06] transition-colors flex items-center gap-1"
+          >
+            <IconFish size={11} />
+            <span>{t('aquarium.viewBestiary')}</span>
+          </button>
+
           {/* Quick Cast +100 */}
           <button
             onClick={() => props.onBurnTokens(100, 'Rust compiler token stream')}
@@ -136,7 +157,7 @@ export const AquariumDock: Component<AquariumDockProps> = (props) => {
           </div>
         )}
 
-        {/* Swimming Fishes Layer */}
+        {/* Swimming Fishes Layer - 100% visible inside the tank */}
         <div class="absolute inset-0 overflow-hidden">
           <For each={props.activeFishes}>
             {(fish) => (
@@ -144,10 +165,8 @@ export const AquariumDock: Component<AquariumDockProps> = (props) => {
                 class="absolute gpu-layer cursor-pointer transition-transform hover:scale-125"
                 style={{
                   top: `${fish.topPercent}%`,
-                  left: '-100px',
-                  animation: `dock-swim ${fish.swimDuration}s linear infinite`,
-                  'animation-delay': `${fish.swimDelay}s`,
-                  transform: `scale(${fish.scale})`
+                  left: `${fish.leftPercent}%`,
+                  animation: `fish-drift ${fish.swimDuration}s ease-in-out infinite`
                 }}
                 onClick={() => props.onFishClick?.(fish)}
               >
@@ -155,11 +174,11 @@ export const AquariumDock: Component<AquariumDockProps> = (props) => {
                   <FishGlyph
                     rarity={fish.def.rarity}
                     isShiny={fish.isShiny}
-                    size={28}
+                    size={28 * fish.scale}
                   />
 
                   {/* Tooltip on hover */}
-                  <div class="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-6 left-1/2 -translate-x-1/2 bg-[#090b10] border border-white/[0.12] text-zinc-200 rounded px-1.5 py-0.5 text-[9px] font-mono whitespace-nowrap shadow-xl z-30 flex items-center gap-1.5">
+                  <div class="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-7 left-1/2 -translate-x-1/2 bg-[#090b10] border border-white/[0.12] text-zinc-200 rounded px-2 py-0.5 text-[9.5px] font-mono whitespace-nowrap shadow-xl z-30 flex items-center gap-1.5">
                     <span class="font-bold">{t(fish.def.nameKey)}</span>
                     <span class="text-emerald-400">+{fish.def.basePPS} PPS</span>
                     {fish.isShiny && <span class="text-amber-400 font-bold">★ SHINY</span>}
@@ -172,21 +191,18 @@ export const AquariumDock: Component<AquariumDockProps> = (props) => {
       </div>
 
       <style>{`
-        @keyframes dock-swim {
-          0% {
-            transform: translate3d(-100px, 0, 0) scaleX(1);
+        @keyframes fish-drift {
+          0%, 100% {
+            transform: translate3d(0, 0, 0) scaleX(1);
           }
           49% {
-            transform: translate3d(calc(100vw + 100px), 0, 0) scaleX(1);
+            transform: translate3d(80px, -12px, 0) scaleX(1);
           }
           50% {
-            transform: translate3d(calc(100vw + 100px), 0, 0) scaleX(-1);
+            transform: translate3d(80px, -12px, 0) scaleX(-1);
           }
           99% {
-            transform: translate3d(-100px, 0, 0) scaleX(-1);
-          }
-          100% {
-            transform: translate3d(-100px, 0, 0) scaleX(1);
+            transform: translate3d(0, 0, 0) scaleX(-1);
           }
         }
       `}</style>

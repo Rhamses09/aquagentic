@@ -22,9 +22,11 @@ interface SidebarProps {
   currentSessionId: string;
   sessions: ChatItem[];
   selectedModel: string;
+  discoveredCount: number;
   onSelectModel: (model: string) => void;
   onNewChat: () => void;
   onSelectSession: (id: string) => void;
+  onOpenBestiary: () => void;
 }
 
 export const Sidebar: Component<SidebarProps> = (props) => {
@@ -77,7 +79,7 @@ export const Sidebar: Component<SidebarProps> = (props) => {
       </div>
 
       {/* Action: New Session */}
-      <div class="p-2.5">
+      <div class="p-2.5 flex flex-col gap-1.5">
         <button
           onClick={props.onNewChat}
           class="w-full flex items-center justify-between px-2.5 py-2 rounded-lg bg-zinc-800/60 hover:bg-zinc-800 text-zinc-200 hover:text-white text-xs font-medium transition-all border border-white/[0.08] shadow-sm group"
@@ -92,11 +94,27 @@ export const Sidebar: Component<SidebarProps> = (props) => {
             </kbd>
           )}
         </button>
+
+        {/* Action: Open Bestiary / Fishdex */}
+        <button
+          onClick={props.onOpenBestiary}
+          class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.07] text-zinc-300 hover:text-white text-xs font-medium transition-all border border-white/[0.06] group"
+        >
+          <div class="flex items-center gap-2">
+            <IconFish size={13} class="text-cyan-400 group-hover:scale-110 transition-transform" />
+            {!collapsed() && <span>{t('nav.bestiary')}</span>}
+          </div>
+          {!collapsed() && (
+            <span class="text-[9px] font-mono text-cyan-400 bg-cyan-950/60 px-1.5 py-0.5 rounded border border-cyan-800/40">
+              {props.discoveredCount}
+            </span>
+          )}
+        </button>
       </div>
 
       {/* Model Engine Selector */}
       {!collapsed() && (
-        <div class="px-3 pb-2 pt-1">
+        <div class="px-3 pb-2 pt-0.5">
           <div class="flex items-center justify-between text-[10px] font-mono uppercase tracking-wider text-zinc-400 font-semibold px-0.5 mb-1.5">
             <span>Model Engine</span>
             <IconCpu size={11} />
