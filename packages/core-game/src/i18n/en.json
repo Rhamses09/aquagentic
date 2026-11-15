@@ -1,0 +1,117 @@
+{
+  "game": {
+    "title": "Aquagentic",
+    "tagline": "Ultralight AI Agent Client & Gamified Aquarium Gacha",
+    "pearls": "Pearls",
+    "abyssalPearls": "Abyssal Pearls",
+    "coralFragments": "Coral Fragments",
+    "pps": "PPS",
+    "tokensBurned": "Tokens Burned",
+    "baitProgress": "Bait Progress",
+    "rodLevel": "Rod Level",
+    "activeTank": "Active Tank",
+    "inventory": "Fishdex",
+    "shop": "Shop",
+    "fusion": "Fusion Lab",
+    "prestige": "Prestige"
+  },
+  "rarity": {
+    "common": "Common",
+    "uncommon": "Uncommon",
+    "rare": "Rare",
+    "epic": "Epic",
+    "legendary": "Legendary",
+    "mythic": "Mythic / Anomaly"
+  },
+  "biome": {
+    "default_ocean": "Classic Ocean",
+    "low_level": "Low-Level Trench",
+    "data_swamp": "Data Swamp",
+    "frontend_reef": "Frontend Reef",
+    "abyssal_zone": "Abyssal Reasoning Trench"
+  },
+  "weather": {
+    "clear": "Crystal Waters",
+    "storm": "Glitch Storm"
+  },
+  "fish": {
+    "syntax_sardine": {
+      "name": "Syntax Sardine",
+      "desc": "An agile fish swimming between braces and semicolons."
+    },
+    "console_log_carp": {
+      "name": "Console.log Carp",
+      "desc": "Spawns whenever you are desperately trying to figure out what's happening."
+    },
+    "bit_shrimp": {
+      "name": "Bit Micro-Shrimp",
+      "desc": "Tiny but foundational across system memory."
+    },
+    "json_jellyfish": {
+      "name": "JSON Jellyfish",
+      "desc": "Drifts translucently organizing key-value pairs."
+    },
+    "compiler_carp": {
+      "name": "Compiler Carp",
+      "desc": "Inspects code for warnings before taking a swim."
+    },
+    "recursive_salmon": {
+      "name": "Recursive Salmon",
+      "desc": "Swims upstream calling itself repeatedly until base condition."
+    },
+    "regex_ray": {
+      "name": "Regex Ray",
+      "desc": "Glides cryptic pattern lines along the swamp floor."
+    },
+    "git_squid": {
+      "name": "Git Squid",
+      "desc": "Equipped with 8 tentacles to juggle branches and merges simultaneously."
+    },
+    "context_remora": {
+      "name": "Context Remora",
+      "desc": "Latches onto massive context windows to double passive resources."
+    },
+    "local_lantern_fish": {
+      "name": "Local Lantern Fish",
+      "desc": "Glows intensely when sustained by local models at 0 API cost."
+    },
+    "null_pointer_eel": {
+      "name": "NullPointer Eel",
+      "desc": "An electric creature that only emerges during bug storms."
+    },
+    "segfault_puffer": {
+      "name": "Segfault Puffer",
+      "desc": "Violently inflates when a process touches forbidden memory."
+    },
+    "kernel_shark": {
+      "name": "Kernel Shark",
+      "desc": "Top OS predator; devours common duplicates and refines coral."
+    },
+    "docker_whale": {
+      "name": "Docker Whale",
+      "desc": "Carries entire containerized cargo pods across the deep seas."
+    },
+    "async_leviathan": {
+      "name": "Async Leviathan",
+      "desc": "A mythical beast of unresolved promises and non-blocking event loops."
+    }
+  },
+  "passive": {
+    "git_commit_surge": {
+      "name": "Commit Surge",
+      "desc": "Fills 25% of the bait bar with each Git action."
+    },
+    "deep_context_boost": {
+      "name": "Deep Synergy",
+      "desc": "Doubles pearl production when context window exceeds 20,000 tokens."
+    },
+    "ollama_saver": {
+      "name": "Sovereign Light",
+      "desc": "Multiplies pearls x3 while chatting with local models."
+    },
+    "common_refiner": {
+      "name": "Kernel Refiner",
+      "desc": "Consumes duplicate common catches to forge Coral Fragments."
+    }
+  }
+}

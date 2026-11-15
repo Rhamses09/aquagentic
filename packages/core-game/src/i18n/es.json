@@ -1,0 +1,117 @@
+{
+  "game": {
+    "title": "Aquagentic",
+    "tagline": "Cliente de Agentes de IA Ultraligero y Acuario de Pesca",
+    "pearls": "Perlas",
+    "abyssalPearls": "Perlas Abisales",
+    "coralFragments": "Fragmentos de Coral",
+    "pps": "PPS",
+    "tokensBurned": "Tokens Consumidos",
+    "baitProgress": "Progreso de Cebo",
+    "rodLevel": "Nivel de Caña",
+    "activeTank": "Acuario Activo",
+    "inventory": "Bestiario",
+    "shop": "Tienda",
+    "fusion": "Laboratorio de Fusión",
+    "prestige": "Prestigio"
+  },
+  "rarity": {
+    "common": "Común",
+    "uncommon": "Poco Común",
+    "rare": "Raro",
+    "epic": "Épico",
+    "legendary": "Legendario",
+    "mythic": "Mítico / Anomalía"
+  },
+  "biome": {
+    "default_ocean": "Océano Clásico",
+    "low_level": "Fosa de Bajo Nivel",
+    "data_swamp": "Pantano de Datos",
+    "frontend_reef": "Arrecife Frontend",
+    "abyssal_zone": "Zona Abisal de Pensamiento"
+  },
+  "weather": {
+    "clear": "Agua Cristalina",
+    "storm": "Tormenta de Glitches"
+  },
+  "fish": {
+    "syntax_sardine": {
+      "name": "Sardina de Sintaxis",
+      "desc": "Un pez ágil que nada entre llaves y puntos y coma."
+    },
+    "console_log_carp": {
+      "name": "Carpa Console.log",
+      "desc": "Aparece cada vez que intentas entender qué está pasando."
+    },
+    "bit_shrimp": {
+      "name": "Micro-camarón Bit",
+      "desc": "Pequeño pero fundamental en la memoria del sistema."
+    },
+    "json_jellyfish": {
+      "name": "Medusa JSON",
+      "desc": "Flota translúcida estructurando pares clave-valor."
+    },
+    "compiler_carp": {
+      "name": "Carpa Compiladora",
+      "desc": "Inspecciona el código en busca de advertencias antes de nadar."
+    },
+    "recursive_salmon": {
+      "name": "Salmón Recursivo",
+      "desc": "Nada contra la corriente llamándose a sí mismo una y otra vez."
+    },
+    "regex_ray": {
+      "name": "Raya Regex",
+      "desc": "Desliza patrones crípticos por el fondo del pantano."
+    },
+    "git_squid": {
+      "name": "Calamar Git",
+      "desc": "Tiene 8 tentáculos para manejar ramas y fusiones simultáneas."
+    },
+    "context_remora": {
+      "name": "Rémora de Contexto",
+      "desc": "Se adhiere a las ventanas de contexto masivas para duplicar recursos."
+    },
+    "local_lantern_fish": {
+      "name": "Pez Linterna Local",
+      "desc": "Brilla con fuerza al alimentarse de modelos locales sin coste de API."
+    },
+    "null_pointer_eel": {
+      "name": "Anguila NullPointer",
+      "desc": "Una criatura eléctrica que solo emerge durante tormentas de bugs."
+    },
+    "segfault_puffer": {
+      "name": "Pez Globo Segfault",
+      "desc": "Se infla violentamente cuando un proceso toca memoria prohibida."
+    },
+    "kernel_shark": {
+      "name": "Tiburón Kernel",
+      "desc": "El máximo depredador del sistema operativo; devora duplicados y refina coral."
+    },
+    "docker_whale": {
+      "name": "Ballena Docker",
+      "desc": "Transporta contenedores enteros a través de las profundidades."
+    },
+    "async_leviathan": {
+      "name": "Leviatán Asíncrono",
+      "desc": "Una mítica bestia de promesas infinitas y eventos no bloqueantes."
+    }
+  },
+  "passive": {
+    "git_commit_surge": {
+      "name": "Impulso de Commit",
+      "desc": "Carga un 25% de la barra de pesca con cada acción Git."
+    },
+    "deep_context_boost": {
+      "name": "Sinergia Profunda",
+      "desc": "Duplica la producción de perlas con más de 20,000 tokens de contexto."
+    },
+    "ollama_saver": {
+      "name": "Luz Soberana",
+      "desc": "Multiplica x3 las perlas mientras usas un modelo local."
+    },
+    "common_refiner": {
+      "name": "Refinador Kernel",
+      "desc": "Devora peces comunes repetidos para forjar Fragmentos de Coral."
+    }
+  }
+}
