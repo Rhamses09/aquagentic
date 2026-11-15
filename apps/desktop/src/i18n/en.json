@@ -1,44 +1,53 @@
 {
+  "app": {
+    "title": "Aquagentic",
+    "statusOnline": "Ready",
+    "mcpActive": "MCP Connected",
+    "mcpTools": "3 active tools"
+  },
   "nav": {
-    "chat": "Agent Chat",
-    "tank": "Aquarium",
-    "fishdex": "Fishdex",
+    "newChat": "New chat",
+    "recentChats": "Recent chats",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "settings": "Settings & API Keys",
+    "bestiary": "Fishdex",
     "shop": "Shop",
-    "remote": "Pair Mobile"
+    "remote": "Pair Mobile",
+    "noChats": "No conversations yet"
   },
-  "stats": {
-    "pearls": "Pearls",
+  "models": {
+    "claude35Sonnet": "Claude 3.5 Sonnet",
+    "geminiFlash": "Gemini 2.5 Flash",
+    "gpt4o": "GPT-4o",
+    "deepseekR1": "DeepSeek R1 (Thinking)",
+    "ollamaLocal": "Ollama Local (0 API Cost)"
+  },
+  "chat": {
+    "welcomeTitle": "How can I assist you today?",
+    "welcomeSubtitle": "Your ultralight desktop agent client powered by real token consumption and passive fishing.",
+    "inputPlaceholder": "Send a prompt or write code... (Shift+Enter for newline)",
+    "tokensBurned": "tokens processed",
+    "reasoning": "Thinking Process",
+    "copy": "Copy",
+    "copied": "Copied",
+    "suggestion1": "Write an ultralight web server in Rust using Axum",
+    "suggestion2": "Analyze this SQL query to optimize database indexes",
+    "suggestion3": "Create a reactive signal-based function in TypeScript",
+    "send": "Send"
+  },
+  "aquarium": {
+    "dockTitle": "Live Aquarium",
+    "collapse": "Collapse",
+    "expand": "Expand Aquarium",
     "pps": "PPS",
-    "tokensBurned": "Tokens Burned",
-    "currentBait": "Bait / Cast Bar",
-    "rodLevel": "Rod Level",
-    "biome": "Biome",
-    "weather": "Weather",
-    "tankCapacity": "Tank Capacity"
-  },
-  "dock": {
-    "title": "Real-Time Token Burning Simulator",
-    "subtitle": "Type a prompt or burn tokens to charge your rod and catch fish live.",
-    "inputPlaceholder": "Enter a test prompt (e.g. Implement a fast parser in Rust...)",
-    "burn100Tokens": "+100 Tokens",
-    "burn500Tokens": "+500 Tokens (Instant Cast)",
-    "simulateStream": "Simulate Streaming Response",
-    "triggerGlitch": "Simulate Error (Glitch Storm)",
-    "goldenBait": "Golden Bait Active",
-    "nextCatchAt": "Next catch at"
-  },
-  "tank": {
-    "empty": "The aquarium is empty. Burn tokens to catch your first fish.",
-    "shinyBadge": "SHINY x3",
-    "paused": "Paused for 100% CPU saving while backgrounded"
-  },
-  "catchModal": {
-    "title": "Fish Caught!",
-    "newBadge": "NEW DISCOVERY!",
-    "pityBadge": "PITY TRIGGERED!",
+    "pearls": "Pearls",
+    "baitProgress": "Cast Bar",
+    "rodReady": "Ready to cast!",
+    "activeTank": "In tank",
+    "caughtToast": "New Catch!",
+    "shinyToast": "★ SHINY VARIANT (x3 PPS)",
     "weight": "Weight",
-    "passive": "Passive Effect",
-    "promptHash": "SHA-256 Seed",
-    "continue": "Add to Aquarium"
+    "viewBestiary": "View in Fishdex"
   }
 }

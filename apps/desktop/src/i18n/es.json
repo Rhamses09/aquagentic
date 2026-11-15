@@ -1,44 +1,53 @@
 {
+  "app": {
+    "title": "Aquagentic",
+    "statusOnline": "Listo",
+    "mcpActive": "MCP Conectado",
+    "mcpTools": "3 herramientas activas"
+  },
   "nav": {
-    "chat": "Chat Agéntico",
-    "tank": "Acuario",
-    "fishdex": "Bestiario",
+    "newChat": "Nueva conversación",
+    "recentChats": "Conversaciones recientes",
+    "today": "Hoy",
+    "yesterday": "Ayer",
+    "settings": "Ajustes y API Keys",
+    "bestiary": "Bestiario",
     "shop": "Tienda",
-    "remote": "Vincular Móvil"
+    "remote": "Vincular Móvil",
+    "noChats": "Sin conversaciones aún"
   },
-  "stats": {
-    "pearls": "Perlas",
+  "models": {
+    "claude35Sonnet": "Claude 3.5 Sonnet",
+    "geminiFlash": "Gemini 2.5 Flash",
+    "gpt4o": "GPT-4o",
+    "deepseekR1": "DeepSeek R1 (Thinking)",
+    "ollamaLocal": "Ollama Local (0 API Cost)"
+  },
+  "chat": {
+    "welcomeTitle": "¿En qué puedo ayudarte hoy?",
+    "welcomeSubtitle": "Tu cliente agéntico de escritorio potenciado por tokens reales y pesca pasiva.",
+    "inputPlaceholder": "Envía un mensaje o escribe código... (Shift+Enter para nueva línea)",
+    "tokensBurned": "tokens procesados",
+    "reasoning": "Proceso de pensamiento",
+    "copy": "Copiar",
+    "copied": "Copiado",
+    "suggestion1": "Escribe un servidor web ultraligero en Rust usando Axum",
+    "suggestion2": "Analiza esta consulta SQL para optimizar índices",
+    "suggestion3": "Crea una función reactiva con señales en TypeScript",
+    "send": "Enviar"
+  },
+  "aquarium": {
+    "dockTitle": "Acuario en Vivo",
+    "collapse": "Colapsar",
+    "expand": "Expandir Acuario",
     "pps": "PPS",
-    "tokensBurned": "Tokens Quemados",
-    "currentBait": "Cebo / Barra de Lanzamiento",
-    "rodLevel": "Caña Nivel",
-    "biome": "Bioma",
-    "weather": "Clima",
-    "tankCapacity": "Capacidad del Tanque"
-  },
-  "dock": {
-    "title": "Simulador de Consumo de Tokens en Tiempo Real",
-    "subtitle": "Escribe un prompt o genera tokens para cargar tu caña y pescar en vivo.",
-    "inputPlaceholder": "Escribe un prompt de prueba (ej: Implementa un parser en Rust...)",
-    "burn100Tokens": "+100 Tokens",
-    "burn500Tokens": "+500 Tokens (Lanzamiento Rápido)",
-    "simulateStream": "Simular Respuesta Streaming",
-    "triggerGlitch": "Simular Error (Tormenta Glitch)",
-    "goldenBait": "Cebo Dorado Activo",
-    "nextCatchAt": "Próxima captura a los"
-  },
-  "tank": {
-    "empty": "El acuario está vacío. Quema tokens para capturar tu primer pez.",
-    "shinyBadge": "SHINY x3",
-    "paused": "Pausado para ahorrar 100% de CPU en segundo plano"
-  },
-  "catchModal": {
-    "title": "¡Pez Capturado!",
-    "newBadge": "¡NUEVA ESPECIE!",
-    "pityBadge": "¡GARANTÍA PITY!",
+    "pearls": "Perlas",
+    "baitProgress": "Barra de Pesca",
+    "rodReady": "¡Listo para pescar!",
+    "activeTank": "En tanque",
+    "caughtToast": "¡Nueva Captura!",
+    "shinyToast": "★ VARIANTE SHINY (x3 PPS)",
     "weight": "Peso",
-    "passive": "Efecto Pasivo",
-    "promptHash": "Semilla SHA-256",
-    "continue": "Añadir al Acuario"
+    "viewBestiary": "Ver en Bestiario"
   }
 }
