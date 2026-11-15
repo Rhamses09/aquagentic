@@ -106,11 +106,11 @@ export const App: Component = () => {
         def: def!,
         inv: item,
         // Spread evenly across heights: 20%, 38%, 56%, 74%
-        topPercent: 20 + ((index * 20) % 58),
+        topPercent: 18 + ((index * 20) % 58),
         // Positioned clearly across visible widths: 15%, 38%, 62%, 82%
         leftPercent: 15 + ((index * 24) % 68),
-        swimDuration: 12 + ((index * 2) % 6),
-        swimDelay: 0,
+        swimDuration: 10 + ((index * 2) % 6),
+        direction: (index % 2 === 0 ? 'right' : 'left') as 'right' | 'left',
         isShiny,
         scale: 1.05 + ((index % 3) * 0.15)
       };

@@ -10,7 +10,7 @@
   body {
     margin: 0;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-    background-color: #0c0d12;
+    background-color: #07090e;
     color: #f3f4f6;
     overflow: hidden;
     user-select: none;
@@ -38,31 +38,82 @@
   background: rgba(255, 255, 255, 0.22);
 }
 
-/* GPU Composited Animation Layers */
+/* 0% CPU GPU Compositing */
 .gpu-layer {
-  transform: translate3d(0, 0, 0);
   will-change: transform;
   backface-visibility: hidden;
 }
 
-/* Biome Ambient Gradient Themes for the Aquarium Dock */
+/* Biome Ambient Gradient Themes for the Full App Aquarium */
 .biome-ambient-default_ocean {
-  background: linear-gradient(180deg, rgba(8, 14, 26, 0.7) 0%, rgba(4, 7, 14, 0.95) 100%);
+  background: radial-gradient(circle at 50% 25%, #0d2238 0%, #06111f 55%, #02060c 100%);
 }
 .biome-ambient-low_level {
-  background: linear-gradient(180deg, rgba(16, 20, 28, 0.7) 0%, rgba(8, 10, 15, 0.95) 100%);
+  background: radial-gradient(circle at 50% 25%, #162232 0%, #0b111a 55%, #030508 100%);
 }
 .biome-ambient-data_swamp {
-  background: linear-gradient(180deg, rgba(8, 22, 18, 0.7) 0%, rgba(4, 12, 10, 0.95) 100%);
+  background: radial-gradient(circle at 50% 25%, #0d2a22 0%, #061511 55%, #020705 100%);
 }
 .biome-ambient-frontend_reef {
-  background: linear-gradient(180deg, rgba(8, 24, 30, 0.7) 0%, rgba(4, 12, 16, 0.95) 100%);
+  background: radial-gradient(circle at 50% 25%, #0b2d38 0%, #05181e 55%, #02080a 100%);
 }
 .biome-ambient-abyssal_zone {
-  background: linear-gradient(180deg, rgba(18, 10, 30, 0.7) 0%, rgba(7, 4, 14, 0.95) 100%);
+  background: radial-gradient(circle at 50% 25%, #1d1033 0%, #0d0619 55%, #030107 100%);
 }
 
 /* Subtle storm pulse */
 .weather-storm-active {
-  box-shadow: inset 0 0 40px rgba(168, 85, 247, 0.15);
+  box-shadow: inset 0 0 70px rgba(168, 85, 247, 0.2);
+  animation: storm-ambient-pulse 3s ease-in-out infinite;
+}
+
+@keyframes storm-ambient-pulse {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.2) hue-rotate(15deg); }
+}
+
+/* Active Swimming Keyframes (Fluid 60 FPS, No Freezing) */
+@keyframes fish-swim-right {
+  0% {
+    transform: translate3d(0, 0, 0) scaleX(1);
+  }
+  48% {
+    transform: translate3d(380px, -24px, 0) scaleX(1);
+  }
+  50% {
+    transform: translate3d(380px, -24px, 0) scaleX(-1);
+  }
+  98% {
+    transform: translate3d(-180px, 18px, 0) scaleX(-1);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scaleX(1);
+  }
+}
+
+@keyframes fish-swim-left {
+  0% {
+    transform: translate3d(0, 0, 0) scaleX(-1);
+  }
+  48% {
+    transform: translate3d(-380px, 20px, 0) scaleX(-1);
+  }
+  50% {
+    transform: translate3d(-380px, 20px, 0) scaleX(1);
+  }
+  98% {
+    transform: translate3d(180px, -16px, 0) scaleX(1);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scaleX(-1);
+  }
+}
+
+@keyframes fish-float-gentle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
 }
