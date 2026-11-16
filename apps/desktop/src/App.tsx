@@ -31,6 +31,46 @@ function loadInitialState(): AquagenticSyncState {
     if (saved) {
       const parsed = JSON.parse(saved);
       if (parsed && parsed.aquarium) {
+        // Ensure active tank fish are valid real species; migrate old legacy fish if needed
+        const rawTankIds: string[] = Array.isArray(parsed.aquarium.activeTankFishIds)
+          ? parsed.aquarium.activeTankFishIds
+          : [];
+        const validTankIds = rawTankIds.filter((id) => FISH_MAP.has(id));
+
+        parsed.aquarium.inventory = parsed.aquarium.inventory || {};
+
+        if (validTankIds.length === 0) {
+          validTankIds.push('clownfish', 'blue_tang');
+          if (!parsed.aquarium.inventory['clownfish']) {
+            parsed.aquarium.inventory['clownfish'] = {
+              count: 1,
+              shinyCount: 0,
+              starRank: 1,
+              maxWeightBytes: 25000,
+              firstCaughtAt: Date.now()
+            };
+          }
+          if (!parsed.aquarium.inventory['blue_tang']) {
+            parsed.aquarium.inventory['blue_tang'] = {
+              count: 1,
+              shinyCount: 0,
+              starRank: 1,
+              maxWeightBytes: 120000,
+              firstCaughtAt: Date.now()
+            };
+          }
+        }
+        parsed.aquarium.activeTankFishIds = validTankIds;
+        parsed.aquarium.availableChests = typeof parsed.aquarium.availableChests === 'number'
+          ? parsed.aquarium.availableChests
+          : 1;
+        parsed.aquarium.pearls = typeof parsed.aquarium.pearls === 'number'
+          ? parsed.aquarium.pearls
+          : 50;
+        parsed.aquarium.pearlsPerSecond = typeof parsed.aquarium.pearlsPerSecond === 'number'
+          ? parsed.aquarium.pearlsPerSecond
+          : 2.5;
+
         return parsed;
       }
     }

@@ -1,4 +1,4 @@
-export * from './types';
+export type * from './types';
 export * from './fishData';
 export * from './gachaEngine';
 export * from './biomeDetector';
