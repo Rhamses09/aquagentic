@@ -10,6 +10,7 @@ import {
 interface AntigravityHeaderProps {
   currentSessionTitle: string;
   projectName?: string;
+  onOpenReviewDiff?: () => void;
 }
 
 export const AntigravityHeader: Component<AntigravityHeaderProps> = (props) => {
@@ -53,7 +54,11 @@ export const AntigravityHeader: Component<AntigravityHeaderProps> = (props) => {
       {/* Right: Window controls and IDE trigger */}
       <div class="flex items-center gap-3">
         {/* Open IDE pill button */}
-        <button class="px-2 py-0.5 rounded text-[10.5px] font-sans font-medium text-zinc-300 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-colors flex items-center gap-1">
+        <button
+          onClick={props.onOpenReviewDiff}
+          class="px-2 py-0.5 rounded text-[10.5px] font-sans font-medium text-zinc-300 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-colors flex items-center gap-1 cursor-pointer"
+          title="Open IDE Review"
+        >
           <span>Open IDE</span>
         </button>
 

@@ -171,5 +171,27 @@
       "whale_shark": "¡El pez más grande del planeta! El Tiburón Ballena es el trofeo definitivo. ¡Atrápalo!",
       "coelacanth": "¡UN FÓSIL VIVIENTE! El Celacanto lleva millones de años oculto. ¡Si me lo traes, te recompensaré como a un rey!"
     }
+  },
+  "upgrade": {
+    "rod_efficiency": {
+      "name": "Refinamiento de Caña",
+      "desc": "Reduce drásticamente el costo de tokens para pescar cofres (de 500 tk a 120 tk)."
+    },
+    "algae": {
+      "name": "Algas Bioluminiscentes",
+      "desc": "Fertiliza el agua aumentando la producción pasiva de perlas (PPS) en +15% por nivel."
+    },
+    "tank": {
+      "name": "Expansión del Acuario",
+      "desc": "Aumenta la capacidad máxima de peces activos en el tanque (+2 cupos por nivel)."
+    },
+    "chum": {
+      "name": "Engodo de Alta Presión",
+      "desc": "Atrae especies raras, épicas y míticas con mayor frecuencia en las aperturas."
+    },
+    "magnet": {
+      "name": "Imán de Perlas Agéntico",
+      "desc": "Absorbe perlas adicionales directamente con cada prompt o llamada de código."
+    }
   }
 }

@@ -107,5 +107,52 @@
     "close": "Close",
     "claimedToast": "Quest completed!",
     "claimedToastDesc": "You received pearls and marine chests from the Angler."
+  },
+  "shop": {
+    "title": "Incremental Upgrades Shop",
+    "subtitle": "Spend pearls to tune rods, expand background tank slots, and boost passive production.",
+    "pearlsBalance": "Pearl Balance",
+    "currentLevel": "Current level",
+    "maxLevelReached": "MAX LEVEL",
+    "upgrade": "Upgrade",
+    "needPearls": "Need pearls",
+    "rodTokenCostLabel": "Cast cost per chest:",
+    "tankCapacityLabel": "Aquarium capacity:",
+    "ppsMultiplierLabel": "PPS Multiplier:"
+  },
+  "settings": {
+    "title": "Settings & Preferences",
+    "subtitle": "Manage BYOK API keys, model preferences, and local encrypted vault.",
+    "apiKeysTab": "API Keys (BYOK)",
+    "preferencesTab": "Preferences",
+    "dataTab": "Data & Backups",
+    "anthropicKey": "Anthropic API Key (Claude)",
+    "openaiKey": "OpenAI API Key (GPT-4o)",
+    "googleKey": "Google Gemini API Key",
+    "ollamaUrl": "Ollama Local Endpoint",
+    "saveKeys": "Save Keys",
+    "keysSaved": "Keys securely saved to local vault!",
+    "language": "Interface Language",
+    "resetData": "Reset Local Data",
+    "resetWarning": "This will clear all local saves and cached fish progress."
+  },
+  "automations": {
+    "title": "Agentic Automations",
+    "subtitle": "Scheduled background jobs orchestrating AI agent workflows.",
+    "cronReview": "Automated Code Review",
+    "cronReviewDesc": "Analyzes recent git commits upon repo file changes.",
+    "cronRegression": "Daily Regression Monitor",
+    "cronRegressionDesc": "Executes e2e tests on schedule and charges the fishing rod.",
+    "cronCompaction": "Context Memory Compaction",
+    "cronCompactionDesc": "Summarizes lengthy session transcripts to optimize context."
+  },
+  "customizations": {
+    "title": "Customizations & MCP Tools",
+    "subtitle": "Active runtime tools and agent skills connected to the environment.",
+    "activeTools": "Active MCP Tools",
+    "installedSkills": "Installed Skills",
+    "mcpFilesystem": "MCP Filesystem (Read/Write)",
+    "mcpGit": "MCP Git Inspector",
+    "mcpTerminal": "MCP Sandboxed Shell"
   }
 }

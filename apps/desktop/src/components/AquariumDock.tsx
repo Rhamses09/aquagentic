@@ -8,7 +8,8 @@ import {
   IconPlus,
   IconFish,
   IconChest,
-  IconAnchor
+  IconAnchor,
+  IconShop
 } from './icons';
 
 interface AquariumDockProps {
@@ -21,8 +22,10 @@ interface AquariumDockProps {
   activeFishCount: number;
   availableChests: number;
   isAnglerQuestReady?: boolean;
+  hasAffordableUpgrade?: boolean;
   onOpenAnglerQuest: () => void;
   onOpenChestModal: () => void;
+  onOpenShop: () => void;
   onBurnTokens: (amount: number, prompt: string) => void;
   onSimulateStream: (prompt: string) => void;
   onSimulateGlitch: () => void;
@@ -89,6 +92,20 @@ export const AquariumDock: Component<AquariumDockProps> = (props) => {
 
       {/* Right: Quick actions & Bestiary shortcut */}
       <div class="flex items-center gap-2">
+        {/* Shop Upgrade Button */}
+        <button
+          onClick={props.onOpenShop}
+          class={`px-2.5 py-1 rounded-md text-[10.5px] font-mono font-medium transition-all flex items-center gap-1.5 border ${
+            props.hasAffordableUpgrade
+              ? 'bg-emerald-950/80 hover:bg-emerald-900/80 text-emerald-300 border-emerald-500/60 shadow-[0_0_12px_rgba(16,185,129,0.35)] animate-pulse'
+              : 'bg-white/[0.04] hover:bg-white/[0.08] text-zinc-300 hover:text-white border-white/[0.06]'
+          }`}
+          title={t('shop.title')}
+        >
+          <IconShop size={12} class={props.hasAffordableUpgrade ? "text-emerald-300" : "text-zinc-400"} />
+          <span>{t('nav.shop')}</span>
+        </button>
+
         {/* Angler NPC Quest Button */}
         <button
           onClick={props.onOpenAnglerQuest}

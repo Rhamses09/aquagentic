@@ -61,6 +61,19 @@ export interface AnglerQuest {
   isCompleted: boolean;
 }
 
+export type UpgradeCategory = 'rod' | 'tank' | 'passive' | 'bait';
+
+export interface ShopUpgradeDefinition {
+  id: string;
+  category: UpgradeCategory;
+  nameKey: string;
+  descriptionKey: string;
+  baseCostPearls: number;
+  costMultiplier: number;
+  maxLevel: number;
+  icon: string;
+}
+
 export interface AquariumState {
   totalTokensBurned: number;
   currentBaitProgress: number;
@@ -73,12 +86,14 @@ export interface AquariumState {
   pityCounterEpic: number;
   pityCounterLegendary: number;
   activeTankFishIds: string[];
+  maxTankCapacity?: number;
   unlockedBiomes: Biome[];
   unlockedThemes: string[];
   inventory: Record<string, InventoryItem>;
   availableChests?: number;
   activeAnglerQuest?: AnglerQuest | null;
   completedQuestsCount: number;
+  upgrades?: Record<string, number>;
 }
 
 export interface ChatSessionMessage {

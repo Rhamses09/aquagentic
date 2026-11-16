@@ -13,6 +13,7 @@ import { IconSparkles, IconCheck, IconPlus } from './icons';
 interface BestiaryModalProps {
   inventory: Record<string, InventoryItem>;
   activeTankIds: string[];
+  maxTankCapacity?: number;
   onToggleActiveTank: (fishId: string) => void;
   onClose: () => void;
 }
@@ -42,6 +43,9 @@ export const BestiaryModal: Component<BestiaryModalProps> = (props) => {
               </h3>
               <span class="px-2 py-0.5 text-[10px] font-mono font-bold bg-cyan-950 text-cyan-300 rounded border border-cyan-800/40">
                 {discoveredCount()} / {INITIAL_FISH_CATALOG.length} {t('bestiary.discovered')}
+              </span>
+              <span class="px-2 py-0.5 text-[10px] font-mono font-bold bg-emerald-950 text-emerald-300 rounded border border-emerald-800/40">
+                Tanque: {props.activeTankIds.length} / {props.maxTankCapacity || 8}
               </span>
             </div>
             <p class="text-xs text-zinc-400 mt-0.5 font-sans">

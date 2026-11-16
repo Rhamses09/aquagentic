@@ -171,5 +171,27 @@
       "whale_shark": "The largest fish on the entire planet! The Whale Shark is the ultimate trophy. Go catch it!",
       "coelacanth": "A LIVING FOSSIL! The Coelacanth has survived for 400 million years. Bring it to me and I'll reward you like a king!"
     }
+  },
+  "upgrade": {
+    "rod_efficiency": {
+      "name": "Rod Carbon Tuning",
+      "desc": "Drastically reduces token cast cost for fishing chests (from 500 tk down to 120 tk)."
+    },
+    "algae": {
+      "name": "Bioluminescent Algae",
+      "desc": "Fertilizes the ecosystem, boosting all tank fish PPS by +15% per level."
+    },
+    "tank": {
+      "name": "Aquarium Tank Expansion",
+      "desc": "Expands background tank swimming fish capacity (+2 fish slots per level)."
+    },
+    "chum": {
+      "name": "Deep-Sea Chum Barrel",
+      "desc": "Attracts rare, epic, and mythic marine species with greater frequency."
+    },
+    "magnet": {
+      "name": "Agentic Pearl Magnet",
+      "desc": "Harvests bonus pearls directly with every prompt processed or code execution."
+    }
   }
 }

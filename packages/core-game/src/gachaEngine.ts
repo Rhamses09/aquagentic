@@ -91,8 +91,10 @@ export function rollGacha(state: AquariumState, options: RollOptions): GachaRoll
     targetRarity = 'epic';
     pityTriggered = 'epic';
   } else {
-    // Standard Gacha Rates (Golden Bait multiplies high rarity chances)
-    const luckMultiplier = goldenBaitActive ? 2.0 : 1.0;
+    // Standard Gacha Rates (Golden Bait and Chum Bucket upgrade multiply high rarity chances)
+    const chumLvl = state.upgrades?.['chum_bucket'] || 0;
+    const chumMultiplier = 1 + (chumLvl * 0.25); // +25% per Chum Bucket level
+    const luckMultiplier = (goldenBaitActive ? 2.0 : 1.0) * chumMultiplier;
     const mythicRate = 0.001 * luckMultiplier;
     const legendaryRate = 0.009 * luckMultiplier;
     const epicRate = 0.03 * luckMultiplier;

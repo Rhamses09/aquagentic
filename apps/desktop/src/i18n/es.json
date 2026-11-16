@@ -107,5 +107,52 @@
     "close": "Cerrar",
     "claimedToast": "¡Misión completada!",
     "claimedToastDesc": "Has recibido perlas y cofres marinos del Pescador."
+  },
+  "shop": {
+    "title": "Tienda de Mejoras Incrementales",
+    "subtitle": "Gasta tus perlas para optimizar cañas, expandir el tanque y multiplicar tu producción pasiva.",
+    "pearlsBalance": "Balance de Perlas",
+    "currentLevel": "Nivel actual",
+    "maxLevelReached": "NIVEL MÁXIMO",
+    "upgrade": "Mejorar",
+    "needPearls": "Faltan perlas",
+    "rodTokenCostLabel": "Costo por cofre:",
+    "tankCapacityLabel": "Capacidad del acuario:",
+    "ppsMultiplierLabel": "Multiplicador de PPS:"
+  },
+  "settings": {
+    "title": "Ajustes y Configuración",
+    "subtitle": "Gestión de claves de API BYOK, preferencias de modelo y almacenamiento local.",
+    "apiKeysTab": "Claves API (BYOK)",
+    "preferencesTab": "Preferencias",
+    "dataTab": "Datos y Respaldo",
+    "anthropicKey": "Anthropic API Key (Claude)",
+    "openaiKey": "OpenAI API Key (GPT-4o)",
+    "googleKey": "Google Gemini API Key",
+    "ollamaUrl": "Ollama Endpoint Local",
+    "saveKeys": "Guardar Claves",
+    "keysSaved": "¡Claves guardadas de forma segura!",
+    "language": "Idioma de la Interfaz",
+    "resetData": "Restablecer Datos Locales",
+    "resetWarning": "Esto eliminará todo el progreso guardado localmente."
+  },
+  "automations": {
+    "title": "Automatizaciones Agénticas",
+    "subtitle": "Tareas programadas en segundo plano ejecutadas por agentes de IA.",
+    "cronReview": "Revisión Automática de Código",
+    "cronReviewDesc": "Analiza commits recientes al detectar cambios en el repositorio.",
+    "cronRegression": "Monitoreo Diario de Regresiones",
+    "cronRegressionDesc": "Ejecuta suite de pruebas e2e y alimenta la caña de pesca.",
+    "cronCompaction": "Compactación de Contexto",
+    "cronCompactionDesc": "Resume sesiones antiguas para ahorrar ventana de contexto."
+  },
+  "customizations": {
+    "title": "Personalizaciones y MCP Tools",
+    "subtitle": "Herramientas de entorno y extensiones agénticas conectadas.",
+    "activeTools": "Herramientas MCP Activas",
+    "installedSkills": "Habilidades Instaladas",
+    "mcpFilesystem": "MCP Filesystem (Lectura/Escritura)",
+    "mcpGit": "MCP Git Inspector",
+    "mcpTerminal": "MCP Shell Sandboxed"
   }
 }

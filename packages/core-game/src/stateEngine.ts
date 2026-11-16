@@ -1,6 +1,7 @@
 import { FISH_MAP } from './fishData';
 import { AquariumState, AquagenticSyncState, Biome, CaughtFishInstance, InventoryItem } from './types';
 import { generateAnglerQuest } from './anglerEngine';
+import { calculateUpgradesPPSMultiplier } from './upgradesEngine';
 
 export const INITIAL_ROD_COST = 500; // Tokens needed for 1 catch by default
 
@@ -22,12 +23,14 @@ export function createInitialState(origin: 'desktop' | 'mobile' = 'desktop'): Aq
       pityCounterEpic: 0,
       pityCounterLegendary: 0,
       activeTankFishIds: [],
+      maxTankCapacity: 8,
       unlockedBiomes: ['default_ocean'],
       unlockedThemes: ['classic_dark'],
       inventory: {},
       availableChests: 1,
       activeAnglerQuest: generateAnglerQuest(0),
-      completedQuestsCount: 0
+      completedQuestsCount: 0,
+      upgrades: {}
     },
     recentSessions: []
   };
@@ -45,7 +48,8 @@ export function calculatePassivePPS(aquarium: AquariumState): number {
 
     totalPPS += def.basePPS * starMultiplier * shinyMultiplier;
   }
-  return totalPPS;
+  const upgradeMultiplier = calculateUpgradesPPSMultiplier(aquarium.upgrades);
+  return totalPPS * upgradeMultiplier;
 }
 
 export function calculateOfflineGains(

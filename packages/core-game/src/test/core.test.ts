@@ -14,7 +14,12 @@ import {
   INITIAL_FISH_CATALOG,
   generateAnglerQuest,
   checkQuestCompletion,
-  claimQuestReward
+  claimQuestReward,
+  buyUpgrade,
+  getUpgradeCost,
+  calculateRodTokenCost,
+  calculateMaxTankCapacity,
+  calculateUpgradesPPSMultiplier
 } from '../index';
 
 test('SHA-256 produces deterministic hash', () => {
@@ -148,4 +153,34 @@ test('Angler Quest system generates quests, checks inventory, and awards bountie
   assert.strictEqual(state.completedQuestsCount, 1);
   assert.ok(state.activeAnglerQuest);
   assert.notStrictEqual(state.activeAnglerQuest.id, quest.id);
+});
+
+test('Incremental Upgrade system deducts pearls, upgrades rod, expands tank, and boosts PPS', () => {
+  const state = createInitialState('desktop').aquarium;
+  state.pearls = 2000;
+
+  // Initial stats
+  assert.strictEqual(calculateRodTokenCost(state.upgrades), 500);
+  assert.strictEqual(calculateMaxTankCapacity(state.upgrades), 8);
+  assert.strictEqual(calculateUpgradesPPSMultiplier(state.upgrades), 1.0);
+
+  // Buy rod efficiency upgrade (cost 150 pearls)
+  const cost = getUpgradeCost('rod_efficiency', 0);
+  assert.strictEqual(cost, 150);
+
+  const bought = buyUpgrade(state, 'rod_efficiency');
+  assert.strictEqual(bought, true);
+  assert.strictEqual(state.pearls, 2000 - 150);
+  assert.strictEqual(state.upgrades?.['rod_efficiency'], 1);
+  assert.strictEqual(state.rodTokenCost, 420); // Reduced token requirement!
+
+  // Buy tank expansion upgrade (cost 500 pearls)
+  const boughtTank = buyUpgrade(state, 'tank_expansion');
+  assert.strictEqual(boughtTank, true);
+  assert.strictEqual(state.maxTankCapacity, 10); // Expanded from 8 to 10 slots!
+
+  // Buy algae upgrade (cost 100 pearls)
+  const boughtAlgae = buyUpgrade(state, 'bioluminescent_algae');
+  assert.strictEqual(boughtAlgae, true);
+  assert.strictEqual(calculateUpgradesPPSMultiplier(state.upgrades), 1.15); // +15% PPS boost!
 });

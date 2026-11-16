@@ -29,6 +29,7 @@ interface ChatViewProps {
   isStreaming: boolean;
   onSendMessage: (content: string) => void;
   onSelectModel?: (model: string) => void;
+  onOpenReviewDiff?: () => void;
 }
 
 export const ChatView: Component<ChatViewProps> = (props) => {
@@ -36,6 +37,7 @@ export const ChatView: Component<ChatViewProps> = (props) => {
   const [copiedId, setCopiedId] = createSignal<string | null>(null);
   const [expandedReasoning, setExpandedReasoning] = createSignal<Record<string, boolean>>({});
   const [speedMode, setSpeedMode] = createSignal<'Turbo' | 'Thinking'>('Turbo');
+  const [showModelMenu, setShowModelMenu] = createSignal(false);
 
   const models = [
     'Claude 3.5 Sonnet',
@@ -137,7 +139,10 @@ export const ChatView: Component<ChatViewProps> = (props) => {
                       </div>
 
                       <div class="flex items-center gap-3">
-                        <button class="px-2 py-0.5 rounded text-[10.5px] font-medium text-zinc-300 bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] transition-colors flex items-center gap-1">
+                        <button
+                          onClick={props.onOpenReviewDiff}
+                          class="px-2 py-0.5 rounded text-[10.5px] font-medium text-zinc-300 bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] transition-colors flex items-center gap-1 cursor-pointer"
+                        >
                           Review
                         </button>
 
@@ -234,9 +239,41 @@ export const ChatView: Component<ChatViewProps> = (props) => {
               </button>
 
               {/* Model Picker Pill */}
-              <div class="relative flex items-center gap-1 text-zinc-300 hover:text-white cursor-pointer px-2 py-0.5 rounded hover:bg-white/[0.05] transition-colors text-[11px] font-sans">
-                <span>{props.selectedModel}</span>
-                <IconChevronDown size={10} class="text-zinc-500" />
+              <div class="relative">
+                <button
+                  type="button"
+                  onClick={() => setShowModelMenu(!showModelMenu())}
+                  class="flex items-center gap-1 text-zinc-300 hover:text-white cursor-pointer px-2 py-0.5 rounded hover:bg-white/[0.05] transition-colors text-[11px] font-sans"
+                >
+                  <span>{props.selectedModel}</span>
+                  <IconChevronDown size={10} class="text-zinc-500" />
+                </button>
+
+                <Show when={showModelMenu()}>
+                  <div class="absolute bottom-full left-0 mb-1 w-48 bg-[#181a26] border border-white/[0.1] rounded-xl shadow-2xl py-1 z-30 flex flex-col text-xs font-sans animate-fade-in">
+                    <For each={models}>
+                      {(m) => (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            props.onSelectModel?.(m);
+                            setShowModelMenu(false);
+                          }}
+                          class={`px-3 py-1.5 text-left transition-colors flex items-center justify-between ${
+                            props.selectedModel === m
+                              ? 'bg-cyan-500/15 text-cyan-300 font-medium'
+                              : 'text-zinc-300 hover:bg-white/[0.05] hover:text-white'
+                          }`}
+                        >
+                          <span>{m}</span>
+                          <Show when={props.selectedModel === m}>
+                            <IconCheck size={11} class="text-cyan-400" />
+                          </Show>
+                        </button>
+                      )}
+                    </For>
+                  </div>
+                </Show>
               </div>
             </div>
 
