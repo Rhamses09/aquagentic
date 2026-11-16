@@ -48,7 +48,10 @@
     "caughtToast": "New Catch!",
     "shinyToast": "★ SHINY VARIANT (x3 PPS)",
     "weight": "Weight",
-    "viewBestiary": "View Fishdex"
+    "viewBestiary": "View Fishdex",
+    "fishStartled": "Startled!",
+    "fishPetted": "Petted!",
+    "clickBonus": "+1 💎"
   },
   "bestiary": {
     "title": "Fishdex & Collection",

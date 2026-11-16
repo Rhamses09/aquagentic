@@ -48,7 +48,10 @@
     "caughtToast": "¡Nueva Captura!",
     "shinyToast": "★ VARIANTE SHINY (x3 PPS)",
     "weight": "Peso",
-    "viewBestiary": "Ver Bestiario"
+    "viewBestiary": "Ver Bestiario",
+    "fishStartled": "¡Asustado!",
+    "fishPetted": "¡Acariciado!",
+    "clickBonus": "+1 💎"
   },
   "bestiary": {
     "title": "Bestiario de Peces (Fishdex)",

@@ -812,6 +812,7 @@ export const App: Component = () => {
         biome={currentBiome()}
         weather={currentWeather()}
         activeFishes={swimmingFishes()}
+        onFishClick={() => setPearls((p) => p + 1)}
       />
 
       {/* 2. Antigravity Desktop Native Header & Breadcrumbs (Z-30) */}
