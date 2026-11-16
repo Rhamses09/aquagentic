@@ -10,7 +10,11 @@ import {
   GachaRollResult,
   FISH_MAP,
   AquagenticSyncState,
-  InventoryItem
+  InventoryItem,
+  AnglerQuest,
+  generateAnglerQuest,
+  checkQuestCompletion,
+  claimQuestReward
 } from '@aquagentic/core-game';
 import { Sidebar } from './components/Sidebar';
 import { ChatView, Message } from './components/ChatView';
@@ -18,6 +22,7 @@ import { AquariumDock } from './components/AquariumDock';
 import { CatchNotification } from './components/CatchNotification';
 import { BestiaryModal } from './components/BestiaryModal';
 import { ChestOpeningModal } from './components/ChestOpeningModal';
+import { AnglerQuestModal } from './components/AnglerQuestModal';
 import { AmbientAquariumBackground, SwimmingFishState } from './components/AmbientAquariumBackground';
 
 function loadInitialState(): AquagenticSyncState {
@@ -81,6 +86,22 @@ export const App: Component = () => {
   );
   const [isChestModalOpen, setIsChestModalOpen] = createSignal<boolean>(false);
 
+  // Terraria-style Angler NPC Quests State
+  const [activeAnglerQuest, setActiveAnglerQuest] = createSignal<AnglerQuest | null>(
+    initial.aquarium.activeAnglerQuest || generateAnglerQuest(0)
+  );
+  const [completedQuestsCount, setCompletedQuestsCount] = createSignal<number>(
+    initial.aquarium.completedQuestsCount || 0
+  );
+  const [isAnglerModalOpen, setIsAnglerModalOpen] = createSignal<boolean>(false);
+
+  // Check if current quest can be turned in
+  const isAnglerQuestReady = createMemo(() => {
+    const q = activeAnglerQuest();
+    if (!q) return false;
+    return checkQuestCompletion(q, inventory());
+  });
+
   // STABLE SWIMMING FISH SIGNAL (Updated ONLY on catch / toggle, NEVER on 500ms economy ticks!)
   const [swimmingFishes, setSwimmingFishes] = createSignal<SwimmingFishState[]>(
     buildSwimmingFishes(initial.aquarium.activeTankFishIds || [], initial.aquarium.inventory || {})
@@ -133,7 +154,9 @@ export const App: Component = () => {
           unlockedBiomes: ['default_ocean'],
           unlockedThemes: ['classic_dark'],
           inventory: inventory(),
-          availableChests: availableChests()
+          availableChests: availableChests(),
+          activeAnglerQuest: activeAnglerQuest(),
+          completedQuestsCount: completedQuestsCount()
         } as any,
         recentSessions: []
       };
@@ -264,6 +287,38 @@ export const App: Component = () => {
     return caughtFish;
   };
 
+  // Claim Terraria-style Angler NPC Quest Reward
+  const handleClaimAnglerReward = () => {
+    const quest = activeAnglerQuest();
+    if (!quest) return;
+
+    const dummyAquarium: any = {
+      pearls: pearls(),
+      availableChests: availableChests(),
+      coralFragments: 0,
+      completedQuestsCount: completedQuestsCount(),
+      activeAnglerQuest: quest,
+      inventory: inventory()
+    };
+
+    const result = claimQuestReward(dummyAquarium);
+    if (result) {
+      setPearls(dummyAquarium.pearls);
+      setAvailableChests(dummyAquarium.availableChests);
+      setCompletedQuestsCount(dummyAquarium.completedQuestsCount);
+      setActiveAnglerQuest(result.nextQuest);
+      persistState();
+    }
+  };
+
+  // Reroll Angler Quest
+  const handleRerollAnglerQuest = () => {
+    const current = activeAnglerQuest();
+    const next = generateAnglerQuest(completedQuestsCount(), current?.targetFishId);
+    setActiveAnglerQuest(next);
+    persistState();
+  };
+
   // Toggle fish in/out of the active tank
   const handleToggleActiveTank = (fishId: string) => {
     let currentTank = [...activeTankFishIds()];
@@ -375,10 +430,12 @@ export const App: Component = () => {
         sessions={sessions()}
         selectedModel={selectedModel()}
         discoveredCount={discoveredCount()}
+        isAnglerQuestReady={isAnglerQuestReady()}
         onSelectModel={setSelectedModel}
         onNewChat={handleNewChat}
         onSelectSession={setCurrentSessionId}
         onOpenBestiary={() => setIsBestiaryOpen(true)}
+        onOpenAnglerQuest={() => setIsAnglerModalOpen(true)}
       />
 
       {/* 3. Main Workspace (Transparent container so background shows through, Z-10) */}
@@ -401,12 +458,26 @@ export const App: Component = () => {
           rodCost={rodCost()}
           activeFishCount={swimmingFishes().length}
           availableChests={availableChests()}
+          isAnglerQuestReady={isAnglerQuestReady()}
+          onOpenAnglerQuest={() => setIsAnglerModalOpen(true)}
           onOpenChestModal={() => setIsChestModalOpen(true)}
           onBurnTokens={handleBurnTokens}
           onSimulateStream={handleSendMessage}
           onSimulateGlitch={handleSimulateGlitch}
           onOpenBestiary={() => setIsBestiaryOpen(true)}
         />
+
+        {/* Terraria Angler NPC Quest Modal */}
+        <Show when={isAnglerModalOpen()}>
+          <AnglerQuestModal
+            quest={activeAnglerQuest()}
+            inventory={inventory()}
+            completedQuestsCount={completedQuestsCount()}
+            onClaimReward={handleClaimAnglerReward}
+            onRerollQuest={handleRerollAnglerQuest}
+            onClose={() => setIsAnglerModalOpen(false)}
+          />
+        </Show>
 
         {/* Gacha Fishing Chest Opening Modal */}
         <Show when={isChestModalOpen()}>

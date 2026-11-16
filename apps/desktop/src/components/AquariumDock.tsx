@@ -7,7 +7,8 @@ import {
   IconTerminal,
   IconPlus,
   IconFish,
-  IconChest
+  IconChest,
+  IconAnchor
 } from './icons';
 
 interface AquariumDockProps {
@@ -19,6 +20,8 @@ interface AquariumDockProps {
   rodCost: number;
   activeFishCount: number;
   availableChests: number;
+  isAnglerQuestReady?: boolean;
+  onOpenAnglerQuest: () => void;
   onOpenChestModal: () => void;
   onBurnTokens: (amount: number, prompt: string) => void;
   onSimulateStream: (prompt: string) => void;
@@ -86,6 +89,20 @@ export const AquariumDock: Component<AquariumDockProps> = (props) => {
 
       {/* Right: Quick actions & Bestiary shortcut */}
       <div class="flex items-center gap-2">
+        {/* Angler NPC Quest Button */}
+        <button
+          onClick={props.onOpenAnglerQuest}
+          class={`px-2.5 py-1 rounded-md text-[10.5px] font-mono font-medium transition-all flex items-center gap-1.5 border ${
+            props.isAnglerQuestReady
+              ? 'bg-amber-950/80 hover:bg-amber-900/80 text-amber-300 border-amber-500/60 shadow-[0_0_12px_rgba(245,158,11,0.35)] animate-pulse'
+              : 'bg-white/[0.04] hover:bg-white/[0.08] text-zinc-300 hover:text-white border-white/[0.06]'
+          }`}
+          title={t('angler.navButton')}
+        >
+          <IconAnchor size={12} class={props.isAnglerQuestReady ? "text-amber-300" : "text-zinc-400"} />
+          <span>{props.isAnglerQuestReady ? t('angler.readyBadge') : t('angler.dockIndicator')}</span>
+        </button>
+
         {/* Fishing Chest Gacha Button */}
         <button
           onClick={props.onOpenChestModal}

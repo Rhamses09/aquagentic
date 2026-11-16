@@ -141,5 +141,35 @@
       "name": "Electro-Recepción",
       "desc": "Detecta y devora duplicados comunes para forjar Fragmentos de Coral."
     }
+  },
+  "angler": {
+    "name": "Pescador del Arrecife",
+    "title": "Misiones de Pesca",
+    "subtitle": "¡Cumple mis pedidos de captura para obtener cofres pirata y perlas!",
+    "questActive": "Misión en curso",
+    "questCompleted": "¡Misión completada!",
+    "claimReward": "Entregar Captura y Reclamar",
+    "searching": "Buscando especie...",
+    "reward": "Recompensa:",
+    "questsFinished": "Misiones completadas:",
+    "newQuest": "Nueva Misión",
+    "quest": {
+      "clownfish": "¡Oye tú! Tráeme un Pez Payaso del arrecife ahora mismo. ¡No para comer, sino porque me gusta su actitud burlona entre las anémonas!",
+      "blue_tang": "¡Necesito un Cirujano Azul para mi pecera! Pero asegúrate de que no se olvide de nadar derecho.",
+      "seahorse": "¡Vi un Caballito de Mar deslizándose entre las algas! Ve a pescarlo antes de que se sujete con la cola y se pierda.",
+      "french_angelfish": "El Pez Ángel Francés tiene escamas bordeadas de oro de lujo. ¡Atrápalo para mi colección!",
+      "lionfish": "¡Cuidado con las espinas! El Pez León tiene veneno y es un peligro invasor. ¡Sácalo del agua de inmediato!",
+      "mandarin_dragonet": "¡Ese Pez Mandarín tiene patrones psicodélicos impresionantes! Tráemelo intacto.",
+      "copperband_butterfly": "El Pez Mariposa Pico Largo se alimenta en grietas profundas. Pon a prueba tus tokens y consíguelo.",
+      "pufferfish": "¡Quiero ver a un Pez Globo inflarse como una pelota con púas! Tráeme uno bien gordo.",
+      "blue_ringed_octopus": "¡Peligro biológico extremo! El Pulpo de Anillos Azules es letal. ¡Atrápalo con extrema precaución!",
+      "anglerfish": "¡Ese Pez Rape de la zona abisal tiene su propia linterna! Imagina la ventaja que me daría al pescar de noche.",
+      "moray_eel": "¡Una Morena Gigante intentó morder mi caña! Ve y sácala del fondo para darle una lección.",
+      "hammerhead_shark": "¡El Tiburón Martillo Gigante está merodeando! Necesito que demuestres tu temple de pescador con él.",
+      "manta_ray": "¡La gran Manta Raya vuela por las profundidades como un ave marina! Consigue una para mi acuario.",
+      "sailfish": "¡El Pez Vela es el corredor más rápido de todo el mar! Lanza tu caña con fuerza y alcánzalo.",
+      "whale_shark": "¡El pez más grande del planeta! El Tiburón Ballena es el trofeo definitivo. ¡Atrápalo!",
+      "coelacanth": "¡UN FÓSIL VIVIENTE! El Celacanto lleva millones de años oculto. ¡Si me lo traes, te recompensaré como a un rey!"
+    }
   }
 }

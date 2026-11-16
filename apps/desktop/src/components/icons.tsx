@@ -154,3 +154,18 @@ export const IconKey: Component<IconProps> = (props) => (
     <path d="m15.5 7.5 3 3L22 7l-3-3" />
   </svg>
 );
+
+export const IconAnchor: Component<IconProps> = (props) => (
+  <svg class={props.class || "w-4 h-4"} width={props.size || 16} height={props.size || 16} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="5" r="3" />
+    <line x1="12" y1="22" x2="12" y2="8" />
+    <path d="M5 12H2a10 10 0 0 0 20 0h-3" />
+  </svg>
+);
+
+export const IconAward: Component<IconProps> = (props) => (
+  <svg class={props.class || "w-4 h-4"} width={props.size || 16} height={props.size || 16} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="8" r="6" />
+    <path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.2 0l-3.58 2.686a.5.5 0 0 1-.81-.469l1.514-8.526" />
+  </svg>
+);

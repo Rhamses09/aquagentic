@@ -88,5 +88,24 @@
     "rarityMythic": "Mythic",
     "shinyVariant": "✨ SHINY VARIANT (x3 PPS) ✨",
     "passiveTitle": "Passive Ability:"
+  },
+  "angler": {
+    "navButton": "Angler Quests",
+    "readyBadge": "Ready!",
+    "dockIndicator": "Angler Quest",
+    "modalTitle": "Reef Angler",
+    "modalSubtitle": "Terraria-inspired fishing bounties with loot and chest rewards.",
+    "completedBounties": "Quests completed",
+    "bountyTarget": "Requested species",
+    "statusReady": "Fish available in your inventory!",
+    "statusSearching": "Searching the ocean... (0/1)",
+    "hintBiome": "Habitat hint:",
+    "rewardTitle": "Bounty reward:",
+    "claimButton": "Turn In Catch & Claim Bounty!",
+    "claiming": "Claiming bounty...",
+    "rerollButton": "Reroll quest",
+    "close": "Close",
+    "claimedToast": "Quest completed!",
+    "claimedToastDesc": "You received pearls and marine chests from the Angler."
   }
 }

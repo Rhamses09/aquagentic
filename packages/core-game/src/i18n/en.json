@@ -141,5 +141,35 @@
       "name": "Electro-Sense",
       "desc": "Detects and consumes common duplicates to forge Coral Fragments."
     }
+  },
+  "angler": {
+    "name": "Reef Angler",
+    "title": "Fishing Quests",
+    "subtitle": "Complete my catch bounties to earn pirate chests and pearls!",
+    "questActive": "Active Quest",
+    "questCompleted": "Quest Completed!",
+    "claimReward": "Turn In Catch & Claim",
+    "searching": "Searching species...",
+    "reward": "Bounty Reward:",
+    "questsFinished": "Quests completed:",
+    "newQuest": "New Quest",
+    "quest": {
+      "clownfish": "Hey you! Go catch a Clownfish from the reef right now. Not for eating, I just like their cheeky attitude among the anemones!",
+      "blue_tang": "I need a Blue Tang for my tank! Just make sure it doesn't forget how to swim straight.",
+      "seahorse": "I saw a Seahorse gliding through the seaweed! Go hook it before it coils its tail and hides away.",
+      "french_angelfish": "The French Angelfish has fancy gold-rimmed scales. Catch one for my luxury collection!",
+      "lionfish": "Watch the venomous spines! The Lionfish is an invasive menace. Pull it out of the water immediately!",
+      "mandarin_dragonet": "That Mandarin Dragonet has dazzling psychedelic patterns! Bring it to me in one piece.",
+      "copperband_butterfly": "The Copperband Butterflyfish feeds deep in the coral crevices. Put your tokens to the test and reel it in.",
+      "pufferfish": "I want to see a Pufferfish puff up like a spiky ball! Bring me a real chubby one.",
+      "blue_ringed_octopus": "Extreme biohazard warning! The Blue-Ringed Octopus is lethal. Reel it in with extreme caution!",
+      "anglerfish": "That Deep Sea Anglerfish has its own glowing headlamp! Imagine the edge it would give me fishing at night.",
+      "moray_eel": "A Giant Moray Eel tried to bite my rod in half! Go down there and reel it in to teach it a lesson.",
+      "hammerhead_shark": "The Great Hammerhead is on the prowl! Show me you've got real angler grit and catch it.",
+      "manta_ray": "The great Manta Ray glides through the deep like an ocean bird! Bring one in for my lagoon.",
+      "sailfish": "The Sailfish is the fastest swimmer in the sea! Cast your rod with all your might and catch it.",
+      "whale_shark": "The largest fish on the entire planet! The Whale Shark is the ultimate trophy. Go catch it!",
+      "coelacanth": "A LIVING FOSSIL! The Coelacanth has survived for 400 million years. Bring it to me and I'll reward you like a king!"
+    }
   }
 }

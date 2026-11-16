@@ -88,5 +88,24 @@
     "rarityMythic": "Mítico",
     "shinyVariant": "✨ VARIANTE SHINY (x3 PPS) ✨",
     "passiveTitle": "Habilidad Pasiva:"
+  },
+  "angler": {
+    "navButton": "Misiones del Pescador",
+    "readyBadge": "¡Listo!",
+    "dockIndicator": "Misión Pescador",
+    "modalTitle": "Pescador del Arrecife",
+    "modalSubtitle": "Pedidos de captura inspirados en Terraria con recompensas de botín.",
+    "completedBounties": "Misiones cumplidas",
+    "bountyTarget": "Especie solicitada",
+    "statusReady": "¡Pez disponible en tu inventario!",
+    "statusSearching": "Buscando en el océano... (0/1)",
+    "hintBiome": "Pista de hábitat:",
+    "rewardTitle": "Recompensa por entrega:",
+    "claimButton": "¡Entregar Captura y Cobrar Botín!",
+    "claiming": "Reclamando botín...",
+    "rerollButton": "Pedir otra misión",
+    "close": "Cerrar",
+    "claimedToast": "¡Misión completada!",
+    "claimedToastDesc": "Has recibido perlas y cofres marinos del Pescador."
   }
 }

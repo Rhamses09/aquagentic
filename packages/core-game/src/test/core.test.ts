@@ -11,7 +11,10 @@ import {
   mergeStates,
   getTranslation,
   calculatePassivePPS,
-  INITIAL_FISH_CATALOG
+  INITIAL_FISH_CATALOG,
+  generateAnglerQuest,
+  checkQuestCompletion,
+  claimQuestReward
 } from '../index';
 
 test('SHA-256 produces deterministic hash', () => {
@@ -109,4 +112,40 @@ test('i18n translates seamlessly in English and Spanish', () => {
   assert.strictEqual(getTranslation('en', 'fish.clownfish.name'), 'Clownfish');
   assert.strictEqual(getTranslation('es', 'biome.abyssal_zone'), 'Zona Abisal Profunda');
   assert.strictEqual(getTranslation('en', 'biome.abyssal_zone'), 'Abyssal Midnight Trench');
+});
+
+test('Angler Quest system generates quests, checks inventory, and awards bounties', () => {
+  const state = createInitialState('desktop').aquarium;
+
+  const quest = generateAnglerQuest(0);
+  assert.ok(quest.targetFishId);
+  assert.ok(quest.reward.pearls > 0);
+  assert.ok(quest.reward.chests >= 1);
+
+  // Initially inventory is empty -> completion should be false
+  assert.strictEqual(checkQuestCompletion(quest, state.inventory), false);
+
+  // Add target fish to inventory
+  state.inventory[quest.targetFishId] = {
+    count: 1,
+    shinyCount: 0,
+    starRank: 1,
+    maxWeightBytes: 15000,
+    firstCaughtAt: Date.now()
+  };
+
+  assert.strictEqual(checkQuestCompletion(quest, state.inventory), true);
+
+  // Claim reward
+  state.activeAnglerQuest = quest;
+  const initialPearls = state.pearls;
+  const initialChests = state.availableChests || 0;
+
+  const claimed = claimQuestReward(state);
+  assert.ok(claimed);
+  assert.strictEqual(state.pearls, initialPearls + quest.reward.pearls);
+  assert.strictEqual(state.availableChests, initialChests + quest.reward.chests);
+  assert.strictEqual(state.completedQuestsCount, 1);
+  assert.ok(state.activeAnglerQuest);
+  assert.notStrictEqual(state.activeAnglerQuest.id, quest.id);
 });

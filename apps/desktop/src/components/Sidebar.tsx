@@ -1,4 +1,4 @@
-import { Component, For, createSignal } from 'solid-js';
+import { Component, For, createSignal, Show } from 'solid-js';
 import { currentLanguage, setCurrentLanguage, t } from '../i18n';
 import {
   IconPlus,
@@ -8,7 +8,8 @@ import {
   IconFish,
   IconChevronDown,
   IconMessage,
-  IconShield
+  IconShield,
+  IconAnchor
 } from './icons';
 
 interface ChatItem {
@@ -23,10 +24,12 @@ interface SidebarProps {
   sessions: ChatItem[];
   selectedModel: string;
   discoveredCount: number;
+  isAnglerQuestReady?: boolean;
   onSelectModel: (model: string) => void;
   onNewChat: () => void;
   onSelectSession: (id: string) => void;
   onOpenBestiary: () => void;
+  onOpenAnglerQuest: () => void;
 }
 
 export const Sidebar: Component<SidebarProps> = (props) => {
@@ -108,6 +111,36 @@ export const Sidebar: Component<SidebarProps> = (props) => {
             <span class="text-[9px] font-mono text-cyan-400 bg-cyan-950/60 px-1.5 py-0.5 rounded border border-cyan-800/40">
               {props.discoveredCount}
             </span>
+          )}
+        </button>
+
+        {/* Action: Angler NPC Quests (Terraria style) */}
+        <button
+          onClick={props.onOpenAnglerQuest}
+          class={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all border group ${
+            props.isAnglerQuestReady
+              ? 'bg-amber-950/40 hover:bg-amber-950/70 border-amber-500/50 text-amber-200 shadow-[0_0_10px_rgba(245,158,11,0.2)]'
+              : 'bg-white/[0.03] hover:bg-white/[0.07] text-zinc-300 hover:text-white border-white/[0.06]'
+          }`}
+          title={t('angler.navButton')}
+        >
+          <div class="flex items-center gap-2">
+            <IconAnchor size={13} class="text-amber-400 group-hover:scale-110 transition-transform" />
+            {!collapsed() && <span>{t('angler.navButton')}</span>}
+          </div>
+          {!collapsed() && (
+            <Show
+              when={props.isAnglerQuestReady}
+              fallback={
+                <span class="text-[9px] font-mono text-zinc-500 bg-white/[0.04] px-1.5 py-0.5 rounded">
+                  NPC
+                </span>
+              }
+            >
+              <span class="text-[9px] font-mono font-bold text-amber-300 bg-amber-950 px-1.5 py-0.5 rounded border border-amber-500/40 animate-pulse">
+                {t('angler.readyBadge')}
+              </span>
+            </Show>
           )}
         </button>
       </div>

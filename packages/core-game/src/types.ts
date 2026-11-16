@@ -45,6 +45,22 @@ export interface InventoryItem {
   firstCaughtAt: number;
 }
 
+export interface AnglerQuestReward {
+  pearls: number;
+  chests: number;
+  coralFragments?: number;
+}
+
+export interface AnglerQuest {
+  id: string;
+  targetFishId: string;
+  requiredBiome?: Biome;
+  minWeightKB?: number;
+  dialogueKey: string;
+  reward: AnglerQuestReward;
+  isCompleted: boolean;
+}
+
 export interface AquariumState {
   totalTokensBurned: number;
   currentBaitProgress: number;
@@ -60,6 +76,9 @@ export interface AquariumState {
   unlockedBiomes: Biome[];
   unlockedThemes: string[];
   inventory: Record<string, InventoryItem>;
+  availableChests?: number;
+  activeAnglerQuest?: AnglerQuest | null;
+  completedQuestsCount: number;
 }
 
 export interface ChatSessionMessage {
