@@ -22,8 +22,8 @@ export const PixelFish: Component<PixelFishProps> = (props) => {
       class={`inline-flex items-center justify-center select-none ${props.class || ''}`}
       style={{
         filter: isShiny()
-          ? 'drop-shadow(0 0 12px rgba(245, 158, 11, 0.95))'
-          : 'drop-shadow(0 0 6px rgba(0, 229, 255, 0.4))'
+          ? 'drop-shadow(0 0 6px rgba(251, 191, 36, 0.75)) drop-shadow(0 2px 4px rgba(0,0,0,0.5))'
+          : 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.45))'
       }}
     >
       {/* 1. PEZ PAYASO (Clownfish) - Orange & White Bands */}

@@ -29,18 +29,18 @@ export const CustomizationsModal: Component<CustomizationsModalProps> = (props) 
   });
 
   return (
-    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md select-none animate-fade-in p-4 font-sans">
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md select-none animate-fade-in p-4 font-sans">
       <div class="absolute inset-0" onClick={props.onClose} />
 
-      <div class="relative z-10 w-full max-w-xl bg-[#0d0f19]/95 border border-white/[0.1] rounded-2xl p-6 shadow-2xl flex flex-col overflow-hidden">
+      <div class="relative z-10 w-full max-w-xl bg-[#12141e] border border-white/[0.08] rounded-2xl p-6 shadow-2xl flex flex-col overflow-hidden">
         {/* Header */}
-        <div class="flex items-center justify-between pb-4 border-b border-white/[0.08]">
+        <div class="flex items-center justify-between pb-4 border-b border-white/[0.06]">
           <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-lg bg-zinc-800 border border-white/[0.08] flex items-center justify-center text-cyan-400">
-              <IconSliders size={16} />
+            <div class="w-8 h-8 rounded-lg bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-zinc-300">
+              <IconSliders size={15} />
             </div>
             <div>
-              <h2 class="font-bold text-sm text-zinc-100">
+              <h2 class="font-semibold text-sm text-zinc-100">
                 {t('customizations.title')}
               </h2>
               <p class="text-xs text-zinc-400">

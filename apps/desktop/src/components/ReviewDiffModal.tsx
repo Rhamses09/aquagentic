@@ -28,15 +28,15 @@ export const ReviewDiffModal: Component<ReviewDiffModalProps> = (props) => {
   });
 
   return (
-    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md select-none animate-fade-in p-4 font-sans">
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md select-none animate-fade-in p-4 font-sans">
       <div class="absolute inset-0" onClick={props.onClose} />
 
-      <div class="relative z-10 w-full max-w-4xl bg-[#0d0f19]/95 border border-white/[0.1] rounded-2xl p-6 shadow-2xl flex flex-col h-[75vh] overflow-hidden">
+      <div class="relative z-10 w-full max-w-4xl bg-[#12141e] border border-white/[0.08] rounded-2xl p-6 shadow-2xl flex flex-col h-[75vh] overflow-hidden">
         {/* Header */}
-        <div class="flex items-center justify-between pb-3 border-b border-white/[0.08]">
+        <div class="flex items-center justify-between pb-3 border-b border-white/[0.06]">
           <div class="flex items-center gap-3">
-            <h2 class="font-bold text-sm text-zinc-100 flex items-center gap-2">
-              <IconCode size={16} class="text-cyan-400" />
+            <h2 class="font-semibold text-sm text-zinc-100 flex items-center gap-2">
+              <IconCode size={15} class="text-zinc-400" />
               <span>Review Workspace Changes</span>
             </h2>
             <span class="text-xs font-mono text-zinc-400 bg-white/[0.04] px-2 py-0.5 rounded border border-white/[0.06]">

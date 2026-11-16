@@ -32,20 +32,20 @@ export const BestiaryModal: Component<BestiaryModalProps> = (props) => {
   };
 
   return (
-    <div class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 select-none">
-      <div class="bg-[#0c0e17] border border-white/[0.12] rounded-2xl w-full max-w-4xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden font-sans">
+    <div class="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4 select-none animate-fade-in">
+      <div class="bg-[#12141e] border border-white/[0.08] rounded-2xl w-full max-w-4xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden font-sans">
         {/* Header */}
-        <div class="p-5 border-b border-white/[0.07] flex items-center justify-between bg-[#10121d]">
+        <div class="px-6 py-4 border-b border-white/[0.06] flex items-center justify-between bg-[#151722]">
           <div>
-            <div class="flex items-center gap-2">
-              <h3 class="text-base font-bold text-white tracking-tight">
+            <div class="flex items-center gap-3">
+              <h3 class="text-sm font-semibold text-white tracking-tight">
                 {t('bestiary.title')}
               </h3>
-              <span class="px-2 py-0.5 text-[10px] font-mono font-bold bg-cyan-950 text-cyan-300 rounded border border-cyan-800/40">
+              <span class="text-xs font-mono text-zinc-400">
                 {discoveredCount()} / {INITIAL_FISH_CATALOG.length} {t('bestiary.discovered')}
               </span>
-              <span class="px-2 py-0.5 text-[10px] font-mono font-bold bg-emerald-950 text-emerald-300 rounded border border-emerald-800/40">
-                Tanque: {props.activeTankIds.length} / {props.maxTankCapacity || 8}
+              <span class="text-xs font-mono text-zinc-500">
+                • Tanque: {props.activeTankIds.length}/{props.maxTankCapacity || 8}
               </span>
             </div>
             <p class="text-xs text-zinc-400 mt-0.5 font-sans">
@@ -55,7 +55,7 @@ export const BestiaryModal: Component<BestiaryModalProps> = (props) => {
 
           <button
             onClick={props.onClose}
-            class="text-zinc-400 hover:text-white p-2 rounded-lg hover:bg-white/[0.06] transition-colors text-sm font-mono"
+            class="w-7 h-7 rounded-lg hover:bg-white/[0.08] text-zinc-400 hover:text-white flex items-center justify-center transition-colors text-sm"
             title="Cerrar (Esc)"
           >
             ✕

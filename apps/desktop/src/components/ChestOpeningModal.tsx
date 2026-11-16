@@ -111,7 +111,7 @@ export const ChestOpeningModal: Component<ChestOpeningModalProps> = (props) => {
   });
 
   return (
-    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md select-none animate-fade-in p-4">
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md select-none animate-fade-in p-4">
       {/* Outer Click to Dismiss (only when in idle or revealed) */}
       <div
         class="absolute inset-0"
@@ -121,7 +121,7 @@ export const ChestOpeningModal: Component<ChestOpeningModalProps> = (props) => {
       />
 
       {/* Main Gacha Box Container */}
-      <div class="relative z-10 w-full max-w-lg bg-[#0c0f18]/95 border border-white/[0.1] rounded-2xl p-7 shadow-2xl flex flex-col items-center overflow-hidden">
+      <div class="relative z-10 w-full max-w-lg bg-[#12141e] border border-white/[0.08] rounded-2xl p-7 shadow-2xl flex flex-col items-center overflow-hidden">
         {/* Background radial glow */}
         <div
           class="absolute inset-0 pointer-events-none transition-all duration-700 opacity-30"

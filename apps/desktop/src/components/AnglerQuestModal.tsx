@@ -50,31 +50,25 @@ export const AnglerQuestModal: Component<AnglerQuestModalProps> = (props) => {
       <div class="absolute inset-0" onClick={props.onClose} />
 
       {/* Main Angler Quest Dialogue Card */}
-      <div class="relative z-10 w-full max-w-xl bg-[#0c0f18]/95 border border-white/[0.1] rounded-2xl p-7 shadow-2xl flex flex-col overflow-hidden">
-        {/* Subtle oceanic ambient background glow */}
-        <div class="absolute top-0 right-0 w-80 h-80 rounded-full bg-cyan-500/10 blur-3xl pointer-events-none" />
-
+      <div class="relative z-10 w-full max-w-xl bg-[#12141e] border border-white/[0.08] rounded-2xl p-6 shadow-2xl flex flex-col overflow-hidden">
         {/* Modal Header */}
-        <div class="flex items-center justify-between pb-4 border-b border-white/[0.08] relative z-10">
+        <div class="flex items-center justify-between pb-4 border-b border-white/[0.06] relative z-10">
           <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
-              <IconFish size={18} />
+            <div class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+              <IconFish size={16} />
             </div>
             <div>
-              <h2 class="font-bold text-sm tracking-wide text-zinc-100 flex items-center gap-2">
+              <h2 class="font-semibold text-sm tracking-tight text-zinc-100 flex items-center gap-2">
                 <span>{t('angler.modalTitle')}</span>
-                <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-amber-950/80 border border-amber-500/40 text-amber-300">
-                  Terraria NPC
-                </span>
               </h2>
-              <p class="text-[11px] text-zinc-400">
+              <p class="text-[11.5px] text-zinc-400">
                 {t('angler.modalSubtitle')}
               </p>
             </div>
           </div>
 
           <div class="flex items-center gap-3">
-            <span class="px-2.5 py-1 rounded-full text-xs font-mono font-bold bg-cyan-950/80 border border-cyan-800/50 text-cyan-300">
+            <span class="px-2.5 py-1 rounded-full text-xs font-mono font-medium bg-white/[0.04] border border-white/[0.08] text-zinc-300">
               {props.completedQuestsCount} {t('angler.completedBounties')}
             </span>
 

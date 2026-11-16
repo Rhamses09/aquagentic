@@ -37,136 +37,133 @@ export const AquariumDock: Component<AquariumDockProps> = (props) => {
 
   return (
     <footer
-      class={`h-11 px-5 border-t border-white/[0.08] bg-[#0a0c13]/85 backdrop-blur-xl flex items-center justify-between z-20 select-none font-mono text-xs shadow-2xl transition-colors ${
+      class={`h-8 px-3 border-t border-white/[0.06] bg-[#0c0e17]/90 backdrop-blur-xl flex items-center justify-between z-20 select-none text-[11px] font-sans transition-colors ${
         props.weather === 'storm' ? 'weather-storm-active' : ''
       }`}
     >
-      {/* Left: Economy & Biome Ticker */}
-      <div class="flex items-center gap-4">
+      {/* Left: Economy & Status Ticker */}
+      <div class="flex items-center gap-3">
+        {/* Status Ready Indicator */}
+        <div class="flex items-center gap-1.5 text-zinc-400">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+          <span class="font-mono text-[10.5px]">Ready</span>
+        </div>
+
+        <span class="text-white/[0.1] font-thin">|</span>
+
         {/* Pearls */}
-        <div class="flex items-center gap-1.5 text-cyan-300 font-semibold">
-          <span class="text-[9.5px] text-zinc-500 uppercase tracking-wider">Pearls</span>
-          <span class="text-xs">{Math.floor(props.pearls).toLocaleString()}</span>
+        <div class="flex items-center gap-1 font-mono font-medium text-zinc-200">
+          <span class="text-[10px] text-zinc-500 uppercase tracking-wider">💎</span>
+          <span>{Math.floor(props.pearls).toLocaleString()}</span>
         </div>
 
         {/* PPS */}
-        <div class="flex items-center gap-1 text-emerald-400 font-semibold">
-          <IconZap size={10} />
-          <span class="text-xs">+{props.pps.toFixed(1)}/s</span>
+        <div class="flex items-center gap-1 font-mono text-emerald-400/90 text-[10.5px]">
+          <IconZap size={9} />
+          <span>+{props.pps.toFixed(1)}/s</span>
         </div>
 
+        <span class="text-white/[0.1] font-thin">|</span>
+
         {/* Biome */}
-        <div class="flex items-center gap-1.5 text-zinc-400 text-[10.5px]">
+        <div class="flex items-center gap-1 text-zinc-400 hover:text-zinc-200 transition-colors cursor-pointer text-[10.5px]">
           <IconCompass size={11} class="text-zinc-500" />
-          <span class="uppercase tracking-wider text-[9.5px] font-semibold">{t(`biome.${props.biome}`)}</span>
+          <span>{t(`biome.${props.biome}`)}</span>
         </div>
 
         {/* Active Ocean Fish Count */}
         <button
           onClick={props.onOpenBestiary}
-          class="flex items-center gap-1 px-2 py-0.5 rounded-md bg-cyan-950/60 border border-cyan-800/40 text-cyan-300 hover:bg-cyan-900/60 transition-colors text-[10.5px]"
+          class="flex items-center gap-1 px-1.5 py-0.5 rounded text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04] transition-colors text-[10.5px]"
           title={t('aquarium.viewBestiary')}
         >
-          <IconFish size={12} />
+          <IconFish size={11} class="text-cyan-400/80" />
           <span>{props.activeFishCount} {t('aquarium.activeTank')}</span>
         </button>
       </div>
 
       {/* Center: Token Cast / Bait Progress Gauge */}
-      <div class="flex items-center gap-3 w-80">
-        <div class="flex items-center justify-between text-[10px] text-zinc-400 w-full">
-          <span class="text-cyan-400/90 font-semibold text-[9.5px] uppercase tracking-wider">
-            {t('aquarium.baitProgress')}
-          </span>
-          <span>
-            {props.currentBait} / {props.rodCost} tk
-          </span>
-        </div>
-        <div class="w-full h-1.5 bg-white/[0.06] rounded-full overflow-hidden border border-white/[0.04] relative">
+      <div class="flex items-center gap-2.5 w-64 max-w-xs">
+        <span class="text-[10px] text-zinc-500 font-mono tracking-tight flex-shrink-0">
+          🎣 {props.currentBait}/{props.rodCost} tk
+        </span>
+        <div class="w-full h-1 bg-white/[0.06] rounded-full overflow-hidden border border-white/[0.03]">
           <div
-            class="h-full bg-gradient-to-r from-cyan-500 via-indigo-500 to-emerald-400 rounded-full transition-all duration-300"
+            class="h-full bg-gradient-to-r from-cyan-500 to-indigo-500 rounded-full transition-all duration-300"
             style={{ width: `${progressPercent()}%` }}
           />
         </div>
       </div>
 
-      {/* Right: Quick actions & Bestiary shortcut */}
-      <div class="flex items-center gap-2">
+      {/* Right: Quick actions & Navigation triggers */}
+      <div class="flex items-center gap-1.5">
+        {/* Fishing Chest Gacha Trigger (Only highlighted when available) */}
+        <Show when={props.availableChests > 0}>
+          <button
+            onClick={props.onOpenChestModal}
+            class="px-2 py-0.5 rounded text-[10.5px] font-medium text-cyan-300 bg-cyan-950/70 hover:bg-cyan-900/70 border border-cyan-700/50 transition-colors flex items-center gap-1 shadow-sm animate-pulse"
+            title={t('chest.title')}
+          >
+            <IconChest size={11} class="text-cyan-300" />
+            <span>{props.availableChests} {t('chest.openChest')}</span>
+          </button>
+        </Show>
+
+        {/* Angler NPC Quest Trigger */}
+        <Show when={props.isAnglerQuestReady}>
+          <button
+            onClick={props.onOpenAnglerQuest}
+            class="px-2 py-0.5 rounded text-[10.5px] font-medium text-amber-300 bg-amber-950/70 hover:bg-amber-900/70 border border-amber-700/50 transition-colors flex items-center gap-1 shadow-sm"
+            title={t('angler.navButton')}
+          >
+            <IconAnchor size={11} class="text-amber-300" />
+            <span>{t('angler.readyBadge')}</span>
+          </button>
+        </Show>
+
         {/* Shop Upgrade Button */}
         <button
           onClick={props.onOpenShop}
-          class={`px-2.5 py-1 rounded-md text-[10.5px] font-mono font-medium transition-all flex items-center gap-1.5 border ${
-            props.hasAffordableUpgrade
-              ? 'bg-emerald-950/80 hover:bg-emerald-900/80 text-emerald-300 border-emerald-500/60 shadow-[0_0_12px_rgba(16,185,129,0.35)] animate-pulse'
-              : 'bg-white/[0.04] hover:bg-white/[0.08] text-zinc-300 hover:text-white border-white/[0.06]'
-          }`}
+          class="px-2 py-0.5 rounded text-[10.5px] text-zinc-300 hover:text-white hover:bg-white/[0.05] transition-colors flex items-center gap-1.5"
           title={t('shop.title')}
         >
-          <IconShop size={12} class={props.hasAffordableUpgrade ? "text-emerald-300" : "text-zinc-400"} />
+          <IconShop size={11} class="text-zinc-400" />
           <span>{t('nav.shop')}</span>
-        </button>
-
-        {/* Angler NPC Quest Button */}
-        <button
-          onClick={props.onOpenAnglerQuest}
-          class={`px-2.5 py-1 rounded-md text-[10.5px] font-mono font-medium transition-all flex items-center gap-1.5 border ${
-            props.isAnglerQuestReady
-              ? 'bg-amber-950/80 hover:bg-amber-900/80 text-amber-300 border-amber-500/60 shadow-[0_0_12px_rgba(245,158,11,0.35)] animate-pulse'
-              : 'bg-white/[0.04] hover:bg-white/[0.08] text-zinc-300 hover:text-white border-white/[0.06]'
-          }`}
-          title={t('angler.navButton')}
-        >
-          <IconAnchor size={12} class={props.isAnglerQuestReady ? "text-amber-300" : "text-zinc-400"} />
-          <span>{props.isAnglerQuestReady ? t('angler.readyBadge') : t('angler.dockIndicator')}</span>
-        </button>
-
-        {/* Fishing Chest Gacha Button */}
-        <button
-          onClick={props.onOpenChestModal}
-          class={`px-2.5 py-1 rounded-md text-[10.5px] font-mono font-medium transition-all flex items-center gap-1.5 border ${
-            props.availableChests > 0
-              ? 'bg-cyan-950/80 hover:bg-cyan-900/80 text-cyan-300 border-cyan-500/60 shadow-[0_0_12px_rgba(6,182,212,0.35)] animate-pulse'
-              : 'bg-white/[0.04] hover:bg-white/[0.08] text-zinc-300 hover:text-white border-white/[0.06]'
-          }`}
-          title={t('chest.title')}
-        >
-          <IconChest size={12} class={props.availableChests > 0 ? "text-cyan-300" : "text-zinc-400"} />
-          <span>
-            {props.availableChests > 0 ? `${props.availableChests} ${t('chest.openChest')}` : t('chest.openChest')}
-          </span>
+          <Show when={props.hasAffordableUpgrade}>
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          </Show>
         </button>
 
         {/* Open Bestiary */}
         <button
           onClick={props.onOpenBestiary}
-          class="px-2.5 py-1 rounded-md bg-white/[0.04] hover:bg-white/[0.08] text-zinc-300 hover:text-white text-[10.5px] border border-white/[0.06] transition-colors flex items-center gap-1"
+          class="px-2 py-0.5 rounded text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.05] text-[10.5px] transition-colors flex items-center gap-1"
+          title={t('aquarium.viewBestiary')}
         >
           <IconFish size={11} />
-          <span>{t('aquarium.viewBestiary')}</span>
+          <span>{t('nav.bestiary')}</span>
         </button>
 
         {/* Quick Cast +100 */}
         <button
           onClick={() => props.onBurnTokens(100, 'Rust compiler token stream')}
-          class="px-2 py-1 rounded-md bg-white/[0.04] hover:bg-white/[0.08] text-zinc-300 hover:text-white text-[10.5px] border border-white/[0.06] transition-colors flex items-center gap-1"
+          class="px-1.5 py-0.5 rounded text-[10px] font-mono text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.04] transition-colors"
           title="Burn 100 test tokens"
         >
-          <IconPlus size={9} />
-          <span>100 tk</span>
+          +100
         </button>
 
         {/* Glitch Storm Toggle */}
         <button
           onClick={props.onSimulateGlitch}
-          class={`px-2 py-1 rounded-md text-[10.5px] transition-colors border flex items-center gap-1 ${
+          class={`p-1 rounded text-[10px] transition-colors flex items-center ${
             props.weather === 'storm'
-              ? 'bg-purple-950 text-purple-300 border-purple-600'
-              : 'bg-white/[0.03] text-zinc-400 border-white/[0.06] hover:text-zinc-200'
+              ? 'text-purple-300 bg-purple-950/80 border border-purple-600/60'
+              : 'text-zinc-500 hover:text-purple-300 hover:bg-white/[0.04]'
           }`}
           title="Simulate glitch storm"
         >
-          <IconTerminal size={10} />
-          <span>Glitch</span>
+          <IconTerminal size={11} />
         </button>
       </div>
     </footer>

@@ -36,21 +36,13 @@ export const ShopModal: Component<ShopModalProps> = (props) => {
       <div class="absolute inset-0" onClick={props.onClose} />
 
       {/* Main Shop Container */}
-      <div class="relative z-10 w-full max-w-2xl bg-[#0d0f19]/95 border border-white/[0.1] rounded-2xl p-6 shadow-2xl flex flex-col overflow-hidden max-h-[85vh]">
-        {/* Ambient Top Glow */}
-        <div class="absolute -top-16 left-1/2 -translate-x-1/2 w-96 h-32 bg-cyan-500/15 blur-3xl pointer-events-none" />
-
+      <div class="relative z-10 w-full max-w-2xl bg-[#12141e] border border-white/[0.08] rounded-2xl p-6 shadow-2xl flex flex-col overflow-hidden max-h-[85vh]">
         {/* Modal Header */}
-        <div class="flex items-center justify-between pb-4 border-b border-white/[0.08] relative z-10">
+        <div class="flex items-center justify-between pb-4 border-b border-white/[0.06] relative z-10">
           <div>
-            <div class="flex items-center gap-2">
-              <h2 class="font-bold text-sm tracking-wide text-zinc-100 font-sans">
-                {t('shop.title')}
-              </h2>
-              <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-cyan-950/80 border border-cyan-800/40 text-cyan-300">
-                Incremental Game Engine
-              </span>
-            </div>
+            <h2 class="font-semibold text-sm tracking-tight text-zinc-100 font-sans">
+              {t('shop.title')}
+            </h2>
             <p class="text-xs text-zinc-400 mt-0.5">
               {t('shop.subtitle')}
             </p>
@@ -58,7 +50,7 @@ export const ShopModal: Component<ShopModalProps> = (props) => {
 
           <div class="flex items-center gap-3">
             {/* Live Pearl Balance Indicator */}
-            <div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/90 border border-cyan-700/50 text-cyan-300 font-mono text-xs font-bold shadow-sm">
+            <div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08] text-zinc-200 font-mono text-xs font-medium">
               <span>💎</span>
               <span>{Math.floor(props.pearls).toLocaleString()} Perlas</span>
             </div>

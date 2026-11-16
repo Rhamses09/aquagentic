@@ -278,7 +278,7 @@ const InteractiveSwimmingFish: Component<{
         {/* Floating Click Popup (+1 Pearl) */}
         <For each={popups()}>
           {(pop) => (
-            <span class="absolute -top-6 text-xs font-mono font-bold text-cyan-300 bg-cyan-950/90 border border-cyan-500/60 rounded-full px-2 py-0.5 animate-pearl-pop pointer-events-none shadow-lg">
+            <span class="absolute -top-6 text-[10px] font-mono font-medium text-amber-300 bg-[#181a24]/90 border border-amber-500/40 rounded-full px-2 py-0.5 animate-pearl-pop pointer-events-none shadow-md">
               {pop.text}
             </span>
           )}
@@ -286,7 +286,7 @@ const InteractiveSwimmingFish: Component<{
 
         {/* Startled Reaction Indicator */}
         <Show when={isFleeing()}>
-          <span class="absolute -top-5 px-1.5 py-0.2 rounded-full bg-amber-500/90 text-black text-[9px] font-bold font-mono tracking-tight animate-bounce pointer-events-none shadow-md">
+          <span class="absolute -top-5 px-1.5 py-0.2 rounded-full bg-cyan-400 text-black text-[9px] font-bold font-mono tracking-tight animate-bounce pointer-events-none shadow-sm">
             !
           </span>
         </Show>
@@ -300,19 +300,19 @@ const InteractiveSwimmingFish: Component<{
             fishId={props.fish.def.id}
             rarity={props.fish.def.rarity}
             isShiny={props.fish.isShiny}
-            size={46 * props.fish.scale}
-            class={`transform transition-all ${
-              isHovered() ? 'scale-125 brightness-125' : isFleeing() ? 'scale-110' : ''
+            size={44 * props.fish.scale}
+            class={`transform transition-transform duration-150 ${
+              isHovered() ? 'scale-115' : isFleeing() ? 'scale-105' : ''
             }`}
           />
         </div>
 
-        {/* Identification Badge Pill (Never flipped or mirrored) */}
+        {/* Identification Badge Pill (Graceful reveal on hover, invisible when idle) */}
         <span
-          class={`mt-1 px-1.5 py-0.5 rounded text-[8.5px] font-mono whitespace-nowrap shadow-lg transition-all backdrop-blur-sm pointer-events-none ${
+          class={`mt-1.5 px-2 py-0.5 rounded-md text-[9px] font-mono whitespace-nowrap shadow-md transition-all duration-200 backdrop-blur-md pointer-events-none ${
             isHovered() || isFleeing()
-              ? 'text-cyan-200 bg-black/85 border border-cyan-500/60 opacity-100 scale-105'
-              : 'text-cyan-300/80 bg-black/60 border border-cyan-900/40 opacity-50 group-hover:opacity-100'
+              ? 'text-zinc-100 bg-[#13151f]/95 border border-white/[0.14] opacity-100 translate-y-0'
+              : 'opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 text-zinc-300 bg-black/80 border border-white/[0.08]'
           }`}
         >
           {isFleeing() ? t('aquarium.fishStartled') : `${t(props.fish.def.nameKey)} (+${props.fish.def.basePPS} PPS)`}
@@ -354,11 +354,10 @@ export const AmbientAquariumBackground: Component<AmbientAquariumBackgroundProps
         props.weather === 'storm' ? 'weather-storm-active' : ''
       }`}
     >
-      {/* Oceanic Bioluminescent Ambient Spheres */}
-      <div class="absolute inset-0 opacity-40 pointer-events-none">
-        <div class="absolute top-[10%] left-[20%] w-[550px] h-[550px] rounded-full bg-cyan-500/15 blur-[130px]" />
-        <div class="absolute bottom-[15%] right-[25%] w-[650px] h-[650px] rounded-full bg-indigo-600/15 blur-[150px]" />
-        <div class="absolute top-[60%] left-[45%] w-[400px] h-[400px] rounded-full bg-emerald-500/10 blur-[120px]" />
+      {/* Oceanic Subtle Atmospheric Depth */}
+      <div class="absolute inset-0 opacity-25 pointer-events-none">
+        <div class="absolute top-[15%] left-[25%] w-[450px] h-[450px] rounded-full bg-cyan-600/10 blur-[140px]" />
+        <div class="absolute bottom-[20%] right-[30%] w-[500px] h-[500px] rounded-full bg-indigo-900/15 blur-[160px]" />
       </div>
 
       {/* Floating Plankton Particles */}
