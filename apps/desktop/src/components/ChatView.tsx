@@ -4,11 +4,13 @@ import {
   IconSend,
   IconCopy,
   IconCheck,
-  IconSparkles,
-  IconTerminal,
-  IconCpu,
+  IconPlus,
   IconZap,
-  IconCode
+  IconChevronDown,
+  IconMic,
+  IconThumbsUp,
+  IconThumbsDown,
+  IconSparkles
 } from './icons';
 
 export interface Message {
@@ -17,6 +19,7 @@ export interface Message {
   content: string;
   reasoning?: string;
   tokens?: number;
+  filesChanged?: string;
   timestamp: string;
 }
 
@@ -25,11 +28,22 @@ interface ChatViewProps {
   selectedModel: string;
   isStreaming: boolean;
   onSendMessage: (content: string) => void;
+  onSelectModel?: (model: string) => void;
 }
 
 export const ChatView: Component<ChatViewProps> = (props) => {
   const [inputText, setInputText] = createSignal('');
   const [copiedId, setCopiedId] = createSignal<string | null>(null);
+  const [expandedReasoning, setExpandedReasoning] = createSignal<Record<string, boolean>>({});
+  const [speedMode, setSpeedMode] = createSignal<'Turbo' | 'Thinking'>('Turbo');
+
+  const models = [
+    'Claude 3.5 Sonnet',
+    'Gemini 2.5 Flash',
+    'GPT-4o',
+    'DeepSeek R1',
+    'Ollama Local'
+  ];
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -51,80 +65,46 @@ export const ChatView: Component<ChatViewProps> = (props) => {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
+  const toggleReasoning = (msgId: string) => {
+    setExpandedReasoning((prev) => ({
+      ...prev,
+      [msgId]: !prev[msgId]
+    }));
+  };
+
   return (
-    <div class="flex-1 flex flex-col h-full bg-transparent relative overflow-hidden select-text">
-      {/* Top Session Bar (Client Titlebar Style) */}
-      <div class="h-13 border-b border-white/[0.06] px-5 flex items-center justify-between bg-[#0d0f17]/80 backdrop-blur-md z-10 select-none">
-        <div class="flex items-center gap-2 text-xs">
-          <span class="font-semibold text-zinc-300 font-mono">session_main</span>
-          <span class="text-zinc-600">/</span>
-          <span class="text-[11px] font-mono text-cyan-400 bg-cyan-950/40 px-2 py-0.5 rounded border border-cyan-800/40">
-            {props.selectedModel}
-          </span>
-        </div>
-
-        <div class="flex items-center gap-3 text-xs">
-          <div class="flex items-center gap-1.5 text-zinc-400 text-[11px] font-mono">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_5px_#34d399]" />
-            <span>Ready</span>
-          </div>
-          <span class="text-zinc-700">|</span>
-          <div class="flex items-center gap-1 text-[11px] font-mono text-zinc-400">
-            <IconTerminal size={12} class="text-zinc-400" />
-            <span>MCP Sandboxed</span>
-          </div>
-        </div>
-      </div>
-
+    <div class="flex-1 flex flex-col h-full bg-transparent relative overflow-hidden select-text font-sans">
       {/* Messages Scroll Container */}
-      <div class="flex-1 overflow-y-auto px-4 md:px-10 py-6 flex flex-col gap-5 max-w-4xl w-full mx-auto">
-        {/* Empty State / Welcome Screen */}
+      <div class="flex-1 overflow-y-auto px-4 md:px-12 py-8 flex flex-col gap-6 max-w-3xl w-full mx-auto">
+        {/* Empty State / Antigravity Welcome */}
         <Show when={props.messages.length === 0}>
-          <div class="my-auto flex flex-col items-center text-center max-w-lg mx-auto py-10 select-none">
-            <div class="w-11 h-11 rounded-xl bg-zinc-900 border border-white/[0.08] flex items-center justify-center text-cyan-400 mb-3.5 shadow-md">
-              <IconSparkles size={20} />
+          <div class="my-auto flex flex-col items-center text-center max-w-md mx-auto py-12 select-none">
+            <div class="w-10 h-10 rounded-xl bg-[#1c1e2a] border border-white/[0.08] flex items-center justify-center text-zinc-300 mb-3.5 shadow-md">
+              <IconSparkles size={18} class="text-cyan-400" />
             </div>
 
-            <h2 class="text-lg font-bold text-zinc-100 tracking-tight font-sans mb-1.5">
+            <h2 class="text-base font-semibold text-zinc-100 tracking-tight mb-1">
               {t('chat.welcomeTitle')}
             </h2>
-            <p class="text-xs text-zinc-400 leading-relaxed mb-6 max-w-md">
+            <p class="text-xs text-zinc-400 leading-relaxed mb-6">
               {t('chat.welcomeSubtitle')}
             </p>
 
-            {/* Quick Prompt Cards */}
-            <div class="grid grid-cols-1 gap-2 w-full text-left font-mono">
+            {/* Quick Suggestions */}
+            <div class="flex flex-col gap-2 w-full text-left font-sans">
               <button
                 onClick={() => setInputText(t('chat.suggestion1'))}
-                class="p-3 rounded-xl bg-[#12141e]/90 hover:bg-[#181b29] border border-white/[0.06] hover:border-white/[0.12] transition-all text-xs text-zinc-300 flex items-center justify-between group shadow-sm"
+                class="px-3.5 py-2.5 rounded-xl bg-[#181a24]/85 hover:bg-[#202331] border border-white/[0.06] hover:border-white/[0.12] transition-all text-xs text-zinc-300 flex items-center justify-between group shadow-sm"
               >
-                <div class="flex items-center gap-2.5 truncate">
-                  <IconCode size={13} class="text-zinc-500 group-hover:text-cyan-400 transition-colors" />
-                  <span class="truncate">{t('chat.suggestion1')}</span>
-                </div>
-                <span class="text-zinc-600 group-hover:text-cyan-400 transition-colors text-sm">→</span>
+                <span>{t('chat.suggestion1')}</span>
+                <span class="text-zinc-500 group-hover:text-zinc-300 font-mono text-[10px]">↵</span>
               </button>
-
               <button
                 onClick={() => setInputText(t('chat.suggestion2'))}
-                class="p-3 rounded-xl bg-[#12141e]/90 hover:bg-[#181b29] border border-white/[0.06] hover:border-white/[0.12] transition-all text-xs text-zinc-300 flex items-center justify-between group shadow-sm"
+                class="px-3.5 py-2.5 rounded-xl bg-[#181a24]/85 hover:bg-[#202331] border border-white/[0.06] hover:border-white/[0.12] transition-all text-xs text-zinc-300 flex items-center justify-between group shadow-sm"
               >
-                <div class="flex items-center gap-2.5 truncate">
-                  <IconTerminal size={13} class="text-zinc-500 group-hover:text-cyan-400 transition-colors" />
-                  <span class="truncate">{t('chat.suggestion2')}</span>
-                </div>
-                <span class="text-zinc-600 group-hover:text-cyan-400 transition-colors text-sm">→</span>
-              </button>
-
-              <button
-                onClick={() => setInputText(t('chat.suggestion3'))}
-                class="p-3 rounded-xl bg-[#12141e]/90 hover:bg-[#181b29] border border-white/[0.06] hover:border-white/[0.12] transition-all text-xs text-zinc-300 flex items-center justify-between group shadow-sm"
-              >
-                <div class="flex items-center gap-2.5 truncate">
-                  <IconCpu size={13} class="text-zinc-500 group-hover:text-cyan-400 transition-colors" />
-                  <span class="truncate">{t('chat.suggestion3')}</span>
-                </div>
-                <span class="text-zinc-600 group-hover:text-cyan-400 transition-colors text-sm">→</span>
+                <span>{t('chat.suggestion2')}</span>
+                <span class="text-zinc-500 group-hover:text-zinc-300 font-mono text-[10px]">↵</span>
               </button>
             </div>
           </div>
@@ -133,134 +113,162 @@ export const ChatView: Component<ChatViewProps> = (props) => {
         {/* Message Stream */}
         <For each={props.messages}>
           {(msg) => (
-            <div class={`flex gap-3 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              {/* Assistant Glyph Avatar */}
-              {msg.role === 'assistant' && (
-                <div class="w-6 h-6 rounded-md bg-zinc-900 border border-white/[0.08] flex items-center justify-center shrink-0 mt-0.5 text-cyan-400 shadow-sm">
-                  <IconSparkles size={13} />
+            <div class="w-full flex flex-col gap-2">
+              {/* USER MESSAGE: Sleek Dark Capsule Right-Aligned (Antigravity Style) */}
+              <Show when={msg.role === 'user'}>
+                <div class="flex justify-end">
+                  <div class="bg-[#212433] border border-white/[0.08] text-zinc-100 rounded-2xl px-4 py-2.5 max-w-xl text-[13px] leading-relaxed shadow-sm">
+                    <p class="whitespace-pre-wrap">{msg.content}</p>
+                  </div>
                 </div>
-              )}
+              </Show>
 
-              {/* Message Content Container */}
-              <div
-                class={`flex flex-col gap-1 max-w-[85%] ${
-                  msg.role === 'user' ? 'items-end' : 'items-start'
-                }`}
-              >
-                {/* Thinking Process Block (DeepSeek / Reasoning models) */}
-                {msg.reasoning && (
-                  <details class="w-full bg-[#10131d] border border-white/[0.06] rounded-xl px-3 py-2 text-xs text-zinc-400 mb-1">
-                    <summary class="cursor-pointer font-medium text-[11px] text-zinc-400 hover:text-zinc-200 list-none flex items-center gap-1.5 font-mono select-none">
-                      <IconZap size={11} class="text-amber-400" />
-                      <span>{t('chat.reasoning')}</span>
-                      <span class="text-[9.5px] text-zinc-500 font-normal">(thinking tokens)</span>
-                    </summary>
-                    <div class="mt-2 text-[11px] text-zinc-400 font-mono border-t border-white/[0.05] pt-2 whitespace-pre-wrap leading-relaxed">
-                      {msg.reasoning}
+              {/* ASSISTANT MESSAGE: Clean Unboxed Document Layout (Antigravity Style) */}
+              <Show when={msg.role === 'assistant'}>
+                <div class="w-full flex flex-col gap-2 text-zinc-200">
+                  {/* Top Bar for Assistant: Files Changed Badge (Like in screenshot: 15 files changed +754 -7) */}
+                  <Show when={msg.filesChanged || (msg.tokens && msg.tokens > 100)}>
+                    <div class="flex items-center justify-between p-2 px-3 rounded-lg bg-[#181a26]/90 border border-white/[0.06] text-xs">
+                      <div class="flex items-center gap-2 text-zinc-400 font-mono text-[11px]">
+                        <span class="text-zinc-300 font-medium">{msg.filesChanged || '15 files changed'}</span>
+                        <span class="text-emerald-400">+754</span>
+                        <span class="text-rose-400">-7</span>
+                        <span class="text-zinc-600">›</span>
+                      </div>
+
+                      <div class="flex items-center gap-3">
+                        <button class="px-2 py-0.5 rounded text-[10.5px] font-medium text-zinc-300 bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] transition-colors flex items-center gap-1">
+                          Review
+                        </button>
+
+                        <div class="flex items-center gap-2 text-zinc-500 text-[11px]">
+                          <span>{msg.timestamp}</span>
+                          <button
+                            onClick={() => copyToClipboard(msg.id, msg.content)}
+                            class="hover:text-zinc-300 transition-colors"
+                            title="Copy message"
+                          >
+                            <Show when={copiedId() === msg.id} fallback={<IconCopy size={12} />}>
+                              <IconCheck size={12} class="text-emerald-400" />
+                            </Show>
+                          </button>
+                          <button class="hover:text-zinc-300 transition-colors" title="Good response">
+                            <IconThumbsUp size={12} />
+                          </button>
+                          <button class="hover:text-zinc-300 transition-colors" title="Bad response">
+                            <IconThumbsDown size={12} />
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                  </details>
-                )}
+                  </Show>
 
-                {/* Bubble Body */}
-                <div
-                  class={`rounded-xl px-3.5 py-2.5 text-xs leading-relaxed ${
-                    msg.role === 'user'
-                      ? 'bg-[#181b26] text-zinc-100 border border-white/[0.08] shadow-sm'
-                      : 'bg-[#12141e] text-zinc-200 border border-white/[0.06] w-full shadow-sm'
-                  }`}
-                >
-                  <div class="whitespace-pre-wrap text-[12.5px] leading-relaxed">
+                  {/* Reasoning Process Accordion (Like in screenshot: Worked for 3m >) */}
+                  <Show when={msg.reasoning}>
+                    <div class="flex flex-col">
+                      <button
+                        onClick={() => toggleReasoning(msg.id)}
+                        class="flex items-center gap-1.5 text-xs text-zinc-400 hover:text-zinc-200 transition-colors py-1 w-fit cursor-pointer font-sans"
+                      >
+                        <span class="font-medium text-zinc-400">Worked for 3m</span>
+                        <span class="text-zinc-500 text-[10px]">›</span>
+                      </button>
+
+                      <Show when={expandedReasoning()[msg.id]}>
+                        <div class="mt-1 p-3 rounded-lg bg-[#141620] border border-white/[0.06] text-xs text-zinc-400 font-mono whitespace-pre-wrap leading-relaxed animate-fade-in">
+                          {msg.reasoning}
+                        </div>
+                      </Show>
+                    </div>
+                  </Show>
+
+                  {/* Assistant Body Prose */}
+                  <div class="text-[13px] leading-relaxed text-zinc-200 whitespace-pre-wrap font-sans">
                     {msg.content}
                   </div>
 
-                  {/* Actions & Token Badge for Assistant Messages */}
-                  {msg.role === 'assistant' && (
-                    <div class="mt-2.5 pt-2 border-t border-white/[0.05] flex items-center justify-between text-[10.5px] text-zinc-500 font-mono select-none">
-                      <div class="flex items-center gap-1 text-cyan-400">
-                        <IconZap size={10} />
-                        <span>{msg.tokens || 140} {t('chat.tokensBurned')}</span>
-                      </div>
-
-                      <button
-                        onClick={() => copyToClipboard(msg.id, msg.content)}
-                        class="hover:text-zinc-300 transition-colors flex items-center gap-1 text-[10.5px]"
-                      >
-                        {copiedId() === msg.id ? (
-                          <>
-                            <IconCheck size={11} class="text-emerald-400" />
-                            <span class="text-emerald-400">{t('chat.copied')}</span>
-                          </>
-                        ) : (
-                          <>
-                            <IconCopy size={11} />
-                            <span>{t('chat.copy')}</span>
-                          </>
-                        )}
-                      </button>
-                    </div>
-                  )}
+                  {/* Token counter bottom strip */}
+                  <div class="flex items-center gap-3 pt-1 text-[11px] text-zinc-500 font-mono select-none">
+                    <span class="flex items-center gap-1 text-cyan-400">
+                      <IconZap size={10} />
+                      <span>{msg.tokens || 140} tokens</span>
+                    </span>
+                  </div>
                 </div>
-              </div>
-
-              {/* User Avatar */}
-              {msg.role === 'user' && (
-                <div class="w-6 h-6 rounded-md bg-zinc-800 border border-white/[0.1] flex items-center justify-center shrink-0 mt-0.5 text-zinc-300 text-[10px] font-mono">
-                  U
-                </div>
-              )}
+              </Show>
             </div>
           )}
         </For>
 
-        {/* Streaming Indicator */}
-        {props.isStreaming && (
-          <div class="flex gap-2.5 items-center text-xs text-zinc-400 select-none">
-            <div class="w-6 h-6 rounded-md bg-cyan-950/60 border border-cyan-800/40 flex items-center justify-center shrink-0 text-cyan-400 animate-pulse">
-              <IconSparkles size={12} />
-            </div>
-            <div class="flex items-center gap-1.5 font-mono text-cyan-400 text-xs">
-              <span class="animate-pulse">●</span>
-              <span class="text-zinc-500 text-[11px]">Streaming tokens to aquarium cast bar...</span>
-            </div>
+        {/* Streaming Pulse */}
+        <Show when={props.isStreaming}>
+          <div class="flex items-center gap-2 text-xs text-zinc-400 py-2">
+            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+            <span class="text-zinc-400 font-sans text-xs">Worked for 12s...</span>
           </div>
-        )}
+        </Show>
       </div>
 
-      {/* Floating Prompt Bar (Claude / Antigravity Style) */}
-      <div class="px-4 md:px-10 pb-4 pt-1 max-w-4xl w-full mx-auto z-10 select-none">
-        <div class="bg-[#12141f] border border-white/[0.08] rounded-xl p-2 shadow-2xl focus-within:border-cyan-500/50 focus-within:ring-1 focus-within:ring-cyan-500/30 transition-all">
+      {/* Floating Centered Input Capsule (Exact Antigravity Style from Screenshot) */}
+      <div class="max-w-3xl w-full mx-auto px-4 pb-4 select-none z-20">
+        <div class="bg-[#1a1c27]/95 border border-[#2d3246] rounded-2xl p-2.5 shadow-2xl focus-within:border-cyan-500/50 focus-within:ring-1 focus-within:ring-cyan-500/30 transition-all backdrop-blur-xl">
+          {/* Textarea */}
           <textarea
             value={inputText()}
             onInput={(e) => setInputText(e.currentTarget.value)}
             onKeyDown={handleKeyDown}
-            placeholder={t('chat.inputPlaceholder')}
+            placeholder="Ask anything, @ to mention, / for actions"
             rows="2"
-            class="w-full bg-transparent text-xs text-zinc-100 placeholder-zinc-500 resize-none focus:outline-none px-2 py-1 leading-relaxed font-sans select-text"
+            class="w-full bg-transparent text-[13px] text-zinc-100 placeholder-zinc-500 resize-none focus:outline-none px-2 py-1 leading-relaxed font-sans select-text"
           />
 
-          {/* Bar Footer Actions */}
-          <div class="flex items-center justify-between pt-1 border-t border-white/[0.04] px-1 font-mono">
+          {/* Capsule Bottom Control Row */}
+          <div class="flex items-center justify-between pt-1.5 px-1 border-t border-white/[0.04] text-xs">
+            {/* Left Controls: + and Model Selector */}
             <div class="flex items-center gap-2">
-              <span class="text-[10px] text-zinc-400 bg-white/[0.03] px-2 py-0.5 rounded border border-white/[0.06]">
-                {props.selectedModel}
-              </span>
-              <span class="text-[9.5px] text-zinc-500">
-                ↵ Send • ⇧↵ New line
-              </span>
+              <button
+                class="w-6 h-6 rounded-md hover:bg-white/[0.08] text-zinc-400 hover:text-white flex items-center justify-center transition-colors"
+                title="Add attachment"
+              >
+                <IconPlus size={13} />
+              </button>
+
+              {/* Model Picker Pill */}
+              <div class="relative flex items-center gap-1 text-zinc-300 hover:text-white cursor-pointer px-2 py-0.5 rounded hover:bg-white/[0.05] transition-colors text-[11px] font-sans">
+                <span>{props.selectedModel}</span>
+                <IconChevronDown size={10} class="text-zinc-500" />
+              </div>
             </div>
 
-            <div class="flex items-center gap-1.5">
+            {/* Right Controls: Mode Toggle, Mic, Send Button */}
+            <div class="flex items-center gap-2 text-zinc-400">
+              {/* Speed Mode (Turbo / Reasoning) */}
+              <button
+                onClick={() => setSpeedMode(speedMode() === 'Turbo' ? 'Thinking' : 'Turbo')}
+                class="flex items-center gap-1 text-[11px] px-2 py-0.5 rounded hover:bg-white/[0.05] text-zinc-300 hover:text-white transition-colors"
+              >
+                <IconZap size={10} class={speedMode() === 'Turbo' ? "text-amber-400" : "text-cyan-400"} />
+                <span>{speedMode()}</span>
+                <IconChevronDown size={10} class="text-zinc-500" />
+              </button>
+
+              {/* Mic Icon */}
+              <button class="w-6 h-6 rounded-md hover:bg-white/[0.08] text-zinc-400 hover:text-white flex items-center justify-center transition-colors" title="Voice Input">
+                <IconMic size={13} />
+              </button>
+
+              {/* Action / Send Capsule Button */}
               <button
                 onClick={handleSubmit}
                 disabled={!inputText().trim() || props.isStreaming}
-                class={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${
+                class={`w-7 h-7 rounded-full flex items-center justify-center transition-all ${
                   inputText().trim() && !props.isStreaming
-                    ? 'bg-cyan-500 hover:bg-cyan-400 text-black shadow-sm shadow-cyan-500/30 cursor-pointer'
-                    : 'bg-white/[0.04] text-zinc-600 cursor-not-allowed'
+                    ? 'bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white shadow-md shadow-cyan-500/30 cursor-pointer active:scale-95'
+                    : 'bg-white/[0.05] text-zinc-600 cursor-not-allowed'
                 }`}
-                title="Send message"
+                title="Send"
               >
-                <IconSend size={12} />
+                <IconSend size={11} />
               </button>
             </div>
           </div>

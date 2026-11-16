@@ -23,6 +23,7 @@ import { CatchNotification } from './components/CatchNotification';
 import { BestiaryModal } from './components/BestiaryModal';
 import { ChestOpeningModal } from './components/ChestOpeningModal';
 import { AnglerQuestModal } from './components/AnglerQuestModal';
+import { AntigravityHeader } from './components/AntigravityHeader';
 import { AmbientAquariumBackground, SwimmingFishState } from './components/AmbientAquariumBackground';
 
 function loadInitialState(): AquagenticSyncState {
@@ -455,8 +456,13 @@ export const App: Component = () => {
     setTimeout(() => setCurrentWeather('clear'), 10000);
   };
 
+  const currentSessionTitle = createMemo(() => {
+    const s = sessions().find((x) => x.id === currentSessionId());
+    return s ? s.title : 'Aquagentic Project Brainstorm Summary';
+  });
+
   return (
-    <div class="relative flex h-screen w-screen overflow-hidden bg-[#07090e] text-zinc-100 select-none">
+    <div class="relative flex flex-col h-screen w-screen overflow-hidden bg-[#0d0f17] text-zinc-100 select-none font-sans">
       {/* 1. Fullscreen Ambient Living Aquarium Background (Z-0) */}
       <AmbientAquariumBackground
         biome={currentBiome()}
@@ -464,86 +470,96 @@ export const App: Component = () => {
         activeFishes={swimmingFishes()}
       />
 
-      {/* 2. Left Sidebar (Translucent Obsidian Glass, Z-20) */}
-      <Sidebar
-        currentSessionId={currentSessionId()}
-        sessions={sessions()}
-        selectedModel={selectedModel()}
-        discoveredCount={discoveredCount()}
-        isAnglerQuestReady={isAnglerQuestReady()}
-        onSelectModel={setSelectedModel}
-        onNewChat={handleNewChat}
-        onSelectSession={setCurrentSessionId}
-        onOpenBestiary={() => setIsBestiaryOpen(true)}
-        onOpenAnglerQuest={() => setIsAnglerModalOpen(true)}
+      {/* 2. Antigravity Desktop Native Header & Breadcrumbs (Z-30) */}
+      <AntigravityHeader
+        currentSessionTitle={currentSessionTitle()}
+        projectName="aquagentic"
       />
 
-      {/* 3. Main Workspace (Transparent container so background shows through, Z-10) */}
-      <main class="flex-1 flex flex-col h-screen overflow-hidden relative z-10 bg-transparent">
-        {/* Chat Conversation View with Translucent Glass Panels */}
-        <ChatView
-          messages={messages()}
+      {/* 3. Main Workspace Row (Sidebar + Workspace Container) */}
+      <div class="flex-1 flex overflow-hidden relative z-10 bg-transparent">
+        {/* Antigravity Left Sidebar (Z-20) */}
+        <Sidebar
+          currentSessionId={currentSessionId()}
+          sessions={sessions()}
           selectedModel={selectedModel()}
-          isStreaming={isStreaming()}
-          onSendMessage={handleSendMessage}
-        />
-
-        {/* Minimal Bottom Telemetry Strip */}
-        <AquariumDock
-          biome={currentBiome()}
-          weather={currentWeather()}
-          pearls={pearls()}
-          pps={pps()}
-          currentBait={currentBait()}
-          rodCost={rodCost()}
-          activeFishCount={swimmingFishes().length}
-          availableChests={availableChests()}
+          discoveredCount={discoveredCount()}
           isAnglerQuestReady={isAnglerQuestReady()}
-          onOpenAnglerQuest={() => setIsAnglerModalOpen(true)}
-          onOpenChestModal={() => setIsChestModalOpen(true)}
-          onBurnTokens={handleBurnTokens}
-          onSimulateStream={handleSendMessage}
-          onSimulateGlitch={handleSimulateGlitch}
+          onSelectModel={setSelectedModel}
+          onNewChat={handleNewChat}
+          onSelectSession={setCurrentSessionId}
           onOpenBestiary={() => setIsBestiaryOpen(true)}
+          onOpenAnglerQuest={() => setIsAnglerModalOpen(true)}
         />
 
-        {/* Terraria Angler NPC Quest Modal */}
-        <Show when={isAnglerModalOpen()}>
-          <AnglerQuestModal
-            quest={activeAnglerQuest()}
-            inventory={inventory()}
-            completedQuestsCount={completedQuestsCount()}
-            onClaimReward={handleClaimAnglerReward}
-            onRerollQuest={handleRerollAnglerQuest}
-            onClose={() => setIsAnglerModalOpen(false)}
+        {/* Central Workspace (Transparent container showing living aquarium background) */}
+        <main class="flex-1 flex flex-col h-full overflow-hidden relative bg-transparent">
+          {/* Antigravity Chat Conversation & Floating Input Capsule */}
+          <ChatView
+            messages={messages()}
+            selectedModel={selectedModel()}
+            isStreaming={isStreaming()}
+            onSendMessage={handleSendMessage}
+            onSelectModel={setSelectedModel}
           />
-        </Show>
 
-        {/* Gacha Fishing Chest Opening Modal */}
-        <Show when={isChestModalOpen()}>
-          <ChestOpeningModal
+          {/* Minimal Bottom IDE Status Bar / Aquarium Dock */}
+          <AquariumDock
+            biome={currentBiome()}
+            weather={currentWeather()}
+            pearls={pearls()}
+            pps={pps()}
+            currentBait={currentBait()}
+            rodCost={rodCost()}
+            activeFishCount={swimmingFishes().length}
             availableChests={availableChests()}
-            onOpenOneChest={handleOpenOneChest}
-            onClose={() => setIsChestModalOpen(false)}
+            isAnglerQuestReady={isAnglerQuestReady()}
+            onOpenAnglerQuest={() => setIsAnglerModalOpen(true)}
+            onOpenChestModal={() => setIsChestModalOpen(true)}
+            onBurnTokens={handleBurnTokens}
+            onSimulateStream={handleSendMessage}
+            onSimulateGlitch={handleSimulateGlitch}
+            onOpenBestiary={() => setIsBestiaryOpen(true)}
           />
-        </Show>
 
-        {/* Sleek Catch Notification Card */}
-        <CatchNotification
-          catchResult={latestCatch()}
-          onDismiss={() => setLatestCatch(null)}
-        />
+          {/* Terraria Angler NPC Quest Modal */}
+          <Show when={isAnglerModalOpen()}>
+            <AnglerQuestModal
+              quest={activeAnglerQuest()}
+              inventory={inventory()}
+              completedQuestsCount={completedQuestsCount()}
+              onClaimReward={handleClaimAnglerReward}
+              onRerollQuest={handleRerollAnglerQuest}
+              onClose={() => setIsAnglerModalOpen(false)}
+            />
+          </Show>
 
-        {/* Bestiario / Fishdex Modal */}
-        <Show when={isBestiaryOpen()}>
-          <BestiaryModal
-            inventory={inventory()}
-            activeTankIds={activeTankFishIds()}
-            onToggleActiveTank={handleToggleActiveTank}
-            onClose={() => setIsBestiaryOpen(false)}
+          {/* Gacha Fishing Chest Opening Modal */}
+          <Show when={isChestModalOpen()}>
+            <ChestOpeningModal
+              availableChests={availableChests()}
+              onOpenOneChest={handleOpenOneChest}
+              onClose={() => setIsChestModalOpen(false)}
+            />
+          </Show>
+
+          {/* Sleek Catch Notification Card */}
+          <CatchNotification
+            catchResult={latestCatch()}
+            onDismiss={() => setLatestCatch(null)}
           />
-        </Show>
-      </main>
+
+          {/* Bestiario / Fishdex Modal */}
+          <Show when={isBestiaryOpen()}>
+            <BestiaryModal
+              inventory={inventory()}
+              activeTankIds={activeTankFishIds()}
+              onToggleActiveTank={handleToggleActiveTank}
+              onClose={() => setIsBestiaryOpen(false)}
+            />
+          </Show>
+        </main>
+      </div>
     </div>
   );
 };

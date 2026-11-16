@@ -3,25 +3,21 @@ import { currentLanguage, setCurrentLanguage, t } from '../i18n';
 import {
   IconPlus,
   IconSidebar,
-  IconTerminal,
-  IconCpu,
   IconFish,
-  IconChevronDown,
-  IconMessage,
-  IconShield,
-  IconAnchor
+  IconSettings,
+  IconAnchor,
+  IconClock,
+  IconSliders,
+  IconFolder,
+  IconAntigravity,
+  IconArrowLeft,
+  IconArrowRight,
+  IconSearch
 } from './icons';
-
-interface ChatItem {
-  id: string;
-  title: string;
-  updatedAt: string;
-  model: string;
-}
 
 interface SidebarProps {
   currentSessionId: string;
-  sessions: ChatItem[];
+  sessions: Array<{ id: string; title: string; updatedAt: string; model: string }>;
   selectedModel: string;
   discoveredCount: number;
   isAnglerQuestReady?: boolean;
@@ -34,77 +30,106 @@ interface SidebarProps {
 
 export const Sidebar: Component<SidebarProps> = (props) => {
   const [collapsed, setCollapsed] = createSignal(false);
-
-  const models = [
-    { id: 'Claude 3.5 Sonnet', label: 'Claude 3.5 Sonnet', badge: 'Anthropic' },
-    { id: 'Gemini 2.5 Flash', label: 'Gemini 2.5 Flash', badge: 'Google' },
-    { id: 'GPT-4o', label: 'GPT-4o', badge: 'OpenAI' },
-    { id: 'DeepSeek R1 (Thinking)', label: 'DeepSeek R1', badge: 'Reasoning' },
-    { id: 'Ollama Local (0 Cost)', label: 'Ollama Local', badge: 'Local BYOK' }
-  ];
+  const [tcsOpen, setTcsOpen] = createSignal(true);
+  const [aquagenticOpen, setAquagenticOpen] = createSignal(true);
 
   return (
     <aside
-      class={`h-screen bg-[#0d0f17] border-r border-white/[0.07] flex flex-col transition-all duration-200 z-30 select-none ${
+      class={`h-full bg-[#13151f] border-r border-white/[0.07] flex flex-col transition-all duration-200 z-30 select-none ${
         collapsed() ? 'w-14' : 'w-64'
       }`}
     >
-      {/* Top Header / App Brand */}
-      <div class="h-13 px-3.5 flex items-center justify-between border-b border-white/[0.06]">
+      {/* Top Controls Row */}
+      <div class="h-10 px-3 flex items-center justify-between border-b border-white/[0.06] text-zinc-400">
         {!collapsed() ? (
-          <div class="flex items-center gap-2.5">
-            <div class="w-7 h-7 rounded-lg bg-cyan-950/80 border border-cyan-700/50 flex items-center justify-center text-cyan-400 shadow-sm shadow-cyan-950">
-              <IconFish size={15} />
-            </div>
-            <div class="flex flex-col">
-              <div class="flex items-center gap-1.5 leading-none">
-                <span class="font-bold text-xs text-zinc-100 tracking-tight font-mono">Aquagentic</span>
-                <span class="px-1.5 py-0.5 text-[8.5px] font-mono font-semibold bg-white/[0.05] text-zinc-400 rounded border border-white/[0.08]">
-                  v0.1
-                </span>
-              </div>
-              <span class="text-[9.5px] text-zinc-400 font-mono mt-0.5">Desktop BYOK Client</span>
-            </div>
+          <div class="flex items-center gap-2">
+            <button class="p-1 rounded hover:bg-white/[0.06] hover:text-white transition-colors" title="Antigravity Home">
+              <IconAntigravity size={14} class="text-zinc-300" />
+            </button>
+            <button
+              onClick={() => setCollapsed(true)}
+              class="p-1 rounded hover:bg-white/[0.06] hover:text-white transition-colors"
+              title="Toggle Sidebar"
+            >
+              <IconSidebar size={13} />
+            </button>
+            <button class="p-1 rounded hover:bg-white/[0.06] hover:text-white transition-colors" title="Back">
+              <IconArrowLeft size={11} />
+            </button>
+            <button class="p-1 rounded hover:bg-white/[0.06] hover:text-white transition-colors" title="Forward">
+              <IconArrowRight size={11} />
+            </button>
+            <button class="p-1 rounded hover:bg-white/[0.06] hover:text-white transition-colors" title="Search">
+              <IconSearch size={11} />
+            </button>
           </div>
         ) : (
-          <div class="w-7 h-7 mx-auto rounded-lg bg-cyan-950/80 border border-cyan-700/50 flex items-center justify-center text-cyan-400">
-            <IconFish size={15} />
-          </div>
+          <button
+            onClick={() => setCollapsed(false)}
+            class="mx-auto p-1 rounded hover:bg-white/[0.06] text-zinc-400 hover:text-white"
+            title="Expand Sidebar"
+          >
+            <IconAntigravity size={16} class="text-zinc-200" />
+          </button>
         )}
+      </div>
 
+      {/* Button: + New Conversation */}
+      <div class="p-2.5">
         <button
-          onClick={() => setCollapsed(!collapsed())}
-          class="text-zinc-500 hover:text-zinc-200 p-1 rounded-md hover:bg-white/[0.05] transition-colors"
-          title={collapsed() ? "Expand (Ctrl+B)" : "Collapse (Ctrl+B)"}
+          onClick={props.onNewChat}
+          class="w-full flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#1f2230] hover:bg-[#272b3d] text-zinc-200 hover:text-white text-xs font-medium transition-all border border-white/[0.08] shadow-sm group"
         >
-          <IconSidebar size={14} />
+          <IconPlus size={13} class="text-zinc-400 group-hover:text-white transition-colors" />
+          {!collapsed() && <span>+ New Conversation</span>}
         </button>
       </div>
 
-      {/* Action: New Session */}
-      <div class="p-2.5 flex flex-col gap-1.5">
+      {/* Core Nav Links: Automations, Customizations, Angler, Bestiary */}
+      <div class="px-2 pb-2 flex flex-col gap-0.5 border-b border-white/[0.06] text-xs font-medium">
+        {/* Automations */}
+        <button class="w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.04] transition-colors">
+          <IconClock size={13} class="text-zinc-400" />
+          {!collapsed() && <span>Automations</span>}
+        </button>
+
+        {/* Customizations / Skills */}
+        <button class="w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.04] transition-colors">
+          <IconSliders size={13} class="text-zinc-400" />
+          {!collapsed() && <span>Customizations</span>}
+        </button>
+
+        {/* Terraria Angler NPC Quests */}
         <button
-          onClick={props.onNewChat}
-          class="w-full flex items-center justify-between px-2.5 py-2 rounded-lg bg-zinc-800/60 hover:bg-zinc-800 text-zinc-200 hover:text-white text-xs font-medium transition-all border border-white/[0.08] shadow-sm group"
+          onClick={props.onOpenAnglerQuest}
+          class={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg transition-colors group ${
+            props.isAnglerQuestReady
+              ? 'bg-amber-950/40 border border-amber-500/40 text-amber-300'
+              : 'text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.04]'
+          }`}
+          title={t('angler.navButton')}
         >
-          <div class="flex items-center gap-2">
-            <IconPlus size={13} class="text-zinc-400 group-hover:text-white transition-colors" />
-            {!collapsed() && <span>{t('nav.newChat')}</span>}
+          <div class="flex items-center gap-2.5">
+            <IconAnchor size={13} class={props.isAnglerQuestReady ? "text-amber-400" : "text-zinc-400"} />
+            {!collapsed() && <span>{t('angler.navButton')}</span>}
           </div>
           {!collapsed() && (
-            <kbd class="text-[9px] text-zinc-400 font-mono bg-black/40 px-1 py-0.5 rounded border border-white/[0.08]">
-              Ctrl+N
-            </kbd>
+            <Show when={props.isAnglerQuestReady}>
+              <span class="text-[9px] font-mono font-bold text-amber-300 bg-amber-950 px-1.5 py-0.5 rounded border border-amber-500/40 animate-pulse">
+                {t('angler.readyBadge')}
+              </span>
+            </Show>
           )}
         </button>
 
-        {/* Action: Open Bestiary / Fishdex */}
+        {/* Bestiary (Fishdex) */}
         <button
           onClick={props.onOpenBestiary}
-          class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.07] text-zinc-300 hover:text-white text-xs font-medium transition-all border border-white/[0.06] group"
+          class="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.04] transition-colors"
+          title={t('nav.bestiary')}
         >
-          <div class="flex items-center gap-2">
-            <IconFish size={13} class="text-cyan-400 group-hover:scale-110 transition-transform" />
+          <div class="flex items-center gap-2.5">
+            <IconFish size={13} class="text-cyan-400" />
             {!collapsed() && <span>{t('nav.bestiary')}</span>}
           </div>
           {!collapsed() && (
@@ -113,143 +138,118 @@ export const Sidebar: Component<SidebarProps> = (props) => {
             </span>
           )}
         </button>
-
-        {/* Action: Angler NPC Quests (Terraria style) */}
-        <button
-          onClick={props.onOpenAnglerQuest}
-          class={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all border group ${
-            props.isAnglerQuestReady
-              ? 'bg-amber-950/40 hover:bg-amber-950/70 border-amber-500/50 text-amber-200 shadow-[0_0_10px_rgba(245,158,11,0.2)]'
-              : 'bg-white/[0.03] hover:bg-white/[0.07] text-zinc-300 hover:text-white border-white/[0.06]'
-          }`}
-          title={t('angler.navButton')}
-        >
-          <div class="flex items-center gap-2">
-            <IconAnchor size={13} class="text-amber-400 group-hover:scale-110 transition-transform" />
-            {!collapsed() && <span>{t('angler.navButton')}</span>}
-          </div>
-          {!collapsed() && (
-            <Show
-              when={props.isAnglerQuestReady}
-              fallback={
-                <span class="text-[9px] font-mono text-zinc-500 bg-white/[0.04] px-1.5 py-0.5 rounded">
-                  NPC
-                </span>
-              }
-            >
-              <span class="text-[9px] font-mono font-bold text-amber-300 bg-amber-950 px-1.5 py-0.5 rounded border border-amber-500/40 animate-pulse">
-                {t('angler.readyBadge')}
-              </span>
-            </Show>
-          )}
-        </button>
       </div>
 
-      {/* Model Engine Selector */}
-      {!collapsed() && (
-        <div class="px-3 pb-2 pt-0.5">
-          <div class="flex items-center justify-between text-[10px] font-mono uppercase tracking-wider text-zinc-400 font-semibold px-0.5 mb-1.5">
-            <span>Model Engine</span>
-            <IconCpu size={11} />
-          </div>
-          <div class="relative">
-            <select
-              value={props.selectedModel}
-              onChange={(e) => props.onSelectModel(e.currentTarget.value)}
-              class="w-full bg-[#141722] hover:bg-[#181b29] border border-white/[0.08] hover:border-white/[0.14] rounded-lg px-2.5 py-1.5 text-xs text-zinc-200 font-mono appearance-none focus:outline-none focus:border-cyan-500/60 transition-colors pr-7 cursor-pointer"
-            >
-              <For each={models}>
-                {(m) => <option value={m.id}>{m.label}</option>}
-              </For>
-            </select>
-            <div class="absolute right-2.5 top-2.5 pointer-events-none text-zinc-500">
-              <IconChevronDown size={12} />
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Session History */}
-      <div class="flex-1 overflow-y-auto px-2.5 py-1 flex flex-col gap-0.5">
+      {/* Projects Folders Tree (Antigravity Style) */}
+      <div class="flex-1 overflow-y-auto px-2 py-3 flex flex-col gap-1 text-xs">
         {!collapsed() && (
-          <span class="text-[10px] uppercase font-mono tracking-wider text-zinc-400 font-semibold px-1 py-1">
-            {t('nav.recentChats')}
-          </span>
+          <div class="flex items-center justify-between px-2 pb-1 text-[11px] text-zinc-400 font-medium">
+            <span>Projects</span>
+            <span class="text-zinc-500 text-[10px]">📁</span>
+          </div>
         )}
 
-        <For each={props.sessions}>
-          {(session) => {
-            const isActive = session.id === props.currentSessionId;
-            return (
-              <button
-                onClick={() => props.onSelectSession(session.id)}
-                class={`w-full text-left px-2.5 py-1.5 rounded-lg text-xs transition-colors flex items-center justify-between group ${
-                  isActive
-                    ? 'bg-cyan-500/10 text-cyan-300 font-medium border border-cyan-500/20 shadow-sm'
-                    : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04]'
-                }`}
-                title={session.title}
-              >
-                <div class="flex items-center gap-2 truncate">
-                  <IconMessage size={12} class={isActive ? 'text-cyan-400' : 'text-zinc-500 group-hover:text-zinc-400'} />
-                  {!collapsed() && <span class="truncate">{session.title}</span>}
+        {/* Project 1: aquagentic */}
+        <div class="flex flex-col">
+          <button
+            onClick={() => setAquagenticOpen(!aquagenticOpen())}
+            class="flex items-center gap-2 px-2 py-1 rounded text-zinc-300 hover:text-white hover:bg-white/[0.04] transition-colors font-medium text-xs text-left"
+          >
+            <IconFolder size={12} class="text-zinc-500" />
+            {!collapsed() && <span class="truncate">aquagentic</span>}
+          </button>
+
+          <Show when={aquagenticOpen() && !collapsed()}>
+            <div class="pl-5 flex flex-col gap-0.5 mt-0.5">
+              <For each={props.sessions}>
+                {(session) => {
+                  const isActive = props.currentSessionId === session.id;
+                  return (
+                    <button
+                      onClick={() => props.onSelectSession(session.id)}
+                      class={`flex items-center justify-between px-2.5 py-1 rounded-lg text-[11px] text-left transition-colors truncate ${
+                        isActive
+                          ? 'bg-[#212435] text-zinc-100 font-medium'
+                          : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.03]'
+                      }`}
+                    >
+                      <span class="truncate pr-2">{session.title}</span>
+                      <span class="text-[9.5px] text-zinc-500 font-mono flex-shrink-0">
+                        {session.updatedAt}
+                      </span>
+                    </button>
+                  );
+                }}
+              </For>
+            </div>
+          </Show>
+        </div>
+
+        {/* Project 2: TCS (Workspace group) */}
+        {!collapsed() && (
+          <div class="flex flex-col mt-1">
+            <button
+              onClick={() => setTcsOpen(!tcsOpen())}
+              class="flex items-center gap-2 px-2 py-1 rounded text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04] transition-colors font-medium text-xs text-left"
+            >
+              <IconFolder size={12} class="text-zinc-500" />
+              <span>TCS</span>
+            </button>
+
+            <Show when={tcsOpen()}>
+              <div class="pl-5 flex flex-col gap-0.5 mt-0.5 text-[11px] text-zinc-400">
+                <div class="flex items-center justify-between px-2.5 py-1 rounded hover:bg-white/[0.03] cursor-pointer">
+                  <span class="truncate">Project Valuation And Audit</span>
+                  <span class="text-[9.5px] text-zinc-500 font-mono">2h</span>
                 </div>
-              </button>
-            );
-          }}
-        </For>
+                <div class="flex items-center justify-between px-2.5 py-1 rounded hover:bg-white/[0.03] cursor-pointer">
+                  <span class="truncate">Scouting UI/UX Skills Online</span>
+                  <span class="text-[9.5px] text-zinc-500 font-mono">2d</span>
+                </div>
+                <div class="flex items-center justify-between px-2.5 py-1 rounded hover:bg-white/[0.03] cursor-pointer">
+                  <span class="truncate">Guía de Uso de Skills</span>
+                  <span class="w-1.5 h-1.5 rounded-full bg-blue-400" />
+                </div>
+                <div class="flex items-center justify-between px-2.5 py-1 rounded hover:bg-white/[0.03] cursor-pointer">
+                  <span class="truncate">Actualización de Formulari...</span>
+                  <span class="text-[9.5px] text-zinc-500 font-mono">4d</span>
+                </div>
+                <div class="px-2.5 py-1 text-[10.5px] text-zinc-500 hover:text-zinc-400 cursor-pointer">
+                  See all (9)
+                </div>
+              </div>
+            </Show>
+          </div>
+        )}
+
+        {/* Other Projects listed in screenshot */}
+        {!collapsed() && (
+          <div class="flex flex-col gap-1 mt-1 text-zinc-400">
+            <div class="flex items-center gap-2 px-2 py-1 text-xs hover:text-zinc-200 cursor-pointer">
+              <IconFolder size={12} class="text-zinc-500" />
+              <span>minero</span>
+            </div>
+            <div class="flex items-center gap-2 px-2 py-1 text-xs hover:text-zinc-200 cursor-pointer">
+              <IconFolder size={12} class="text-zinc-500" />
+              <span>roblox</span>
+            </div>
+            <div class="flex items-center gap-2 px-2 py-1 text-xs hover:text-zinc-200 cursor-pointer">
+              <IconFolder size={12} class="text-zinc-500" />
+              <span>SmartBussingMobile</span>
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Footer Status & Language */}
-      <div class="p-2.5 border-t border-white/[0.06] flex flex-col gap-2">
-        {/* MCP Status Badge */}
-        <div class="flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-[#141722] border border-white/[0.06] text-xs">
-          <div class="flex items-center gap-2">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]" />
-            {!collapsed() && (
-              <span class="text-[11px] font-mono text-zinc-300">{t('app.mcpActive')}</span>
-            )}
-          </div>
-          {!collapsed() && (
-            <span class="text-[9.5px] text-zinc-500 font-mono flex items-center gap-1">
-              <IconTerminal size={10} />
-              <span>3 tools</span>
-            </span>
-          )}
-        </div>
-
-        {/* Security & Language Switcher */}
-        <div class="flex items-center justify-between pt-0.5">
-          {!collapsed() ? (
-            <div class="flex items-center gap-1.5 text-[10px] font-mono text-zinc-400">
-              <IconShield size={11} class="text-emerald-400" />
-              <span>OS Keychain: Safe</span>
-            </div>
-          ) : (
-            <IconShield size={11} class="text-emerald-400 mx-auto" />
-          )}
-
-          {!collapsed() && (
-            <div class="flex rounded-md bg-white/[0.04] p-0.5 border border-white/[0.08] text-[10px] font-mono font-semibold">
-              <button
-                onClick={() => setCurrentLanguage('es')}
-                class={`px-1.5 py-0.5 rounded transition-colors ${
-                  currentLanguage() === 'es' ? 'bg-cyan-600 text-white' : 'text-zinc-400 hover:text-white'
-                }`}
-              >
-                ES
-              </button>
-              <button
-                onClick={() => setCurrentLanguage('en')}
-                class={`px-1.5 py-0.5 rounded transition-colors ${
-                  currentLanguage() === 'en' ? 'bg-cyan-600 text-white' : 'text-zinc-400 hover:text-white'
-                }`}
-              >
-                EN
-              </button>
-            </div>
-          )}
-        </div>
+      {/* Pinned Bottom: Settings */}
+      <div class="p-2 border-t border-white/[0.06] bg-[#10121a]">
+        <button
+          class="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04] transition-colors text-xs"
+          title={t('nav.settings')}
+        >
+          <IconSettings size={13} class="text-zinc-400" />
+          {!collapsed() && <span>Settings</span>}
+        </button>
       </div>
     </aside>
   );
